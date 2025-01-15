@@ -115,7 +115,7 @@ const WeeklySalesChart = () => {
         {tabs.map((tab, index) => {
           if (chartToDisplay === tab.type) {
             return (
-              <>
+              
                 <div className="mt-4" key={index}>
                   <Line data={tab.data} options={options} />
 
@@ -123,7 +123,7 @@ const WeeklySalesChart = () => {
                     <button className="btn btn-primary">View More</button>
                   </div>
                 </div>
-              </>
+              
             );
           }
           return null;

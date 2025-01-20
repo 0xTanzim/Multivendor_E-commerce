@@ -1,9 +1,25 @@
-import React from 'react'
+import PageHeader from "../../_components/PageHeader";
+import TableActions from "../../_components/TableActions";
 
 const categoriesPage = () => {
   return (
-    <div>categories</div>
-  )
-}
+    <div>
+      {/* header  */}
+      <PageHeader
+        heading="Categories"
+        linkTitle="Add Category"
+        href="/dashboard/categories/new"
+      />
 
-export default categoriesPage
+      {/* table action */}
+      <TableActions />
+
+      <div className="py-8">
+        <h2>Table</h2>
+      </div>
+    </div>
+  );
+};
+
+export default categoriesPage;
+

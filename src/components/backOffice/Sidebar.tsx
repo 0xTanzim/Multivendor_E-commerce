@@ -7,8 +7,10 @@ import {
 import {
   BadgePercent,
   Box,
+  Building2,
   ChevronDown,
   ChevronRight,
+  CircleDollarSign,
   ExternalLink,
   LayoutGrid,
   LayoutList,
@@ -53,15 +55,26 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: "/dashboard/farmers",
     },
     {
+      title: "Orders",
+      icon: Truck,
+      href: "/dashboard/orders",
+    },
+    {
       title: "Staff",
       icon: User,
       href: "/dashboard/staff",
     },
     {
-      title: "Orders",
-      icon: Truck,
-      href: "/dashboard/orders",
+      title: "Limi Community",
+      icon: Building2,
+      href: "/dashboard/community",
     },
+    {
+      title: "Wallet",
+      icon: CircleDollarSign,
+      href: "/dashboard/wallet",
+    },
+    
     {
       title: "Settings",
       icon: Settings,
@@ -108,13 +121,16 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     <div
       className={
         showSidebar
-          ? "sm:block  dark:bg-slate-700 sm:mt-0 mt-20 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-50  fixed top-0 left-0 shadow-md"
-          : "hidden mt-20 sm:mt-0 sm:block dark:bg-slate-700 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-50  fixed top-0 left-0 shadow-md"
+          ? "sm:block  dark:bg-slate-800 sm:mt-0 mt-20 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-300  fixed top-0 left-0 shadow-md overflow-y-scroll"
+          : "hidden mt-20 sm:mt-0 sm:block dark:bg-slate-800 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-300  fixed top-0 left-0 shadow-md overflow-y-scroll"
       }
     >
-      <Link className="mb-6" href="/dashboard" onClick={() => setShowSidebar(false)}>
+      <Link
+        className="mb-6"
+        href="/dashboard"
+        onClick={() => setShowSidebar(false)}
+      >
         <Image
-
           src="/images/logo.png"
           width={150}
           height={150}

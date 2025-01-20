@@ -19,7 +19,7 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
         {/* Header */}
         <Navbar setShowSidebar={setShowSidebar} showSidebar={showSidebar} />
         {/* Main */}
-        <main className="p-6 bg-slate-100 dark:bg-slate-900 text-slate-50  mt-16 ">
+        <main className="p-6 bg-slate-100 dark:bg-slate-900 text-slate-50 min-h-screen  mt-16 ">
           {children}
         </main>
       </div>

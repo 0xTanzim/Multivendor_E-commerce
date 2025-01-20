@@ -5,25 +5,25 @@ const orderStats = [
     period: "Todays Orders",
     sales: 1100,
     color: "bg-green-600",
-    iconColor: "Layers",
+    icon: "Layers",
   },
   {
     period: "Yesterdays Orders",
     sales: 1700,
     color: "bg-blue-600",
-    iconColor: "Layers",
+    icon: "Layers",
   },
   {
     period: "This Month",
     sales: 12000,
     color: "bg-orange-600",
-    iconColor: "Cart",
+    icon: "Cart",
   },
   {
     period: "All Time Sales",
     sales: 120000,
     color: "bg-purple-600",
-    iconColor: "Calendar",
+    icon: "Calendar",
   },
 ];
 

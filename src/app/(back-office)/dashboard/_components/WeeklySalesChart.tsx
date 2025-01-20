@@ -85,8 +85,10 @@ const WeeklySalesChart = () => {
   const [chartToDisplay, setCharToDisplay] = useState(tabs[0].type);
 
   return (
-    <div className="bg-slate-800 p-8 rounded-lg">
-      <h2 className="text-xl font-bold">Weekly Sales Chart</h2>
+    <div className="dark:bg-slate-800 bg-slate-50 shadow-sm p-8 rounded-lg">
+      <h2 className="text-xl font-bold text-slate-800 dark:text-slate-50">
+        Weekly Sales
+      </h2>
       <div className="p-4">
         {/* Tabs  */}
 
@@ -96,10 +98,10 @@ const WeeklySalesChart = () => {
               return (
                 <li className="me-2" key={index}>
                   <button
-                    className={`inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-300 hover:border-gray-100 dark:hover:text-gray-100 ${
+                    className={`inline-block p-4  ${
                       chartToDisplay === tab.type
                         ? "text-orange-600 border-b-2 border-orange-600 rounded-t-lg active dark:text-orange-500 dark:border-orange-500"
-                        : ""
+                        : "border-b-2 border-transparent rounded-t-lg text-slate-800 dark:text-slate-100 hover:text-gray-700 hover:border-gray-100 dark:hover:text-gray-100"
                     }`}
                     onClick={() => setCharToDisplay(tab.type)}
                   >
@@ -115,15 +117,13 @@ const WeeklySalesChart = () => {
         {tabs.map((tab, index) => {
           if (chartToDisplay === tab.type) {
             return (
-              
-                <div className="mt-4" key={index}>
-                  <Line data={tab.data} options={options} />
+              <div className="mt-4" key={index}>
+                <Line data={tab.data} options={options} />
 
-                  <div className="flex justify-center mt-4">
-                    <button className="btn btn-primary">View More</button>
-                  </div>
+                <div className="flex justify-center mt-4">
+                  <button className="btn btn-primary">View More</button>
                 </div>
-              
+              </div>
             );
           }
           return null;

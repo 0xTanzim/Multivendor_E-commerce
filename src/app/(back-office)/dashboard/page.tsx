@@ -1,8 +1,9 @@
-import Heading from "@/app/components/backOffice/Heading";
-import LargeCards from "@/app/components/backOffice/LargeCards";
-import SmallCards from "@/app/components/backOffice/SmallCards";
+
 import DashboardCarts from "./_components/DashboardCarts";
 import CustomDataTable from "./_components/CustomDataTable";
+import Heading from "@/components/backOffice/Heading";
+import LargeCards from "@/components/backOffice/LargeCards";
+import SmallCards from "@/components/backOffice/SmallCards";
 
 const DashboardPage = () => {
   return (

@@ -19,13 +19,11 @@ const CustomDataTable = () => {
   };
 
   return (
-    <div className="">
-      <h2 className="text-xl font-bold mb-4">Recent Orders</h2>
+    <div className="mt-8 ">
+      <h2 className="text-xl  px-4 font-bold text-slate-800 dark:text-slate-50">Recent Orders</h2>
       {/* Table  */}
 
-      <div className="p-8">
-        <>
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
               {/* Table header */}
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -154,9 +152,9 @@ const CustomDataTable = () => {
                         <button
                           onClick={() => handlePageChange(page)}
                           disabled={currentPage === page}
-                          className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white ${
+                          className={`flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-em-400 dark:hover:bg-gray-700 dark:hover:text-white ${
                             currentPage === page
-                              ? "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-white"
+                              ? "bg-emerald-600  dark:bg-emerald-600 text-white dark:text-white rounded"
                               : ""
                           }`}
                         >
@@ -179,8 +177,6 @@ const CustomDataTable = () => {
               </ul>
             </nav>
           </div>
-        </>
-      </div>
     </div>
   );
 };

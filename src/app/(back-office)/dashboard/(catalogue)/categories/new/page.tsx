@@ -2,6 +2,7 @@
 
 import FormHeader from "@/components/backOffice/FormHeader";
 import ImageInput from "@/components/FormInputs/ImageInput";
+import SelectInput from "@/components/FormInputs/SelectInput";
 import SubmitButton from "@/components/FormInputs/SubmitButton";
 import TextareaInput from "@/components/FormInputs/TextareaInput";
 import TextInput from "@/components/FormInputs/TextInput";
@@ -17,17 +18,37 @@ const NewCategoryPage = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<category>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const markets = [
+    {
+      id: 1,
+      title: " Market 1",
+    },
+    {
+      id: 2,
+      title: " Market 2",
+    },
+    {
+      id: 3,
+      title: " Market 3",
+    },
+    {
+      id: 4,
+      title: " Market 4",
+    },
+  ];
 
   const onSubmit = async (data: category) => {
     setLoading(true);
     const slug = generateSlug(data?.title);
     data.slug = slug;
     data.imageUrl = imageUrl ?? undefined;
-   
+
     makePostRequest({
       setLoading,
       endpoint: "api/categories",
@@ -50,6 +71,16 @@ const NewCategoryPage = () => {
             name="title"
             register={register}
             errors={errors}
+            className="w-full"
+          />
+
+          <SelectInput
+            label="Select Market"
+            name="marketIds"
+            options={markets}
+            className="w-full"
+            hasMultiple={true}
+            setValue={setValue}
           />
 
           <TextareaInput
@@ -78,4 +109,3 @@ const NewCategoryPage = () => {
 };
 
 export default NewCategoryPage;
-

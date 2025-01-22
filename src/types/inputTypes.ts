@@ -5,11 +5,11 @@ type BaseInputTypes = {
   register: any;
   errors: Record<string, { message?: string }>;
   isRequired?: boolean;
-  type?: string;
+  // type?: string;
+  type?: HTMLInputElement["type"];
   className?: string;
   defaultValue?: string;
 };
 
 export type TextInputProps = BaseInputTypes & {};
 export type TextareaInputProps = BaseInputTypes & {};
-

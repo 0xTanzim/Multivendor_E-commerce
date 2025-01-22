@@ -4,6 +4,7 @@ export type category = {
   slug?: string;
   description: string;
   imageUrl?: string;
+  marketIds?: string;
   status?: "active" | "inactive";
 };
 

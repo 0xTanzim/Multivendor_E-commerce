@@ -1,25 +1,30 @@
-import { category, isCategory } from "@/types";
+import { isProduct, product } from "@/types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
 
-    if (!isCategory(data)) {
+    if (!isProduct(data)) {
       return NextResponse.json({ error: "Invalid data" }, { status: 400 });
     }
 
-    const newCategory:category = {
+    const newProduct: product = {
       title: data.title,
       slug: data.slug,
-      imageUrl: data.imageUrl,
       description: data.description,
-      marketIds: data.marketIds,
+      productPrice: data.productPrice,
+      tags: data.tags,
+      status: data.status || "inactive",
+      sku: data.sku,
+      barcode: data.barcode,
+      categoryIds: data.categoryIds,
+      farmerIds: data.farmerIds,
     };
 
-    console.log(newCategory);
+    console.log(newProduct);
 
-    return NextResponse.json(newCategory, { status: 201 });
+    return NextResponse.json(newProduct, { status: 201 });
   } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
@@ -28,4 +33,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

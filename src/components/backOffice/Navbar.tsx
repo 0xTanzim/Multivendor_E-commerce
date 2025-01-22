@@ -52,8 +52,8 @@ const Navbar = ({ setShowSidebar, showSidebar }: NavbarProps) => {
 
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <button
-              type="button"
+            <div
+             
               className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-transparent rounded-lg  "
             >
               <Bell className="text-emerald-500" />
@@ -61,7 +61,7 @@ const Navbar = ({ setShowSidebar, showSidebar }: NavbarProps) => {
               <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500   rounded-full -top-0 end-6 dark:border-gray-900">
                 20
               </div>
-            </button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="px-4 py-2 pr-8  ">
             <DropdownMenuLabel>Notifications</DropdownMenuLabel>
@@ -128,7 +128,7 @@ const Navbar = ({ setShowSidebar, showSidebar }: NavbarProps) => {
         {/* Profile Image  */}
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <button>
+            <div>
               <Image
                 src="/images/avatar.png"
                 width={200}
@@ -136,7 +136,7 @@ const Navbar = ({ setShowSidebar, showSidebar }: NavbarProps) => {
                 className="rounded-full w-8 h-8"
                 alt="avatar"
               />
-            </button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="px-4 py-2 pr-8  ">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>

@@ -1,9 +1,24 @@
-import React from 'react'
+import PageHeader from "../../_components/PageHeader";
+import TableActions from "../../_components/TableActions";
 
 const ProductPage = () => {
   return (
-    <div>Product</div>
-  )
-}
+    <div>
+      {/* header  */}
+      <PageHeader
+        heading="Products"
+        linkTitle="Add Product"
+        href="/dashboard/products/new"
+      />
 
-export default ProductPage
+      {/* table action */}
+      <TableActions />
+
+      <div className="py-8">
+        <h2>Table</h2>
+      </div>
+    </div>
+  );
+};
+
+export default ProductPage;

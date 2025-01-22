@@ -155,13 +155,13 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
 
         <Collapsible className="px-6 py-2">
           <CollapsibleTrigger onClick={() => setIsOpenMenu(!isOpenMenu)}>
-            <button className={"flex items-center space-x-2  py-2"}>
+            <div className={"flex items-center space-x-2  py-2"}>
               <div className="flex items-center space-x-2">
                 <Slack />
                 <span>Catalogue</span>
               </div>
               {isOpenMenu ? <ChevronDown /> : <ChevronRight />}
-            </button>
+            </div>
           </CollapsibleTrigger>
           <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-800 rounded-lg">
             {catalogLinks.map((item, index) => (

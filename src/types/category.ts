@@ -4,20 +4,21 @@ export type category = {
   slug?: string;
   description: string;
   imageUrl?: string;
+  status?: "active" | "inactive";
 };
 
 export function isCategoryArray(obj: unknown): obj is category[] {
-  return (obj as category[]).every((item) => isCategory(item));
+  return Array.isArray(obj) && obj.every(isCategory);
 }
 
 export function isCategory(obj: unknown): obj is category {
+  if (typeof obj !== "object" || obj === null) return false;
+  const categoryObj = obj as category;
+  
   return (
-    typeof obj === "object" &&
-    obj !== null &&
-    typeof (obj as category).title === "string" &&
-    typeof (obj as category).description === "string" &&
-    (obj as category).imageUrl === undefined ||
-    typeof (obj as category).imageUrl === "string"
-  )
+    typeof categoryObj.title === "string" &&
+    typeof categoryObj.description === "string" &&
+    (categoryObj.imageUrl === undefined || typeof categoryObj.imageUrl === "string")
+  );
 }
 

@@ -1,24 +1,24 @@
-import { category, isCategory } from "@/types";
+import { coupon, isCoupon } from "@/types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
 
-    if (!isCategory(data)) {
+    if (!isCoupon(data)) {
       return NextResponse.json({ error: "Invalid data" }, { status: 400 });
     }
 
-    const newCategory:category = {
+    const newCoupon: coupon = {
+      couponCode: data.couponCode,
+      expiryDate: data.expiryDate,
       title: data.title,
-      slug: data.slug,
-      imageUrl: data.imageUrl,
-      description: data.description,
+      status: data.status || "inactive",
     };
 
-    console.log(newCategory);
+    console.log(newCoupon);
 
-    return NextResponse.json(newCategory, { status: 201 });
+    return NextResponse.json(newCoupon, { status: 201 });
   } catch (error: unknown) {
     console.error(error);
     return NextResponse.json(
@@ -27,4 +27,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

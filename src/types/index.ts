@@ -1,3 +1,4 @@
 export * from "./inputTypes";
 export * from "./category";
+export * from "./coupon";
 

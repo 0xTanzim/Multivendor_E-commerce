@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       barcode: data.barcode,
       categoryIds: data.categoryIds,
       farmerIds: data.farmerIds,
+      isActive: data.isActive,
     };
 
     console.log(newProduct);

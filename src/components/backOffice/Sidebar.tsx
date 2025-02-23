@@ -65,7 +65,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: "/dashboard/staff",
     },
     {
-      title: "Limi Community",
+      title: " Community",
       icon: Building2,
       href: "/dashboard/community",
     },
@@ -163,7 +163,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
               {isOpenMenu ? <ChevronDown /> : <ChevronRight />}
             </div>
           </CollapsibleTrigger>
-          <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-800 rounded-lg">
+          <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
             {catalogLinks.map((item, index) => (
               <Link
                 key={index}

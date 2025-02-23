@@ -7,6 +7,7 @@ import SelectInput from "@/components/FormInputs/SelectInput";
 import SubmitButton from "@/components/FormInputs/SubmitButton";
 import TextareaInput from "@/components/FormInputs/TextareaInput";
 import TextInput from "@/components/FormInputs/TextInput";
+import ToggleInput from "@/components/FormInputs/ToggleInput";
 import { FileRoutes } from "@/config";
 import { makePostRequest } from "@/lib/apiRequest";
 import { product } from "@/types";
@@ -21,11 +22,17 @@ const NewProductPage = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<product>({});
+  } = useForm<product>({
+    defaultValues: {
+      isActive: true,
+    },
+  });
+
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const [tags, setTags] = useState<string[]>([]);
+
 
   const categories = [
     { id: "1", title: "Category 1" },
@@ -46,7 +53,6 @@ const NewProductPage = () => {
     data.tags = tags;
 
     console.log(data);
-    
 
     makePostRequest({
       setLoading,
@@ -123,6 +129,7 @@ const NewProductPage = () => {
             imageUrl={imageUrl}
             endpoint={FileRoutes.productImageUploader}
           />
+          <ArrayItemsInput items={tags} setItems={setTags} itemTitle="Tag" />
           <TextareaInput
             label="Product Description"
             name="description"
@@ -130,7 +137,13 @@ const NewProductPage = () => {
             errors={errors}
           />
 
-          <ArrayItemsInput items={tags} setItems={setTags} itemTitle="Tag" />
+          <ToggleInput
+            label="Product Status"
+            name="isActive"
+            trueTitle="Active"
+            falseTitle="Draft"
+            register={register}
+          />
         </div>
         <SubmitButton
           isLoading={loading}

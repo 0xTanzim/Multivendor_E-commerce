@@ -3,7 +3,7 @@ export type coupon = {
   title: string;
   couponCode: string;
   expiryDate: Date | string;
-  status?: "active" | "inactive";
+  status?: "ACTIVE" | "INACTIVE";
 };
 
 export function isCouponArray(obj: unknown): obj is coupon[] {

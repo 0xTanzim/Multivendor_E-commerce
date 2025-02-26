@@ -109,9 +109,9 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: "/dashboard/coupons",
     },
     {
-      title: "store sliders",
+      title: "store Banners",
       icon: MonitorPlay,
-      href: "/dashboard/sliders",
+      href: "/dashboard/banners",
     },
   ];
 

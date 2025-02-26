@@ -8,7 +8,7 @@ import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
-import { makePostRequest } from '@/lib/apiRequest';
+import { usePostRequest } from '@/hooks/usePostRequest';
 import { Community } from '@/types';
 import { generateSlug } from '@/utils/generateSlug';
 import { useState } from 'react';
@@ -25,6 +25,7 @@ const NewTrainingPage = () => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<string>('');
+  const makePostRequest = usePostRequest();
 
   const categories = [
     {
@@ -60,6 +61,7 @@ const NewTrainingPage = () => {
       data,
       resourceName: 'Training',
       reset,
+      redirectPath: '/dashboard/community',
     });
 
     setImageUrl(null);
@@ -90,7 +92,6 @@ const NewTrainingPage = () => {
             options={categories}
             className="w-full"
             setValue={setValue}
-            
           />
 
           <TextareaInput

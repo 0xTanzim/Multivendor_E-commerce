@@ -1,9 +1,26 @@
-import React from 'react'
+import PageHeader from '../../_components/PageHeader';
+import TableActions from '../../_components/TableActions';
 
-const bannersPage = () => {
+const bannerPage = () => {
   return (
-    <div>banners</div>
-  )
-}
+    <div>
+      {/* header  */}
+      <PageHeader
+        heading="Banners"
+        linkTitle="Add Banner"
+        href="/dashboard/banners/new"
+      />
 
-export default bannersPage
+      {/* table action */}
+      <TableActions />
+
+      <div className="py-8">
+        <h2>Table</h2>
+        {/* Placeholder for banner table implementation */}
+      </div>
+    </div>
+  );
+};
+
+export default bannerPage;
+

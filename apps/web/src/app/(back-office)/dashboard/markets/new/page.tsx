@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import FormHeader from "@/components/backOffice/FormHeader";
-import ImageInput from "@/components/FormInputs/ImageInput";
-import SubmitButton from "@/components/FormInputs/SubmitButton";
-import TextareaInput from "@/components/FormInputs/TextareaInput";
-import TextInput from "@/components/FormInputs/TextInput";
-import ToggleInput from "@/components/FormInputs/ToggleInput";
-import { FileRoutes } from "@/config";
-import { makePostRequest } from "@/lib/apiRequest";
-import { market } from "@/types";
-import { generateSlug } from "@/utils";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import FormHeader from '@/components/backOffice/FormHeader';
+import ImageInput from '@/components/FormInputs/ImageInput';
+import SubmitButton from '@/components/FormInputs/SubmitButton';
+import TextareaInput from '@/components/FormInputs/TextareaInput';
+import TextInput from '@/components/FormInputs/TextInput';
+import ToggleInput from '@/components/FormInputs/ToggleInput';
+import { FileRoutes } from '@/config';
+import { usePostRequest } from '@/hooks/usePostRequest';
+import { market } from '@/types';
+import { generateSlug } from '@/utils';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const NewMarketPage = () => {
   const {
@@ -27,19 +27,21 @@ const NewMarketPage = () => {
 
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const makePostRequest = usePostRequest();
 
   const onSubmit = async (data: market) => {
     const slug = generateSlug(data.title);
     data.slug = slug;
 
-    data.logoUrl = logoUrl ?? "";
+    data.logoUrl = logoUrl ?? '';
 
     makePostRequest({
       setLoading,
-      endpoint: "api/markets",
+      endpoint: 'api/markets',
       data,
-      resourceName: "Market",
+      resourceName: 'Market',
       reset,
+      redirectPath: '/dashboard/markets',
     });
     setLogoUrl(null);
   };

@@ -2,61 +2,38 @@
 
 import FormHeader from '@/components/backOffice/FormHeader';
 import ImageInput from '@/components/FormInputs/ImageInput';
-import SelectInput from '@/components/FormInputs/SelectInput';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
-import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
+import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { category } from '@/types';
-import { generateSlug } from '@/utils/generateSlug';
+import { Banner } from '@/types';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
-const NewCategoryPage = () => {
+const NewBannerPage = () => {
   const {
     register,
     handleSubmit,
     reset,
     setValue,
     formState: { errors },
-  } = useForm<category>({});
+  } = useForm<Banner>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const makePostRequest = usePostRequest();
 
-  const markets = [
-    {
-      id: 1,
-      title: ' Market 1',
-    },
-    {
-      id: 2,
-      title: ' Market 2',
-    },
-    {
-      id: 3,
-      title: ' Market 3',
-    },
-    {
-      id: 4,
-      title: ' Market 4',
-    },
-  ];
-
-  const onSubmit = async (data: category) => {
+  const onSubmit = async (data: Banner) => {
     setLoading(true);
-    const slug = generateSlug(data?.title);
-    data.slug = slug;
-    data.imageUrl = imageUrl ?? undefined;
+    data.imageUri = imageUrl ?? '';
 
     makePostRequest({
       setLoading,
-      endpoint: 'api/categories',
+      endpoint: 'api/banners',
       data,
-      resourceName: 'Category',
+      resourceName: 'Banner',
       reset,
-      redirectPath: '/dashboard/categories',
+      redirectPath: '/dashboard/banners',
     });
   };
 
@@ -69,45 +46,42 @@ const NewCategoryPage = () => {
       >
         <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
           <TextInput
-            label="Category Title"
+            label="Banner Title"
             name="title"
             register={register}
             errors={errors}
-            className="w-full"
           />
 
-          <SelectInput
-            label="Select Market"
-            name="marketIds"
-            options={markets}
-            className="w-full"
-            hasMultiple={true}
-            setValue={setValue}
-          />
-
-          <TextareaInput
-            label="Category Description"
-            name="description"
+          <TextInput
+            label="Banner link"
+            name="link"
             register={register}
             errors={errors}
           />
 
           <ImageInput
-            label="Category Image"
+            label="Banner Image"
             setImageUrl={setImageUrl}
             imageUrl={imageUrl}
-            endpoint={FileRoutes.categoryImageUploader}
+            endpoint={FileRoutes.bannerImageUploader}
+          />
+          <ToggleInput
+            label="Publish your Banner"
+            name="isActive"
+            trueTitle="Active"
+            falseTitle="Draft"
+            register={register}
           />
         </div>
 
         <SubmitButton
           isLoading={loading}
-          buttonTitle="Create Category"
-          loadingButtonTitle="Creating Category please wait..."
+          buttonTitle="Create Banner"
+          loadingButtonTitle="Creating Banner please wait..."
         />
       </form>
     </div>
   );
 };
 
-export default NewCategoryPage;
+export default NewBannerPage;

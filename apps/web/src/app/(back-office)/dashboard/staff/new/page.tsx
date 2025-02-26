@@ -4,7 +4,7 @@ import FormHeader from '@/components/backOffice/FormHeader';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
-import { makePostRequest } from '@/lib/apiRequest';
+import { usePostRequest } from '@/hooks/usePostRequest';
 import { Staff } from '@/types';
 import { generateUserCode } from '@/utils';
 import { useState } from 'react';
@@ -24,16 +24,18 @@ const NewStaffPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const makePostRequest = usePostRequest();
 
   const onSubmit = async (data: Staff) => {
     const code = generateUserCode('STF', data.name);
     data.code = code;
-    await makePostRequest({
+    makePostRequest({
       setLoading,
       endpoint: 'api/staffs',
       data,
       resourceName: 'Staff',
       reset,
+      redirectPath: '/dashboard/staffs',
     });
   };
 

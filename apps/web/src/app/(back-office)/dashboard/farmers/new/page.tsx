@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import FormHeader from "@/components/backOffice/FormHeader";
-import SubmitButton from "@/components/FormInputs/SubmitButton";
-import TextareaInput from "@/components/FormInputs/TextareaInput";
-import TextInput from "@/components/FormInputs/TextInput";
-import ToggleInput from "@/components/FormInputs/ToggleInput";
-import { makePostRequest } from "@/lib/apiRequest";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import FormHeader from '@/components/backOffice/FormHeader';
+import SubmitButton from '@/components/FormInputs/SubmitButton';
+import TextareaInput from '@/components/FormInputs/TextareaInput';
+import TextInput from '@/components/FormInputs/TextInput';
+import ToggleInput from '@/components/FormInputs/ToggleInput';
+import { usePostRequest } from '@/hooks/usePostRequest';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const NewFarmerPage = () => {
   const {
@@ -21,19 +21,18 @@ const NewFarmerPage = () => {
       isActive: true,
     },
   });
-
+  const makePostRequest = usePostRequest();
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
-
-
     makePostRequest({
       setLoading,
-      endpoint: "api/farmers",
+      endpoint: 'api/farmers',
       data,
-      resourceName: "Farmer",
+      resourceName: 'Farmer',
       reset,
+      redirectPath: '/dashboard/farmers',
     });
   };
 
@@ -93,22 +92,19 @@ const NewFarmerPage = () => {
             className="w-full"
           />
 
-          
-
           <TextareaInput
-          label="Farmer's Payment Terms"
-          name= "terms"
-          register={register}
-          errors={errors}
-          
+            label="Farmer's Payment Terms"
+            name="terms"
+            register={register}
+            errors={errors}
           />
 
           <TextareaInput
-          label="Notes"
-          name= "notes"
-          register={register}
-          errors={errors}
-          isRequired={false}
+            label="Notes"
+            name="notes"
+            register={register}
+            errors={errors}
+            isRequired={false}
           />
 
           <ToggleInput
@@ -117,10 +113,7 @@ const NewFarmerPage = () => {
             trueTitle="Active"
             falseTitle="Draft"
             register={register}
-         
           />
-
-
         </div>
         <SubmitButton
           isLoading={loading}

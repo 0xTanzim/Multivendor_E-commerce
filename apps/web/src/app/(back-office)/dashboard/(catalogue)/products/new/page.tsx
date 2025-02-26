@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import FormHeader from "@/components/backOffice/FormHeader";
-import ArrayItemsInput from "@/components/FormInputs/ArrayItemsInput";
-import ImageInput from "@/components/FormInputs/ImageInput";
-import SelectInput from "@/components/FormInputs/SelectInput";
-import SubmitButton from "@/components/FormInputs/SubmitButton";
-import TextareaInput from "@/components/FormInputs/TextareaInput";
-import TextInput from "@/components/FormInputs/TextInput";
-import ToggleInput from "@/components/FormInputs/ToggleInput";
-import { FileRoutes } from "@/config";
-import { makePostRequest } from "@/lib/apiRequest";
-import { product } from "@/types";
-import { generateSlug } from "@/utils/generateSlug";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import FormHeader from '@/components/backOffice/FormHeader';
+import ArrayItemsInput from '@/components/FormInputs/ArrayItemsInput';
+import ImageInput from '@/components/FormInputs/ImageInput';
+import SelectInput from '@/components/FormInputs/SelectInput';
+import SubmitButton from '@/components/FormInputs/SubmitButton';
+import TextareaInput from '@/components/FormInputs/TextareaInput';
+import TextInput from '@/components/FormInputs/TextInput';
+import ToggleInput from '@/components/FormInputs/ToggleInput';
+import { FileRoutes } from '@/config';
+import { usePostRequest } from '@/hooks/usePostRequest';
+import { product } from '@/types';
+import { generateSlug } from '@/utils/generateSlug';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const NewProductPage = () => {
   const {
@@ -30,20 +30,20 @@ const NewProductPage = () => {
 
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const makePostRequest = usePostRequest();
 
   const [tags, setTags] = useState<string[]>([]);
 
-
   const categories = [
-    { id: "1", title: "Category 1" },
-    { id: "2", title: "Category 2" },
-    { id: "3", title: "Category 3" },
+    { id: '1', title: 'Category 1' },
+    { id: '2', title: 'Category 2' },
+    { id: '3', title: 'Category 3' },
   ];
 
   const farmers = [
-    { id: "1", title: "Farmer 1" },
-    { id: "2", title: "Farmer 2" },
-    { id: "3", title: "Farmer 3" },
+    { id: '1', title: 'Farmer 1' },
+    { id: '2', title: 'Farmer 2' },
+    { id: '3', title: 'Farmer 3' },
   ];
 
   const onSubmit = async (data: product) => {
@@ -56,10 +56,11 @@ const NewProductPage = () => {
 
     makePostRequest({
       setLoading,
-      endpoint: "api/products",
+      endpoint: 'api/products',
       data,
-      resourceName: "Product",
+      resourceName: 'Product',
       reset,
+      redirectPath: '/dashboard/products',
     });
   };
 

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import FormHeader from "@/components/backOffice/FormHeader";
-import SubmitButton from "@/components/FormInputs/SubmitButton";
-import TextInput from "@/components/FormInputs/TextInput";
-import { makePostRequest } from "@/lib/apiRequest";
-import { coupon } from "@/types";
-import { generateCouponCode } from "@/utils";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import FormHeader from '@/components/backOffice/FormHeader';
+import SubmitButton from '@/components/FormInputs/SubmitButton';
+import TextInput from '@/components/FormInputs/TextInput';
+import { usePostRequest } from '@/hooks/usePostRequest';
+import { coupon } from '@/types';
+import { generateCouponCode } from '@/utils';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const NewCouponPage = () => {
   const {
@@ -18,20 +18,19 @@ const NewCouponPage = () => {
   } = useForm<coupon>({});
 
   const [loading, setLoading] = useState(false);
+  const postRequest = usePostRequest();
 
   const onSubmit = async (data: coupon) => {
-    // setLoading(true);
-
     const couponCode = generateCouponCode(data?.title, data?.expiryDate);
-
     data.couponCode = couponCode;
 
-    makePostRequest({
+    postRequest({
       setLoading,
-      endpoint: "api/coupons",
+      endpoint: 'api/coupons',
       data,
-      resourceName: "coupon",
+      resourceName: 'coupon',
       reset,
+      redirectPath: '/dashboard/coupons',
     });
   };
 

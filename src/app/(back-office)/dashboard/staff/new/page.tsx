@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import FormHeader from "@/components/backOffice/FormHeader";
-import SubmitButton from "@/components/FormInputs/SubmitButton";
-import TextareaInput from "@/components/FormInputs/TextareaInput";
-import TextInput from "@/components/FormInputs/TextInput";
-import { makePostRequest } from "@/lib/apiRequest";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import FormHeader from '@/components/backOffice/FormHeader';
+import SubmitButton from '@/components/FormInputs/SubmitButton';
+import TextareaInput from '@/components/FormInputs/TextareaInput';
+import TextInput from '@/components/FormInputs/TextInput';
+import { makePostRequest } from '@/lib/apiRequest';
+import { Staff } from '@/types';
+import { generateUserCode } from '@/utils';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 const NewStaffPage = () => {
   const {
@@ -15,21 +17,22 @@ const NewStaffPage = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm({
+  } = useForm<Staff>({
     defaultValues: {
       isActive: true,
     },
   });
 
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data) => {
-    makePostRequest({
+  const onSubmit = async (data: Staff) => {
+    const code = generateUserCode('STF', data.name);
+    data.code = code;
+    await makePostRequest({
       setLoading,
-      endpoint: "api/staffs",
+      endpoint: 'api/staffs',
       data,
-      resourceName: "Staff",
+      resourceName: 'Staff',
       reset,
     });
   };
@@ -66,6 +69,24 @@ const NewStaffPage = () => {
           />
 
           <TextInput
+            label="NIN (ID Number)"
+            name="nin"
+            register={register}
+            type="text"
+            errors={errors}
+            className="w-full"
+          />
+
+          <TextInput
+            label="Date of Birth"
+            name="dob"
+            register={register}
+            type="text"
+            errors={errors}
+            className="w-full"
+          />
+
+          <TextInput
             label="Staff Password"
             name="password"
             register={register}
@@ -76,7 +97,7 @@ const NewStaffPage = () => {
 
           <TextInput
             label="Staff's Physical Address"
-            name="address"
+            name="physicalAddress"
             register={register}
             errors={errors}
             className="w-full"

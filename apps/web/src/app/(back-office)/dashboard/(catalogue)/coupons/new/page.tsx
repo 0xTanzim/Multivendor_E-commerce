@@ -4,8 +4,8 @@ import FormHeader from '@/components/backOffice/FormHeader';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextInput from '@/components/FormInputs/TextInput';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { coupon } from '@/types';
-import { generateCouponCode } from '@/utils';
+import { coupon } from '@repo/types';
+import { generateCouponCode } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

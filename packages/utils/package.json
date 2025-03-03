@@ -1,0 +1,16 @@
+{
+  "name": "@repo/utils",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {},
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^22.13.8",
+    "eslint": "^9.21.0",
+    "typescript": "^5.8.2"
+  }
+}

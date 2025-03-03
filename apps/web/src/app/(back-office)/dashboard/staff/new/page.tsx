@@ -5,8 +5,8 @@ import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { Staff } from '@/types';
-import { generateUserCode } from '@/utils';
+import { Staff } from '@repo/types';
+import { generateUserCode } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

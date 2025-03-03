@@ -1,4 +1,4 @@
-import { isStaff, Staff } from '@/types';
+import { isStaff, Staff } from '@repo/types';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {

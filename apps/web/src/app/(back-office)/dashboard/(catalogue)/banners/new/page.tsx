@@ -7,7 +7,7 @@ import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { Banner } from '@/types';
+import { Banner } from '@repo/types';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

@@ -1,4 +1,4 @@
-import { Community as Training, isCommunity as isTraining } from '@/types';
+import { Community as Training, isCommunity as isTraining } from '@repo/types';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {

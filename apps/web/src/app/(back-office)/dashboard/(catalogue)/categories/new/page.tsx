@@ -8,8 +8,8 @@ import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { category } from '@/types';
-import { generateSlug } from '@/utils/generateSlug';
+import { category } from '@repo/types';
+import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

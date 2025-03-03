@@ -8,8 +8,8 @@ import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { market } from '@/types';
-import { generateSlug } from '@/utils';
+import { market } from '@repo/types';
+import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 

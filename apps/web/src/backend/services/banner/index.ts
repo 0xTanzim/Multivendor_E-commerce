@@ -1,5 +1,5 @@
-import prisma from '@/backend/lib/prisma';
-import { Banner } from '@/types';
+import { Banner } from '@repo/types';
+import { prisma } from '@repo/database';
 
 export const createBanner = async (data: Banner) => {
   try {
@@ -7,12 +7,15 @@ export const createBanner = async (data: Banner) => {
       link: data.link,
       title: data.title,
       isActive: data.isActive || false,
-      imageUrl: data.imageUri,
+      imageUrl: data.imageUri || '',
     };
 
     const res = await prisma.banner.create({
       data: newBanner,
     });
+
+    console.log('Banner created successfully', res);
+    
 
     return res;
   } catch (err) {
@@ -20,4 +23,3 @@ export const createBanner = async (data: Banner) => {
     throw new Error('Failed to create banner');
   }
 };
-

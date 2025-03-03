@@ -1,6 +1,6 @@
-import prisma from '@/backend/lib/prisma';
-import { isoFormate } from '@/backend/utils';
-import { coupon } from '@/types';
+import { prisma } from '@repo/database';
+import { coupon } from '@repo/types';
+import { isoFormate } from '@repo/utils';
 
 export const createCoupon = async (data: coupon) => {
   try {
@@ -24,4 +24,3 @@ export const createCoupon = async (data: coupon) => {
     throw new Error('Error creating coupon');
   }
 };
-

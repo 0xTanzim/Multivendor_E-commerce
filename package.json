@@ -1,5 +1,35 @@
 {
+  "name": "ecommerce",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "next": "pnpm --filter web dev"
-  }
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "test": "turbo run test",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json}\"",
+    "next": "pnpm --filter web dev",
+    "db:generate": "turbo run db:generate",
+    "db:push": "turbo run db:push",
+    "db:pull": "turbo run db:pull",
+    "db:studio": "turbo run db:studio",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.8",
+    "prettier": "^3.5.3",
+    "turbo": "^2.4.4",
+    "typescript": "5.8.2",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.2"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+    ]
+  },
+  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b"
 }

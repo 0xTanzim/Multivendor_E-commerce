@@ -1,5 +1,5 @@
 import { createBanner } from '@/backend/services/banner';
-import { isBanner } from '@/types';
+import { isBanner } from '@repo/types';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {

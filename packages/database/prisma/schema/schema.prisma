@@ -1,0 +1,12 @@
+//https://www.prisma.io/blog/organize-your-prisma-schema-with-multi-file-support
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./../generated/client"
+  previewFeatures = ["prismaSchemaFolder"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}

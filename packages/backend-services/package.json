@@ -1,0 +1,13 @@
+{
+  "name": "@repo/backend-services",
+  "version": "1.0.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/types": "workspace:*",
+    "@repo/utils": "workspace:*"
+  }
+}

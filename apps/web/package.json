@@ -31,13 +31,14 @@
     "sass": "^1.85.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.5.2"
+    "uploadthing": "^7.5.2",
+    "@repo/database": "workspace:*",
+    "@repo/utils": "workspace:*",
+    "@repo/backend-services": "workspace:*"
   },
   "devDependencies": {
-    "@repo/database": "workspace:*",
-    "@repo/types": "workspace:*",
-    "@repo/utils": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/types": "workspace:*",
     "@repo/eslint-config": "workspace:*",
     "@eslint/eslintrc": "^3",
     "@tailwindcss/forms": "^0.5.10",

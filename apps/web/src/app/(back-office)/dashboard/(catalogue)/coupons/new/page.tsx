@@ -3,8 +3,9 @@
 import FormHeader from '@/components/backOffice/FormHeader';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextInput from '@/components/FormInputs/TextInput';
+import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { coupon } from '@repo/types';
+import { Coupon } from '@repo/types';
 import { generateCouponCode } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,12 +16,12 @@ const NewCouponPage = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<coupon>({});
+  } = useForm<Coupon>({});
 
   const [loading, setLoading] = useState(false);
   const postRequest = usePostRequest();
 
-  const onSubmit = async (data: coupon) => {
+  const onSubmit = async (data: Coupon) => {
     const couponCode = generateCouponCode(data?.title, data?.expiryDate);
     data.couponCode = couponCode;
 
@@ -57,6 +58,14 @@ const NewCouponPage = () => {
             errors={errors}
             type="date"
             className="w-full"
+          />
+
+          <ToggleInput
+            label=" Status"
+            name="isActive"
+            trueTitle="Active"
+            falseTitle="Draft"
+            register={register}
           />
         </div>
 

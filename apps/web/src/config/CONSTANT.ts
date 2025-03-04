@@ -5,6 +5,7 @@ export enum FileRoutes {
   productImageUploader = "productImageUploader",
   trainingImageUploader = "trainingImageUploader",
   bannerImageUploader = "bannerImageUploader",
+  farmerImageUploader = "farmerImageUploader",
 }
 
 

@@ -44,6 +44,15 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.1.1
         version: 1.1.2(@types/react@19.0.10)(react@19.0.0)
+      '@repo/backend-services':
+        specifier: workspace:*
+        version: link:../../packages/backend-services
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@uploadthing/react':
         specifier: ^7.3.0
         version: 7.3.0(next@15.1.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.85.1))(react@19.0.0)(uploadthing@7.5.2(next@15.1.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.85.1))(tailwindcss@3.4.17))
@@ -102,9 +111,6 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.0
-      '@repo/database':
-        specifier: workspace:*
-        version: link:../../packages/database
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
@@ -114,9 +120,6 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../tooling/typescript-config
-      '@repo/utils':
-        specifier: workspace:*
-        version: link:../../packages/utils
       '@tailwindcss/forms':
         specifier: ^0.5.10
         version: 0.5.10(tailwindcss@3.4.17)
@@ -147,6 +150,45 @@ importers:
       typescript:
         specifier: ^5
         version: 5.7.3
+
+  packages/backend-repository:
+    dependencies:
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+
+  packages/backend-services:
+    dependencies:
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
+
+  packages/core:
+    dependencies:
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      '@repo/utils':
+        specifier: workspace:*
+        version: link:../utils
 
   packages/database:
     dependencies:

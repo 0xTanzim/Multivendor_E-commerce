@@ -2,13 +2,13 @@
 
 import FormHeader from '@/components/backOffice/FormHeader';
 import ImageInput from '@/components/FormInputs/ImageInput';
-import SelectInput from '@/components/FormInputs/SelectInput';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
+import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { category } from '@repo/types';
+import { CreateCategory } from '@repo/types';
 import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,31 +20,12 @@ const NewCategoryPage = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<category>({});
+  } = useForm<CreateCategory>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const makePostRequest = usePostRequest();
 
-  const markets = [
-    {
-      id: 1,
-      title: ' Market 1',
-    },
-    {
-      id: 2,
-      title: ' Market 2',
-    },
-    {
-      id: 3,
-      title: ' Market 3',
-    },
-    {
-      id: 4,
-      title: ' Market 4',
-    },
-  ];
-
-  const onSubmit = async (data: category) => {
+  const onSubmit = async (data: CreateCategory) => {
     setLoading(true);
     const slug = generateSlug(data?.title);
     data.slug = slug;
@@ -76,15 +57,6 @@ const NewCategoryPage = () => {
             className="w-full"
           />
 
-          <SelectInput
-            label="Select Market"
-            name="marketIds"
-            options={markets}
-            className="w-full"
-            hasMultiple={true}
-            setValue={setValue}
-          />
-
           <TextareaInput
             label="Category Description"
             name="description"
@@ -97,6 +69,14 @@ const NewCategoryPage = () => {
             setImageUrl={setImageUrl}
             imageUrl={imageUrl}
             endpoint={FileRoutes.categoryImageUploader}
+          />
+
+          <ToggleInput
+            label="Category Status"
+            name="isActive"
+            trueTitle="Active"
+            falseTitle="Draft"
+            register={register}
           />
         </div>
 

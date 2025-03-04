@@ -8,6 +8,7 @@ model Coupon {
   title      String
   couponCode String
   expiryDate DateTime
+  isActive   Boolean      @default(true)
   status     CouponStatus
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt

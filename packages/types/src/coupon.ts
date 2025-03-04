@@ -1,18 +1,19 @@
-export type coupon = {
+export type Coupon = {
   id?: string;
   title: string;
   couponCode: string;
   expiryDate: Date | string;
   status?: "ACTIVE" | "INACTIVE";
+  isActive?: boolean;
 };
 
-export function isCouponArray(obj: unknown): obj is coupon[] {
+export function isCouponArray(obj: unknown): obj is Coupon[] {
   return Array.isArray(obj) && obj.every(isCoupon);
 }
 
-export function isCoupon(obj: unknown): obj is coupon {
+export function isCoupon(obj: unknown): obj is Coupon {
   if (typeof obj !== "object" || obj === null) return false;
-  const couponObj = obj as coupon;
+  const couponObj = obj as Coupon;
 
   return (
     "title" in couponObj &&

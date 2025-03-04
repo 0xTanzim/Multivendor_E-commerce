@@ -9,7 +9,7 @@ import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { Community } from '@repo/types';
+import { Training } from '@repo/types';
 import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -21,7 +21,7 @@ const NewTrainingPage = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<Community>({});
+  } = useForm<Training>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<string>('');
@@ -46,7 +46,7 @@ const NewTrainingPage = () => {
     },
   ];
 
-  const onSubmit = async (data: Community) => {
+  const onSubmit = async (data: Training) => {
     setLoading(true);
     const slug = generateSlug(data?.title);
     data.slug = slug;

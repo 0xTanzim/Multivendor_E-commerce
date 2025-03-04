@@ -10,7 +10,7 @@ import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { product } from '@repo/types';
+import { Product } from '@repo/types';
 import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,7 +22,7 @@ const NewProductPage = () => {
     reset,
     setValue,
     formState: { errors },
-  } = useForm<product>({
+  } = useForm<Product>({
     defaultValues: {
       isActive: true,
     },
@@ -46,7 +46,7 @@ const NewProductPage = () => {
     { id: '3', title: 'Farmer 3' },
   ];
 
-  const onSubmit = async (data: product) => {
+  const onSubmit = async (data: Product) => {
     const slug = generateSlug(data?.title);
     data.slug = slug;
     data.images = imageUrl ? [imageUrl] : [];

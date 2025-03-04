@@ -1,4 +1,4 @@
-import { isProduct, product } from "@/types";
+import { isProduct, Product } from "@repo/types";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
@@ -9,13 +9,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid data" }, { status: 400 });
     }
 
-    const newProduct: product = {
+    const newProduct: Product = {
       title: data.title,
       slug: data.slug,
       description: data.description,
       productPrice: data.productPrice,
       tags: data.tags,
-      status: data.status || "inactive",
       sku: data.sku,
       barcode: data.barcode,
       categoryIds: data.categoryIds,

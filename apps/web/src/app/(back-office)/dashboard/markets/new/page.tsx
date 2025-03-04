@@ -2,13 +2,14 @@
 
 import FormHeader from '@/components/backOffice/FormHeader';
 import ImageInput from '@/components/FormInputs/ImageInput';
+import SelectInput from '@/components/FormInputs/SelectInput';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { market } from '@repo/types';
+import { Market } from '@repo/types';
 import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -18,8 +19,9 @@ const NewMarketPage = () => {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm<market>({
+  } = useForm<Market>({
     defaultValues: {
       isActive: true,
     },
@@ -27,9 +29,25 @@ const NewMarketPage = () => {
 
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
   const makePostRequest = usePostRequest();
 
-  const onSubmit = async (data: market) => {
+  const categories = [
+    {
+      id: 1,
+      title: 'Category 1',
+    },
+    {
+      id: 2,
+      title: 'Category 2',
+    },
+    {
+      id: 3,
+      title: 'Category 3',
+    },
+  ];
+
+  const onSubmit = async (data: Market) => {
     const slug = generateSlug(data.title);
     data.slug = slug;
 
@@ -59,6 +77,16 @@ const NewMarketPage = () => {
             name="title"
             register={register}
             errors={errors}
+            className="w-full"
+          />
+
+          <SelectInput
+            label="Select Categories"
+            name="categoryIds"
+            options={categories}
+            className="w-full"
+            hasMultiple={true}
+            setValue={setValue}
           />
 
           <ImageInput

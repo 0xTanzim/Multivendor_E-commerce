@@ -1,6 +1,6 @@
 "use client";
 
-import { TextareaInputProps } from "@/types";
+import { TextareaInputProps } from "@repo/types";
 
 export default function TextareaInput({
   label,

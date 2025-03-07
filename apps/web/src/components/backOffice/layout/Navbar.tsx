@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   AlignJustify,
@@ -7,8 +7,8 @@ import {
   LogOut,
   Settings,
   X,
-} from "lucide-react";
-import Image from "next/image";
+} from 'lucide-react';
+import Image from 'next/image';
 
 import {
   DropdownMenu,
@@ -17,8 +17,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import ThemeSwitcherBtn from "../ui/ThemeSwitcherBtn";
+} from '@/components/ui/dropdown-menu';
+import ThemeSwitcherBtn from '../../ui/ThemeSwitcherBtn';
 
 type NavbarProps = {
   setShowSidebar: (showSidebar: boolean) => void;
@@ -52,10 +52,7 @@ const Navbar = ({ setShowSidebar, showSidebar }: NavbarProps) => {
 
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <div
-             
-              className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-transparent rounded-lg  "
-            >
+            <div className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-transparent rounded-lg  ">
               <Bell className="text-emerald-500" />
               <span className="sr-only">Notifications</span>
               <div className="absolute inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500   rounded-full -top-0 end-6 dark:border-gray-900">
@@ -167,4 +164,3 @@ const Navbar = ({ setShowSidebar, showSidebar }: NavbarProps) => {
 };
 
 export default Navbar;
-

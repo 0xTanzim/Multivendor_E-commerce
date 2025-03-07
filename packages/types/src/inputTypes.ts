@@ -8,8 +8,10 @@ type BaseInputTypes = {
   // type?: string;
   type?: HTMLInputElement["type"];
   className?: string;
-  defaultValue?: string;
+  defaultValue?: string |  Object;
 };
 
-export type TextInputProps = BaseInputTypes & {};
+export type TextInputProps = BaseInputTypes & {
+  readOnly?: boolean;
+};
 export type TextareaInputProps = BaseInputTypes & {};

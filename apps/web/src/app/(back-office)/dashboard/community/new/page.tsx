@@ -1,5 +1,5 @@
 'use client';
-import FormHeader from '@/components/backOffice/FormHeader';
+import FormHeader from '@/components/backOffice/form/FormHeader';
 import ImageInput from '@/components/FormInputs/ImageInput';
 import QuillEditor from '@/components/FormInputs/QuillEditor';
 import SelectInput from '@/components/FormInputs/SelectInput';

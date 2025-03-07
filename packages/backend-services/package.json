@@ -5,9 +5,14 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
-    "@repo/utils": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@repo/utils": "workspace:*",
+    "bcryptjs": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6"
   }
 }

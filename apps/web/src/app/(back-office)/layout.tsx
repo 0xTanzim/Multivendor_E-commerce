@@ -1,14 +1,14 @@
-"use client";
-import Navbar from "@/components/backOffice/Navbar";
-import Sidebar from "@/components/backOffice/Sidebar";
-import { ReactNode, useState } from "react";
+'use client';
+import Navbar from '@/components/backOffice/layout/Navbar';
+import Sidebar from '@/components/backOffice/layout/Sidebar';
+import { ReactNode, useState } from 'react';
 
 type DashboardLayoutProps = {
   children: ReactNode;
 };
 
 function DashboardLayout({ children }: DashboardLayoutProps) {
-    const [showSidebar, setShowSidebar] = useState(false)
+  const [showSidebar, setShowSidebar] = useState(false);
   return (
     <div className="flex">
       {/* sidebar */}
@@ -28,4 +28,3 @@ function DashboardLayout({ children }: DashboardLayoutProps) {
 }
 
 export default DashboardLayout;
-

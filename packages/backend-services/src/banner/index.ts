@@ -1,5 +1,7 @@
-import { prisma } from '@repo/database';
+import { prisma} from '@repo/database';
 import { Banner } from '@repo/types';
+
+
 
 export class BannerService {
   public static instance: BannerService;

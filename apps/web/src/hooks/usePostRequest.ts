@@ -31,19 +31,16 @@ export function usePostRequest() {
       });
 
       setLoading(false);
+
+      const result = await response.json();
       if (response.ok) {
         toast.success(`New ${resourceName} Created Successfully`);
         reset();
-
         if (redirectPath) {
           router.push(redirectPath);
         }
       } else {
-        if (response.status === 409) {
-          toast.error('The Giving Warehouse Stock is NOT Enough');
-        } else {
-          toast.error('Something Went Wrong');
-        }
+        toast.error(result.error);
       }
     } catch (error) {
       setLoading(false);
@@ -52,4 +49,3 @@ export function usePostRequest() {
     }
   };
 }
-

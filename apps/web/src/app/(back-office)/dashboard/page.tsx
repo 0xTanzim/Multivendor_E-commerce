@@ -1,9 +1,8 @@
-
-import DashboardCarts from "./_components/DashboardCarts";
-import CustomDataTable from "./_components/CustomDataTable";
-import Heading from "@/components/backOffice/Heading";
-import LargeCards from "@/components/backOffice/LargeCards";
-import SmallCards from "@/components/backOffice/SmallCards";
+import LargeCards from '@/components/backOffice/card/LargeCards';
+import SmallCards from '@/components/backOffice/card/SmallCards';
+import Heading from '@/components/backOffice/layout/Heading';
+import CustomDataTable from './_components/CustomDataTable';
+import DashboardCarts from './_components/DashboardCarts';
 
 const DashboardPage = () => {
   return (
@@ -22,4 +21,3 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
-

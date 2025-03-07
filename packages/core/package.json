@@ -1,6 +1,9 @@
 {
   "name": "@repo/core",
   "version": "1.0.0",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
     "@repo/database": "workspace:*",

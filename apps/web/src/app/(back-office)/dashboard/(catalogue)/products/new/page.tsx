@@ -1,6 +1,6 @@
 'use client';
 
-import FormHeader from '@/components/backOffice/FormHeader';
+import FormHeader from '@/components/backOffice/form/FormHeader';
 import ArrayItemsInput from '@/components/FormInputs/ArrayItemsInput';
 import ImageInput from '@/components/FormInputs/ImageInput';
 import SelectInput from '@/components/FormInputs/SelectInput';

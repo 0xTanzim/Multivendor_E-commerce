@@ -46,6 +46,7 @@ export default function SelectInput({
           onChange={handleChange}
           className="text-slate-900"
           classNamePrefix="react-select"
+          
         />
       </div>
     </div>

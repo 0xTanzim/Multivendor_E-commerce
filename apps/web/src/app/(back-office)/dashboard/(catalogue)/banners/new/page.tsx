@@ -55,6 +55,7 @@ const NewBannerPage = () => {
           <TextInput
             label="Banner link"
             name="link"
+            type='url'
             register={register}
             errors={errors}
           />

@@ -68,4 +68,8 @@ export class FarmerService {
       throw new BadRequestError('Failed to create farmer');
     }
   }
+
+  async fetchAllFarmers() {
+    return await prisma.farmerProfile.findMany();
+  }
 }

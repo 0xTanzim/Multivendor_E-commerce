@@ -1,3 +1,4 @@
+import { handleError } from '@/utils';
 import { BannerService } from '@repo/backend-services';
 import { isBanner } from '@repo/types';
 import { NextResponse } from 'next/server';
@@ -31,19 +32,8 @@ export async function GET() {
     const bannerService = BannerService.getInstance();
     const banners = await bannerService.getBanners();
 
-    if (banners.length === 0) {
-      return NextResponse.json(
-        { message: 'No banners found' },
-        { status: 404 }
-      );
-    }
-
     return NextResponse.json(banners);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      { error: err, message: 'An error occurred' },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    return handleError(err);
   }
 }

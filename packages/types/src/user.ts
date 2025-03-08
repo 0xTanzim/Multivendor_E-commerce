@@ -1,6 +1,11 @@
 import { Product } from './product';
 
-export type UserRole = 'SUPER_ADMIN' | 'ADMIN' | 'FARMER' | 'MODERATOR' | 'USER';
+export type UserRole =
+  | 'SUPER_ADMIN'
+  | 'ADMIN'
+  | 'FARMER'
+  | 'MODERATOR'
+  | 'USER';
 export type Gender = 'MALE' | 'FEMALE' | 'UNKNOWN';
 
 export type User = {
@@ -27,4 +32,8 @@ export function isUser(data: unknown): data is User {
     'email' in user &&
     typeof user.email === 'string'
   );
+}
+
+export function isUserArray(data: unknown): data is User[] {
+  return Array.isArray(data) && data.every(isUser);
 }

@@ -1,9 +1,15 @@
 import { handleError } from '@/utils';
-import { UserService } from '@repo/backend-services';
+import { UserService, UserServiceExtend } from '@repo/backend-services';
 import { isUser } from '@repo/types';
 import { NextResponse } from 'next/server';
-const userService = UserService.getInstance();
+import {UserRepository} from '@repo/backend-repository'
+import { prisma } from '@repo/database';
 
+const userRepository = new UserRepository(prisma);
+const userServiceExtend = new UserServiceExtend(userRepository);
+
+
+const userService = UserService.getInstance();
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
@@ -20,7 +26,12 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const user = await userService.fetchAllUsers();
+    const user = await userServiceExtend.findAll({
+    select: {
+      name : true,
+    }
+    });
+   
     return NextResponse.json(user, { status: 200 });
   } catch (error: unknown) {
     return handleError(error);

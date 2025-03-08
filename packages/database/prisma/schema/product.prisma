@@ -1,16 +1,23 @@
 model Product {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  slug         String   @unique
-  description  String
-  imageUrl     String?
-  sku          String?
-  barcode      String?
-  productPrice Float
-  sellPrice    Float?
-  isActive     Boolean  @default(false)
-  tags         String[]
-  
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  slug           String   @unique
+  description    String
+  imageUrl       String?
+  sku            String?
+  barcode        String?
+  productPrice   Float
+  sellPrice      Float?
+  isActive       Boolean  @default(false)
+  tags           String[]
+  isWholesale    Boolean  @default(false)
+  productCode    String?
+  unit           String?
+  wholeSaleQty   Int
+  wholeSalePrice Float
+  productStock   Int
+  stockStatus    String?
+  qty            Int
 
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId String   @db.ObjectId

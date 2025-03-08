@@ -3,6 +3,7 @@ import { FarmerService } from '@repo/backend-services';
 import { isFarmer } from '@repo/types';
 import { NextResponse } from 'next/server';
 
+const farmerService = FarmerService.getInstance();
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
@@ -11,11 +12,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const farmerService = FarmerService.getInstance();
     const newFarmer = await farmerService.createFarmer(data);
 
     return NextResponse.json(newFarmer, { status: 201 });
   } catch (error: unknown) {
     return handleError(error);
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    const farmers = await farmerService.fetchAllFarmers();
+    return NextResponse.json(farmers, { status: 200 });
+  } catch (err) {
+    return handleError(err);
   }
 }

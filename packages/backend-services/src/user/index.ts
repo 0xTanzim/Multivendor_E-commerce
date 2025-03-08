@@ -1,8 +1,10 @@
+import { UserRepository } from '@repo/backend-repository';
 import {
   BadRequestError,
   ConflictError,
   NotFoundError,
 } from '@repo/common/error';
+import { BaseService } from '@repo/core';
 import { prisma } from '@repo/database';
 import { User } from '@repo/types';
 import bcrypt from 'bcryptjs';
@@ -102,5 +104,15 @@ export class UserService {
 
   async comparePassword(password: string, hashedPassword: string) {
     return bcrypt.compare(password, hashedPassword);
+  }
+}
+
+export class UserServiceExtend extends BaseService<User, UserRepository> {
+  constructor(userRepository: UserRepository) {
+    super(userRepository);
+  }
+
+  async fetchUserByEmail(email: string) {
+    return this.repository.findUnique({ where: { email } });
   }
 }

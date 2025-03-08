@@ -9,7 +9,7 @@ import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePostRequest } from '@/hooks/usePostRequest';
 import { Farmer, User } from '@repo/types';
-import { generateUserCode } from '@repo/utils';
+import { generateNameCode } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -39,7 +39,7 @@ export default function NewFarmerForm({ user }: Props) {
       data.profileImageUrl = imageUrl;
     }
 
-    const code = generateUserCode('MFF', data.name);
+    const code = generateNameCode('MFF', data.name);
     data.products = products;
     data.userId = user.id;
     data.code = code;

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -15,15 +15,18 @@
     "@radix-ui/react-dropdown-menu": "^2.1.4",
     "@radix-ui/react-slot": "^1.1.1",
     "@repo/backend-services": "workspace:*",
+    "@repo/backend-repository": "workspace:*",
+    "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@repo/core": "workspace:*",
     "@uploadthing/react": "^7.3.0",
     "bcryptjs": "^3.0.2",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.469.0",
-    "next": "15.1.4",
+    "next": "15.2.1",
     "next-themes": "^0.4.4",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
@@ -35,8 +38,7 @@
     "sass": "^1.85.1",
     "tailwind-merge": "^3.0.2",
     "tailwindcss-animate": "^1.0.7",
-    "uploadthing": "^7.5.2",
-    "@repo/common": "workspace:*"
+    "uploadthing": "^7.5.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -48,7 +50,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "15.1.4",
+    "eslint-config-next": "15.2.1",
     "postcss": "^8",
     "prisma": "^6.4.1",
     "react-scan": "^0.2.9",

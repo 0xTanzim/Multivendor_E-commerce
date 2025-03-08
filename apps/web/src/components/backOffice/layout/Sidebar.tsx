@@ -99,11 +99,6 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: "/dashboard/categories",
     },
     {
-      title: "Attributes",
-      icon: SendToBack,
-      href: "/dashboard/attributes",
-    },
-    {
       title: "Coupons",
       icon: BadgePercent,
       href: "/dashboard/coupons",
@@ -163,7 +158,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
               {isOpenMenu ? <ChevronDown /> : <ChevronRight />}
             </div>
           </CollapsibleTrigger>
-          <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-100 dark:bg-slate-800 rounded-lg">
+          <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-100 dark:text-slate-300 dark:dark:bg-slate-800 rounded-lg">
             {catalogLinks.map((item, index) => (
               <Link
                 key={index}

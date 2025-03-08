@@ -3,8 +3,8 @@
 type ToggleInputProps = {
   label: string;
   name: string;
-  trueTitle: 'Active' | 'Draft' | 'Inactive';
-  falseTitle: 'Active' | 'Draft' | 'Inactive';
+  trueTitle: 'Active' | 'Draft' | 'Inactive' | 'Supported' | 'Not Supported';
+  falseTitle: 'Active' | 'Draft' | 'Inactive' | 'Supported' | 'Not Supported';
   register: any;
   className?: string;
 };

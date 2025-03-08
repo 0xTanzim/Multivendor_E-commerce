@@ -1,4 +1,4 @@
-export const generateUserCode = (prefix: string, name: string): string => {
+export const generateNameCode = (prefix: string, name: string): string => {
   const formattedName = name.toUpperCase().replace(/\s+/g, '');
   const date = new Date();
   const day = String(date.getDate()).padStart(2, '0');

@@ -6,11 +6,13 @@
   },
   "dependencies": {
     "@repo/common": "workspace:*",
+    "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@repo/utils": "workspace:*",
-    "bcryptjs": "^3.0.2"
+    "bcryptjs": "^3.0.2",
+    "@repo/backend-repository": "workspace:*"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6"

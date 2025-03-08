@@ -51,7 +51,7 @@ export function isFarmer(data: unknown): data is Farmer {
     typeof obj.mainCrops === 'string' &&
     (obj.products === undefined ||
       (Array.isArray(obj.products) &&
-        obj.products.every((p) => typeof p === 'string' || isProduct(p))))
+        obj.products.every((p) => typeof p === 'string' || isProductData(p))))
   );
 }
 
@@ -63,6 +63,6 @@ export function isFarmers(data: unknown): data is Farmer[] {
   return data.every(isFarmer);
 }
 
-export function isProduct(data: unknown): data is Product {
+function isProductData(data: unknown): data is Product {
   return typeof data === 'object' && data !== null && 'id' in data;
 }

@@ -6,7 +6,7 @@ import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import { usePostRequest } from '@/hooks/usePostRequest';
 import { Staff } from '@repo/types';
-import { generateUserCode } from '@repo/utils';
+import { generateNameCode } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -27,7 +27,7 @@ const NewStaffPage = () => {
   const makePostRequest = usePostRequest();
 
   const onSubmit = async (data: Staff) => {
-    const code = generateUserCode('STF', data.name);
+    const code = generateNameCode('STF', data.name);
     data.code = code;
     makePostRequest({
       setLoading,

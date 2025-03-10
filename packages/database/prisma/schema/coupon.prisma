@@ -1,7 +1,4 @@
-enum CouponStatus {
-  ACTIVE
-  INACTIVE
-}
+
 
 model Coupon {
   id         String       @id @default(auto()) @map("_id") @db.ObjectId
@@ -9,7 +6,6 @@ model Coupon {
   couponCode String
   expiryDate DateTime
   isActive   Boolean      @default(true)
-  status     CouponStatus
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
 }

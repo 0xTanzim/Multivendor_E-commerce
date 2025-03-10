@@ -1,3 +1,4 @@
+"use client"
 import Heading from '@/components/backOffice/layout/Heading';
 import { X } from 'lucide-react';
 import { useRouter } from 'next/navigation';

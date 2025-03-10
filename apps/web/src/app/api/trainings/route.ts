@@ -1,11 +1,7 @@
+import { trainingService } from '@/lib/di';
 import { handleError } from '@/utils';
-import { TrainingRepository } from '@repo/backend-repository';
-import { TrainingService } from '@repo/backend-services';
-import { prisma } from '@repo/database';
 import { Training, isTraining } from '@repo/types';
 import { NextResponse } from 'next/server';
-
-const trainingService = new TrainingService(new TrainingRepository(prisma));
 
 export async function POST(req: Request) {
   try {

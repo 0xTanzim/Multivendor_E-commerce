@@ -1,9 +1,8 @@
+import { farmerService } from '@/lib/di';
 import { handleError } from '@/utils';
-import { FarmerService } from '@repo/backend-services';
 import { isFarmer } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-const farmerService = FarmerService.getInstance();
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
@@ -22,7 +21,7 @@ export async function POST(req: Request) {
 
 export async function GET(req: Request) {
   try {
-    const farmers = await farmerService.fetchAllFarmers();
+    const farmers = await farmerService.findAll();
     return NextResponse.json(farmers, { status: 200 });
   } catch (err) {
     return handleError(err);

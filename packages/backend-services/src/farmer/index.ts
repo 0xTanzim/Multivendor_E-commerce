@@ -1,51 +1,20 @@
-import {
-  BadRequestError,
-  ConflictError,
-  NotFoundError,
-} from '@repo/common/error';
-import { prisma, UserRole } from '@repo/database';
+import { FarmerProfileRepository } from '@repo/backend-repository';
+import { BadRequestError, ConflictError } from '@repo/common/error';
+import { BaseService, injectable } from '@repo/core';
+import { FarmerProfile } from '@repo/database';
 import { Farmer } from '@repo/types';
 
-export class FarmerService {
-  public static instance: FarmerService;
-
-  private constructor() {}
-
-  public static getInstance(): FarmerService {
-    if (!FarmerService.instance) {
-      FarmerService.instance = new FarmerService();
-    }
-    return FarmerService.instance;
-  }
-
-  async fetchUserFarmerById(id: string) {
-    if (!id) {
-      throw new BadRequestError('Id is required');
-    }
-
-    const farmer = await prisma.user.findUnique({
-      where: { id, role: UserRole.FARMER },
-    });
-
-    if (!farmer) {
-      throw new NotFoundError('Farmer not found');
-    }
-    return farmer;
-  }
-
-  async existFarmer(userId: string, email: string): Promise<boolean> {
-    const farmer = await prisma.farmerProfile.findFirst({
-      where: { userId, email },
-    });
-    return Boolean(farmer);
+@injectable()
+export class FarmerService extends BaseService<
+  FarmerProfile,
+  FarmerProfileRepository
+> {
+  constructor(farmerRepository: FarmerProfileRepository) {
+    super(farmerRepository);
   }
 
   async createFarmer(data: Farmer) {
     try {
-      if (await this.existFarmer(data.userId, data.email)) {
-        throw new ConflictError('Farmer already exists');
-      }
-
       return await prisma.farmerProfile.create({
         data: {
           ...data,
@@ -65,11 +34,12 @@ export class FarmerService {
       });
     } catch (error) {
       console.error('Error creating farmer:', error);
+
+      if (error.code === 'P2002') {
+        throw new ConflictError('Record already exists');
+      }
+
       throw new BadRequestError('Failed to create farmer');
     }
-  }
-
-  async fetchAllFarmers() {
-    return await prisma.farmerProfile.findMany();
   }
 }

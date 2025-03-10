@@ -7,14 +7,14 @@ export interface CreateCategory {
   slug: string;
   imageUrl?: string;
   description?: string;
-  isActive?: boolean;
+  isActive: boolean;
   marketIds?: string[];
 }
 
 export type Category = {
   id?: string;
   title: string;
-  slug?: string;
+  slug: string;
   description: string;
   imageUrl?: string;
   isActive?: boolean;

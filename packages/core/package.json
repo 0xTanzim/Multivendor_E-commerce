@@ -12,8 +12,6 @@
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/utils": "workspace:*",
-    "@repo/backend-services": "workspace:*",
-    "@repo/backend-repository": "workspace:*"
+    "@repo/utils": "workspace:*"
   }
 }

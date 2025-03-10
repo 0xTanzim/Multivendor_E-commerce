@@ -25,7 +25,7 @@ const NewBannerPage = () => {
 
   const onSubmit = async (data: Banner) => {
     setLoading(true);
-    data.imageUri = imageUrl ?? '';
+    data.imageUrl = imageUrl ?? '';
 
     makePostRequest({
       setLoading,

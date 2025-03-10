@@ -1,7 +1,8 @@
+import { couponService } from '@/lib/di';
+import { handleError } from '@/utils';
 import { isCoupon } from '@repo/types';
+import { isoFormate } from '@repo/utils';
 import { NextResponse } from 'next/server';
-
-import { CouponService } from '@repo/backend-services';
 
 export async function POST(req: Request): Promise<NextResponse> {
   try {
@@ -11,32 +12,30 @@ export async function POST(req: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const couponService = CouponService.getInstance();
-    const newCoupon = await couponService.createCoupon(data);
+    const newCoupon = await couponService.create({
+      ...data,
+      expiryDate:
+        data.expiryDate instanceof Date
+          ? data.expiryDate
+          : isoFormate(data.expiryDate),
+    });
 
     return NextResponse.json(newCoupon, {
       status: 201,
       statusText: 'Successfully created!',
     });
   } catch (error: unknown) {
-    console.error(error);
-    return NextResponse.json(
-      { error: String(error), message: 'An error occurred' },
-      { status: 500 }
-    );
+    return handleError(error);
   }
 }
 
 export async function GET(): Promise<NextResponse> {
   try {
-    const couponService = CouponService.getInstance();
-    const coupons = await couponService.getCoupons();
+    const coupons = await couponService.findAll({
+      orderBy: { createdAt: 'desc' },
+    });
     return NextResponse.json(coupons);
   } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      { error: String(err), message: 'An error occurred' },
-      { status: 500 }
-    );
+    return handleError(err);
   }
 }

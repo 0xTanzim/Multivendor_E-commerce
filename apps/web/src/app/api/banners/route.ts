@@ -1,5 +1,5 @@
+import { bannerService } from '@/lib/di';
 import { handleError } from '@/utils';
-import { BannerService } from '@repo/backend-services';
 import { isBanner } from '@repo/types';
 import { NextResponse } from 'next/server';
 
@@ -11,26 +11,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const bannerService = BannerService.getInstance();
-    const banner = await bannerService.createBanner(data);
+    const banner = await bannerService.create({
+      ...data,
+      imageUrl: data.imageUrl || '',
+    });
 
     return NextResponse.json(banner, { status: 201 });
   } catch (error: unknown) {
-    console.error(error);
-    return NextResponse.json(
-      {
-        error: 'An error occurred',
-        message: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    return handleError(error);
   }
 }
 
 export async function GET() {
   try {
-    const bannerService = BannerService.getInstance();
-    const banners = await bannerService.getBanners();
+    const banners = await bannerService.findAll();
 
     return NextResponse.json(banners);
   } catch (err: unknown) {

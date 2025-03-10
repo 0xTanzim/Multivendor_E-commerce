@@ -1,14 +1,8 @@
+import { userService } from '@/lib/di';
 import { handleError } from '@/utils';
-import { UserRepository } from '@repo/backend-repository';
-import { UserService, UserServiceExtend } from '@repo/backend-services';
-import { prisma } from '@repo/database';
 import { isUser } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-const userRepository = new UserRepository(prisma);
-const userServiceExtend = new UserServiceExtend(userRepository);
-
-const userService = UserService.getInstance();
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
@@ -25,7 +19,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const user = await userServiceExtend.findAll({
+    const user = await userService.findAll({
       select: {
         name: true,
         id: true,

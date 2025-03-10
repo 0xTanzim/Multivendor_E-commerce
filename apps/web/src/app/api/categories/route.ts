@@ -1,4 +1,5 @@
-import { CategoryService } from '@repo/backend-services';
+import { categoryService } from '@/lib/di';
+import { handleError } from '@/utils';
 import { CreateCategory, isCategory } from '@repo/types';
 import { NextResponse } from 'next/server';
 
@@ -10,40 +11,24 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const categoryService = CategoryService.getInstance();
+    const CategoryData: CreateCategory = {
+      title: data.title,
+      slug: data.slug,
+      imageUrl: data.imageUrl ?? '',
+      description: data.description ?? '',
+      isActive: data.isActive ?? false,
+    };
 
-    const existingCategory = await categoryService.isExistingCategory(
-      data.slug as string
-    );
-
-    if (existingCategory) {
-      return NextResponse.json(
-        { message: 'Category already exists' },
-        { status: 400 } // Bad Request
-      );
-    }
-
-    const newCategory = await categoryService.createCategory(
-      data as CreateCategory
-    );
-
-    console.log(newCategory);
-
+    const newCategory = await categoryService.create(CategoryData);
     return NextResponse.json(newCategory, { status: 201 });
   } catch (error: unknown) {
-    console.error(error);
-    return NextResponse.json(
-      { error: error, message: 'An error occurred' },
-      { status: 500 }
-    );
+    return handleError(error);
   }
 }
 
 export async function GET() {
   try {
-    const categoryService = CategoryService.getInstance();
-
-    const categories = await categoryService.getCategories();
+    const categories = await categoryService.findAll();
     return NextResponse.json(categories);
   } catch (err) {
     console.error(err);

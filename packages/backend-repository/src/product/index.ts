@@ -1,9 +1,14 @@
 import { BaseRepository } from '@repo/core';
-import { Prisma, PrismaClient, Training } from '@repo/database';
+import { Prisma, PrismaClient, Product } from '@repo/database';
+
 import { inject, injectable, PrismaClientToken } from '@repo/core/container';
+
 @injectable()
-export class TrainingRepository extends BaseRepository<Training, Prisma.TrainingDelegate> {
+export class ProductRepository extends BaseRepository<
+  Product,
+  Prisma.ProductDelegate
+> {
   constructor(@inject(PrismaClientToken) prisma: PrismaClient) {
-    super(prisma, prisma.training);
+    super(prisma, prisma.product);
   }
 }

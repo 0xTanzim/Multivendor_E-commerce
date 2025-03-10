@@ -3,8 +3,7 @@ export type Coupon = {
   title: string;
   couponCode: string;
   expiryDate: Date | string;
-  status?: "ACTIVE" | "INACTIVE";
-  isActive?: boolean;
+  isActive: boolean;
 };
 
 export function isCouponArray(obj: unknown): obj is Coupon[] {
@@ -12,16 +11,18 @@ export function isCouponArray(obj: unknown): obj is Coupon[] {
 }
 
 export function isCoupon(obj: unknown): obj is Coupon {
-  if (typeof obj !== "object" || obj === null) return false;
+  if (typeof obj !== 'object' || obj === null) return false;
   const couponObj = obj as Coupon;
 
   return (
-    "title" in couponObj &&
-    typeof couponObj.title === "string" &&
-    "couponCode" in couponObj &&
-    typeof couponObj.couponCode === "string" &&
+    'title' in couponObj &&
+    typeof couponObj.title === 'string' &&
+    'couponCode' in couponObj &&
+    typeof couponObj.couponCode === 'string' &&
     (couponObj.expiryDate === undefined ||
-      typeof couponObj.expiryDate === "string" ||
-      couponObj.expiryDate instanceof Date)
+      typeof couponObj.expiryDate === 'string' ||
+      couponObj.expiryDate instanceof Date) &&
+    'isActive' in couponObj &&
+    typeof couponObj.isActive === 'boolean'
   );
 }

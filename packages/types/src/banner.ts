@@ -2,8 +2,8 @@ export type Banner = {
   id?: string;
   title: string;
   link: string;
-  imageUri?: string;
-  isActive?: boolean;
+  imageUrl?: string;
+  isActive: boolean;
 };
 
 export function isBannerArray(obj: unknown): obj is Banner[] {
@@ -15,12 +15,12 @@ export function isBanner(obj: unknown): obj is Banner {
   const bannerObj = obj as Banner;
 
   return (
+    'title' in bannerObj &&
     typeof bannerObj.title === 'string' &&
+    'link' in bannerObj &&
     typeof bannerObj.link === 'string' &&
-    (bannerObj.imageUri === undefined ||
-      typeof bannerObj.imageUri === 'string') &&
-    (bannerObj.isActive === undefined ||
-      typeof bannerObj.isActive === 'boolean')
+    'isActive' in bannerObj &&
+    typeof bannerObj.isActive === 'boolean' &&
+    (typeof bannerObj.imageUrl === 'string' || bannerObj.imageUrl === undefined)
   );
 }
-

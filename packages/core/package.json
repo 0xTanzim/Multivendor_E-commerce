@@ -2,13 +2,18 @@
   "name": "@repo/core",
   "version": "1.0.0",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./container": "./src/di/container.ts"
   },
   "dependencies": {
-    "@repo/typescript-config": "workspace:*",
+    "tsyringe": "^4.8.0",
+    "reflect-metadata": "^0.2.2",
+    "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@repo/utils": "workspace:*",
-    "@repo/common": "workspace:*"
+    "@repo/backend-services": "workspace:*",
+    "@repo/backend-repository": "workspace:*"
   }
 }

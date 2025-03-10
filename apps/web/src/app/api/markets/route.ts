@@ -1,12 +1,7 @@
+import { marketService } from '@/lib/di';
 import { handleError } from '@/utils';
-import { MarketRepository } from '@repo/backend-repository';
-import { MarketService } from '@repo/backend-services';
-import { prisma } from '@repo/database';
 import { isMarket, Market } from '@repo/types';
 import { NextResponse } from 'next/server';
-
-const marketRepo = new MarketRepository(prisma);
-const marketService = new MarketService(marketRepo);
 
 export async function POST(req: Request) {
   try {

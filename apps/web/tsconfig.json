@@ -8,6 +8,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "incremental": true,
+    
     "paths": {
       "@/*": ["./src/*"]
     }

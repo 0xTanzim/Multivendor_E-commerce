@@ -1,0 +1,21 @@
+{
+  "name": "@repo/database",
+  "version": "0.0.1",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "db:generate": "prisma generate --schema=./prisma/schema",
+    "db:push": "prisma db push --schema=./prisma/schema/",
+    "db:pull": "prisma db pull --schema=./prisma/schema/",
+    "db:studio": "prisma studio --schema=./prisma/schema/"
+  },
+  "prisma": {
+    "schema": "./prisma/schema/"
+  },
+  "dependencies": {
+    "@prisma/client": "6.4.1",
+    "prisma": "^6.4.1"
+  }
+}

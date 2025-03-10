@@ -1,0 +1,9 @@
+model Banner {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  link        String
+  title       String
+  imageUrl    String
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

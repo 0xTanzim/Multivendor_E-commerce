@@ -8,6 +8,7 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
-    "@repo/utils": "workspace:*"
+    "@repo/utils": "workspace:*",
+    "@repo/common": "workspace:*"
   }
 }

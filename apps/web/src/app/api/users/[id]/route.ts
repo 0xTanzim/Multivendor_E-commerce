@@ -1,6 +1,11 @@
 import { handleError } from '@/utils';
-import { UserService } from '@repo/backend-services';
+import { UserRepository } from '@repo/backend-repository';
+import { UserServiceExtend } from '@repo/backend-services';
 import { NextResponse } from 'next/server';
+
+import { prisma } from '@repo/database';
+const userRepository = new UserRepository(prisma);
+const userServiceExtend = new UserServiceExtend(userRepository);
 
 export async function GET(
   _req: Request,
@@ -8,9 +13,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-
-    const userService = UserService.getInstance();
-    const user = await userService.fetchUserById(id);
+    const user = await userServiceExtend.findById(id);
 
     return NextResponse.json(user, { status: 200 });
   } catch (err) {

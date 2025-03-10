@@ -1,3 +1,10 @@
+import {
+  BadRequestError,
+  BaseError,
+  ConflictError,
+  InternalServerError,
+  NotFoundError,
+} from '@repo/common/error';
 import { BaseRepository, ID } from '../repository/BaseRepository';
 
 export abstract class BaseService<
@@ -13,53 +20,125 @@ export abstract class BaseService<
   async findAll(
     options?: Parameters<TRepository['findAll']>[0]
   ): Promise<TModel[]> {
-    return this.repository.findAll(options);
+    try {
+      const result = await this.repository.findAll(options);
+      return result;
+    } catch (err) {
+      throw new InternalServerError('Error fetching records');
+    }
   }
 
   async findById(id: ID): Promise<TModel | null> {
-    return this.repository.findById(id);
+    try {
+      const result = await this.repository.findById(id);
+      if (!result) {
+        throw new NotFoundError(`Record with ID ${id} not found`);
+      }
+      return result;
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] findById error', error);
+      throw new InternalServerError('Error fetching records');
+    }
   }
 
   async create<T = TModel>(
     data: Parameters<TRepository['create']>[0],
     select?: Parameters<TRepository['create']>[1]
   ): Promise<T> {
-    return this.repository.create(data, select);
+    try {
+      return await this.repository.create(data, select);
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        throw new ConflictError('Record already exists');
+      }
+      console.error('[BaseService] create error', error);
+      throw new BadRequestError('Failed to create record');
+    }
   }
 
   async update(
-    id: any,
+    id: ID,
     data: Parameters<TRepository['update']>[1]
   ): Promise<TModel | null> {
-    return this.repository.update(id, data);
+    try {
+      const record = await this.repository.findById(id);
+      if (!record) throw new NotFoundError(`Record with ID ${id} not found`);
+
+      return await this.repository.update(id, data);
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] update error', error);
+      throw new BadRequestError('Failed to update record');
+    }
   }
 
   async delete(id: ID): Promise<TModel | null> {
-    return this.repository.delete(id);
+    try {
+      const result = await this.repository.delete(id);
+      if (!result) throw new NotFoundError(`Record with ID ${id} not found`);
+      return result;
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] delete error', error);
+      throw new BadRequestError('Failed to delete record');
+    }
   }
 
   async checkExistById(id: ID): Promise<boolean> {
-    return this.repository.checkExist({ id });
+    try {
+      return await this.repository.checkExist({ id });
+    } catch (error) {
+      throw new InternalServerError('Error checking record');
+    }
   }
 
   async checkExist(
     where: Parameters<TRepository['checkExist']>[0]
   ): Promise<boolean> {
-    return this.repository.checkExist(where);
+    try {
+      return await this.repository.checkExist(where);
+    } catch (error) {
+      throw new InternalServerError('Error checking record');
+    }
   }
 
   async aggregate(args: Parameters<TRepository['aggregate']>[0]): Promise<any> {
-    return this.repository.aggregate(args);
+    try {
+      return await this.repository.aggregate(args);
+    } catch (error) {
+      console.error('[BaseService] aggregate error', error);
+      throw new InternalServerError('Error performing aggregate operation');
+    }
   }
 
   async count(args: Parameters<TRepository['count']>[0]): Promise<number> {
-    return this.repository.count(args);
+    try {
+      return await this.repository.count(args);
+    } catch (error) {
+      console.error('[BaseService] count error', error);
+      throw new InternalServerError('Error counting records');
+    }
   }
 
   async upsert(
     args: Parameters<TRepository['upsert']>[0]
   ): Promise<TModel | null> {
-    return this.repository.upsert(args);
+    try {
+      return await this.repository.upsert(args);
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        throw new ConflictError('Record already exists');
+      }
+      console.error('[BaseService] upsert error', error);
+      throw new BadRequestError('Failed to upsert record');
+    }
   }
 
   // async groupBy(args: Parameters<TRepository['groupBy']>[0]): Promise<any> {
@@ -69,33 +148,81 @@ export abstract class BaseService<
   async findFirst(
     args: Parameters<TRepository['findFirst']>[0]
   ): Promise<TModel | null> {
-    return this.repository.findFirst(args);
+    try {
+      return await this.repository.findFirst(args);
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] findFirst error', error);
+      throw new InternalServerError('Error finding record');
+    }
   }
 
   async aggregateRaw(
     args: Parameters<TRepository['aggregateRaw']>[0]
   ): Promise<any> {
-    return this.repository.aggregateRaw(args);
+    try {
+      return await this.repository.aggregateRaw(args);
+    } catch (error) {
+      console.error('[BaseService] aggregateRaw error', error);
+      throw new InternalServerError('Error performing raw aggregate operation');
+    }
   }
 
   async findMany(
     args: Parameters<TRepository['findMany']>[0]
   ): Promise<TModel[]> {
-    return this.repository.findMany(args);
+    try {
+      return await this.repository.findMany(args);
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] findMany error', error);
+      throw new InternalServerError('Error finding records');
+    }
   }
+
   async deleteMany(
     args: Parameters<TRepository['deleteMany']>[0]
   ): Promise<TModel[]> {
-    return this.repository.deleteMany(args);
+    try {
+      return await this.repository.deleteMany(args);
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] deleteMany error', error);
+      throw new BadRequestError('Failed to delete records');
+    }
   }
+
   async updateMany(
     args: Parameters<TRepository['updateMany']>[0]
   ): Promise<TModel[]> {
-    return this.repository.updateMany(args);
+    try {
+      return await this.repository.updateMany(args);
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] updateMany error', error);
+      throw new BadRequestError('Failed to update records');
+    }
   }
+
   async findUnique(
     args: Parameters<TRepository['findUnique']>[0]
   ): Promise<TModel | null> {
-    return this.repository.findUnique(args);
+    try {
+      return await this.repository.findUnique(args);
+    } catch (error) {
+      if (error instanceof BaseError) {
+        throw error;
+      }
+      console.error('[BaseService] findUnique error', error);
+      throw new InternalServerError('Error finding unique record');
+    }
   }
 }

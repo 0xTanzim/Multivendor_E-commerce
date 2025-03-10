@@ -1,24 +1,21 @@
-import { Category } from './category';
-
 export type CreateMarket = {
   id?: string;
   title: string;
-  slug?: string;
+  slug: string;
   logoUrl?: string;
   description: string;
-  isActive?: boolean;
-  categoryIds?: string[];
+  isActive: boolean;
+  categoryIds: string[];
 };
 
 export type Market = {
   id?: string;
   title: string;
-  slug?: string;
+  slug: string;
   logoUrl?: string;
   description: string;
-  isActive?: boolean;
-  categoryIds?: string[];
-  categories?: Category[];
+  isActive: boolean;
+  categoryIds: string[];
 };
 
 /**
@@ -40,9 +37,16 @@ export function isMarket(obj: unknown): obj is Market {
   const marketObj = obj as Market;
 
   return (
+    'title' in marketObj &&
     typeof marketObj.title === 'string' &&
+    'description' in marketObj &&
     typeof marketObj.description === 'string' &&
     'slug' in marketObj &&
-    typeof marketObj.slug === 'string'
+    typeof marketObj.slug === 'string' &&
+    'isActive' in marketObj &&
+    typeof marketObj.isActive === 'boolean' &&
+    'categoryIds' in marketObj &&
+    Array.isArray(marketObj.categoryIds) &&
+    marketObj.categoryIds.every((id) => typeof id === 'string')
   );
 }

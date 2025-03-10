@@ -1,34 +1,45 @@
+import { handleError } from '@/utils';
+import { TrainingRepository } from '@repo/backend-repository';
+import { TrainingService } from '@repo/backend-services';
+import { prisma } from '@repo/database';
 import { Training, isTraining } from '@repo/types';
 import { NextResponse } from 'next/server';
+
+const trainingService = new TrainingService(new TrainingRepository(prisma));
 
 export async function POST(req: Request) {
   try {
     const data: unknown = await req.json();
-
     if (!isTraining(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const newTraining: Training = {
+    const trainingData: Training = {
       categoryId: data.categoryId,
       content: data.content,
       description: data.description,
-      expertId: data.expertId,
-      id: data.id,
-      image: data.image,
+      image: data.image ?? '',
       isActive: data.isActive,
       slug: data.slug,
       title: data.title,
     };
 
+    const newTraining = await trainingService.create(trainingData);
+
     console.log(newTraining);
 
     return NextResponse.json(newTraining, { status: 201 });
   } catch (error: unknown) {
-    console.error(error);
-    return NextResponse.json(
-      { error: error, message: 'An error occurred' },
-      { status: 500 }
-    );
+    return handleError(error);
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    const trainings = await trainingService.findAll();
+
+    return NextResponse.json(trainings, { status: 200 });
+  } catch (error: unknown) {
+    return handleError(error);
   }
 }

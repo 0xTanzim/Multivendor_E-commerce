@@ -1,10 +1,9 @@
 model Training {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   title       String
-  expertId    String
-  slug        String
+  slug        String  @unique
   description String
-  image       String
+  image       String?
   content     String
   isActive    Boolean
 

@@ -13,6 +13,7 @@ import { Market } from '@repo/types';
 import { generateSlug } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 
 type NewMarketFormProps = {
   categories: {
@@ -40,6 +41,14 @@ const NewMarketForm = ({ categories }: NewMarketFormProps) => {
   const makePostRequest = usePostRequest();
 
   const onSubmit = async (data: Market) => {
+
+    setLoading(true);
+
+    if (!data.categoryIds || data.categoryIds.length === 0) {
+      setLoading(false);
+      return toast.error('Please select at least one category');
+    }
+
     const slug = generateSlug(data.title);
     data.slug = slug;
 
@@ -54,6 +63,7 @@ const NewMarketForm = ({ categories }: NewMarketFormProps) => {
       redirectPath: '/dashboard/markets',
     });
     setLogoUrl(null);
+    
   };
 
   return (

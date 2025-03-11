@@ -16,14 +16,14 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '23'
+          cache: 'pnpm'  
 
       - name: Install pnpm
         run: npm install -g pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile 
 
-      - name: Build web app
-        run: pnpm build
-        working-directory: apps/web
+      - name: Build with Turbo
+        run: pnpm turbo run build --filter=web  

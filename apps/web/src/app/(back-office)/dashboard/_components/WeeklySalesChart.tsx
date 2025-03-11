@@ -82,7 +82,7 @@ const WeeklySalesChart = () => {
     },
   ];
 
-  const [chartToDisplay, setCharToDisplay] = useState(tabs[0].type);
+  const [chartToDisplay, setCharToDisplay] = useState(tabs[0]?.type || 'sales');
 
   return (
     <div className="dark:bg-slate-800 bg-slate-50 shadow-sm p-8 rounded-lg">

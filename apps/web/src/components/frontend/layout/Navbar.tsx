@@ -9,7 +9,7 @@ import { HelpModal } from '../HelpModal';
 const Navbar = () => {
   return (
     <div className="bg-white dark:bg-slate-700 shadow-sm">
-      <div className=" flex items-center justify-between py-3 max-w-7xl mx-auto px-8 gap-8">
+      <div className=" flex items-center justify-between py-3 max-w-6xl mx-auto px-8 gap-8">
         <Link className="" href="/">
           <Image src={logo} alt="MindFuel logo" className="w-24" />
         </Link>

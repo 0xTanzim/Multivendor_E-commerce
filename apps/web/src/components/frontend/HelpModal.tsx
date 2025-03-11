@@ -12,7 +12,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 export function HelpModal() {
-  const [openModal, setOpenModal] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
 
   return (
     <>

@@ -19,7 +19,7 @@ const LoginForm = () => {
 
   const makeAuthRequest = useAuthRequest();
 
-  async function onSubmit(data: any) {
+  async function onSubmit(data: unknown) {
     console.log(data);
   }
 

@@ -1,12 +1,22 @@
 {
   "name": "@repo/backend-repository",
   "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
   }
 }

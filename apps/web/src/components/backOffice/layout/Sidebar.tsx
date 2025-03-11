@@ -1,9 +1,9 @@
-"use client";
+'use client';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+} from '@/components/ui/collapsible';
 import {
   BadgePercent,
   Box,
@@ -16,7 +16,6 @@ import {
   LayoutList,
   LogOut,
   MonitorPlay,
-  SendToBack,
   Settings,
   Slack,
   Tractor,
@@ -24,11 +23,11 @@ import {
   User,
   Users2,
   Warehouse,
-} from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 type SidebarProps = {
   showSidebar: boolean;
@@ -40,73 +39,73 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
 
   const sidebarLinks = [
     {
-      title: "Customers",
+      title: 'Customers',
       icon: Users2,
-      href: "/dashboard/customers",
+      href: '/dashboard/customers',
     },
     {
-      title: "Markets",
+      title: 'Markets',
       icon: Warehouse,
-      href: "/dashboard/markets",
+      href: '/dashboard/markets',
     },
     {
-      title: "Farmers",
+      title: 'Farmers',
       icon: Tractor,
-      href: "/dashboard/farmers",
+      href: '/dashboard/farmers',
     },
     {
-      title: "Orders",
+      title: 'Orders',
       icon: Truck,
-      href: "/dashboard/orders",
+      href: '/dashboard/orders',
     },
     {
-      title: "Staff",
+      title: 'Staff',
       icon: User,
-      href: "/dashboard/staff",
+      href: '/dashboard/staff',
     },
     {
-      title: " Community",
+      title: ' Community',
       icon: Building2,
-      href: "/dashboard/community",
+      href: '/dashboard/community',
     },
     {
-      title: "Wallet",
+      title: 'Wallet',
       icon: CircleDollarSign,
-      href: "/dashboard/wallet",
+      href: '/dashboard/wallet',
     },
-    
+
     {
-      title: "Settings",
+      title: 'Settings',
       icon: Settings,
-      href: "/dashboard/settings",
+      href: '/dashboard/settings',
     },
     {
-      title: "Online Store",
+      title: 'Online Store',
       icon: ExternalLink,
-      href: "/",
+      href: '/',
     },
   ];
 
   const catalogLinks = [
     {
-      title: "Products",
+      title: 'Products',
       icon: Box,
-      href: "/dashboard/products",
+      href: '/dashboard/products',
     },
     {
-      title: "Categories",
+      title: 'Categories',
       icon: LayoutList,
-      href: "/dashboard/categories",
+      href: '/dashboard/categories',
     },
     {
-      title: "Coupons",
+      title: 'Coupons',
       icon: BadgePercent,
-      href: "/dashboard/coupons",
+      href: '/dashboard/coupons',
     },
     {
-      title: "store Banners",
+      title: 'store Banners',
       icon: MonitorPlay,
-      href: "/dashboard/banners",
+      href: '/dashboard/banners',
     },
   ];
 
@@ -116,8 +115,8 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     <div
       className={
         showSidebar
-          ? "sm:block  dark:bg-slate-800 sm:mt-0 mt-20 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-300  fixed top-0 left-0 shadow-md overflow-y-scroll"
-          : "hidden mt-20 sm:mt-0 sm:block dark:bg-slate-800 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-300  fixed top-0 left-0 shadow-md overflow-y-scroll"
+          ? 'sm:block  dark:bg-slate-800 sm:mt-0 mt-20 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-300  fixed top-0 left-0 shadow-md overflow-y-scroll'
+          : 'hidden mt-20 sm:mt-0 sm:block dark:bg-slate-800 bg-slate-50 space-y-6 w-64  h-screen text-slate-800 dark:text-slate-300  fixed top-0 left-0 shadow-md overflow-y-scroll'
       }
     >
       <Link
@@ -139,9 +138,9 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
           onClick={() => setShowSidebar(false)}
           href="/dashboard"
           className={
-            "/dashboard" === pathname
-              ? " flex items-center space-x-2 py-2 px-6 border-l-8 border-green-600 text-green-500"
-              : "flex items-center space-x-2  py-2 px-6"
+            '/dashboard' === pathname
+              ? ' flex items-center space-x-2 py-2 px-6 border-l-8 border-green-600 text-green-500'
+              : 'flex items-center space-x-2  py-2 px-6'
           }
         >
           <LayoutGrid />
@@ -150,7 +149,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
 
         <Collapsible className="px-6 py-2">
           <CollapsibleTrigger onClick={() => setIsOpenMenu(!isOpenMenu)}>
-            <div className={"flex items-center space-x-2  py-2"}>
+            <div className={'flex items-center space-x-2  py-2'}>
               <div className="flex items-center space-x-2">
                 <Slack />
                 <span>Catalogue</span>
@@ -166,8 +165,8 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
                 onClick={() => setShowSidebar(false)}
                 className={
                   item.href === pathname
-                    ? " flex items-center space-x-2 py-1 text-sm border-green-600 text-green-500"
-                    : "flex items-center space-x-2  py-1 "
+                    ? ' flex items-center space-x-2 py-1 text-sm border-green-600 text-green-500'
+                    : 'flex items-center space-x-2  py-1 '
                 }
               >
                 <item.icon className="w-4 h-4" />
@@ -184,8 +183,8 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
             onClick={() => setShowSidebar(false)}
             className={
               itemLink.href === pathname
-                ? " flex items-center space-x-2 py-2 px-6 border-l-8 border-green-600 text-green-500"
-                : "flex items-center space-x-2  py-2 px-6"
+                ? ' flex items-center space-x-2 py-2 px-6 border-l-8 border-green-600 text-green-500'
+                : 'flex items-center space-x-2  py-2 px-6'
             }
           >
             <itemLink.icon />
@@ -204,4 +203,3 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
 };
 
 export default Sidebar;
-

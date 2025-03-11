@@ -15,7 +15,6 @@ const NewStaffPage = () => {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<Staff>({
     defaultValues: {

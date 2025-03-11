@@ -16,7 +16,6 @@ const NewBannerPage = () => {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<Banner>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);

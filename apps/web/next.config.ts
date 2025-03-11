@@ -14,6 +14,16 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+
+  experimental: {
+    externalDir: true,
+  },
+  webpack: (config) => {
+    config.watchOptions = {
+      ignored: ["**/node_modules", "**/.next", "**/dist", "**/.turbo"],
+    };
+    return config;
+  },
 };
 
 export default nextConfig;

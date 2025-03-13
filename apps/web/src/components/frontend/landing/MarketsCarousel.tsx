@@ -1,9 +1,14 @@
 'use client';
 
+import { Market } from '@repo/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+
+type MarketsCarouselProps = {
+  markets: Market[];
+};
 
 const responsive = {
   desktop: {
@@ -23,8 +28,8 @@ const responsive = {
   },
 };
 
-const MarketsCarousel = () => {
-  const slides = [{}, {}, {}, {},{}, {},{}, {}, {}];
+const MarketsCarousel = ({ markets }: MarketsCarouselProps) => {
+  const defaultImage = '/images/tometo.webp';
 
   return (
     <>
@@ -33,7 +38,7 @@ const MarketsCarousel = () => {
         draggable={false}
         showDots={true}
         responsive={responsive}
-        ssr={true} // means to render carousel on server-side.
+        ssr={true}
         infinite={true}
         autoPlay={true}
         autoPlaySpeed={1000}
@@ -46,17 +51,23 @@ const MarketsCarousel = () => {
         dotListClass="custom-dot-list-style"
         itemClass="px-4"
       >
-        {slides &&
-          slides.map((slides, inx) => (
-            <Link href="#" key={inx} className="rounded-lg mr-3  bg-red-300">
+        {markets &&
+          markets.map((market) => (
+            <Link
+              href="#"
+              key={market?.id}
+              className="rounded-lg mr-3  bg-red-300"
+            >
               <Image
-                src="/images/tometo.webp"
-                alt="11.jpg"
+                src={market?.logoUrl || defaultImage}
+                alt={market?.title}
                 width={550}
                 height={550}
-                className="w-full rounded-sm"
+                className="w-full rounded-2xl"
               />
-              <h2 className=" text-center mt-2 dark:text-slate-200  text-slate-800">Vegetables</h2>
+              <h2 className=" text-center mt-2 dark:text-slate-200  text-slate-800">
+                {market?.title}
+              </h2>
             </Link>
           ))}
       </Carousel>

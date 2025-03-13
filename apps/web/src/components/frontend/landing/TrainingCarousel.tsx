@@ -1,5 +1,6 @@
 'use client';
 
+import { Training } from '@repo/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import Carousel from 'react-multi-carousel';
@@ -22,8 +23,12 @@ const responsive = {
   },
 };
 
-const TrainingCarousel = () => {
-  const slides = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
+type TrainingCarouselProps = {
+  trainings: Training[];
+};
+
+const TrainingCarousel = ({ trainings }: TrainingCarouselProps) => {
+  const defaultImage = '/images/community.png';
 
   return (
     <>
@@ -45,39 +50,43 @@ const TrainingCarousel = () => {
         dotListClass="custom-dot-list-style"
         itemClass="px-4"
       >
-        {slides &&
-          slides.map((slides, inx) => (
-            <div key={inx} className="rounded-lg mr-3 bg-slate-200  dark:bg-slate-900 overflow-hidden">
+        {trainings &&
+          trainings.map((training) => (
+            <div
+              key={training?.id}
+              className="rounded-lg mr-3 bg-slate-200  dark:bg-slate-900 overflow-hidden"
+            >
               <Link href={'#'}>
                 <Image
-                  src="/images/community.png"
-                  alt="11.jpg"
+                  src={training?.image || defaultImage}
+                  alt={training?.title}
                   width={550}
                   height={550}
-                  className="w-full rounded-sm"
+                  className="w-full rounded-sm h-48 object-cover"
                 />
               </Link>
 
               <h2 className=" text-center mt-2 dark:text-slate-200 my-2 text-slate-800 text-xl">
-                Vegetables
+                {training?.title}
               </h2>
-              <p className='px-4 line-clamp-3 text-slate-800 dark:text-slate-200'>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam
-                corporis, quisquam molestiae ipsa eos earum repudiandae ea,
-                quasi dolore ab tempore odio facere voluptatum, dignissimos
-                deserunt doloremque quam quos ut consequatur voluptatibus quidem
-                natus voluptate! Nulla eligendi eos suscipit.
+              <p className="px-4 line-clamp-3 text-slate-800 dark:text-slate-200">
+                {training?.description}
               </p>
 
               <div className="flex justify-between items-center px-4 py-2">
                 <Link
                   href={'#'}
-                  className="bg-lime-900 hover:bg-lime-800 duration-300 transition-all text-slate-50 rounded-md px-4 py-2"
+                  className="bg-lime-600 hover:bg-lime-700 duration-300 transition-all text-slate-50 rounded-md px-4 py-2"
                 >
                   Read More
                 </Link>
 
-                <Link className='dark:text-slate-200  text-slate-800' href={'#'}>Talk to the Consultant</Link>
+                <Link
+                  className="dark:text-slate-200  text-slate-800"
+                  href={'#'}
+                >
+                  Talk to the Consultant
+                </Link>
               </div>
             </div>
           ))}

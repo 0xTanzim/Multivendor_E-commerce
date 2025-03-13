@@ -1,9 +1,19 @@
+import { getData } from '@/lib/getData';
+import { isTrainingArray } from '@repo/types';
 import Link from 'next/link';
-import CategoryCarousel from './CategoryCarousel';
 import TrainingCarousel from './TrainingCarousel';
 
-const CommunityTrainings = () => {
-  const categories = [{}, {}, {}, {}, {}, {}];
+const CommunityTrainings = async () => {
+  const trainingData = await getData('trainings');
+
+  let trainings = null;
+
+  if (!isTrainingArray(trainingData)) {
+    trainings = null;
+  } else {
+    trainings = trainingData;
+  }
+
   return (
     <>
       <div className=" bg-white border border-gray-300 rounded-lg  dark:bg-gray-700 dark:border-gray-700 text-slate-800 dark:text-slate-100 overflow-hidden">
@@ -11,13 +21,13 @@ const CommunityTrainings = () => {
           <h2>MindFuel Community</h2>
           <Link
             href={'#'}
-            className="bg-lime-900 hover:bg-lime-800 duration-300 transition-all text-slate-50 rounded-md px-4 py-2"
+            className="bg-lime-700 hover:bg-lime-800 duration-300 transition-all text-slate-50 rounded-md px-4 py-2"
           >
             See All
           </Link>
         </div>
         <div className="bg-white p-4 dark:bg-slate-700 ">
-          <TrainingCarousel />
+          {trainings && <TrainingCarousel trainings={trainings} />}
         </div>
       </div>
     </>

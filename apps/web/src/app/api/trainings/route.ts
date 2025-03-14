@@ -1,7 +1,7 @@
 import { trainingService } from '@/lib/di';
 import { handleError } from '@/utils';
 import { Training, isTraining } from '@repo/types';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
@@ -30,12 +30,9 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
-    const searchParams = req.nextUrl.searchParams
-     const query = searchParams.get('include')  
-
-    let trainings = await trainingService.findAll();
+    const trainings = await trainingService.findAll();
 
     return NextResponse.json(trainings, { status: 200 });
   } catch (error: unknown) {

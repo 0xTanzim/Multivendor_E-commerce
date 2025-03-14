@@ -9,7 +9,7 @@ import 'react-multi-carousel/lib/styles.css';
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 5,
+    items: 4,
     slidesToSlide: 3,
   },
   tablet: {
@@ -52,8 +52,11 @@ const CategoryCarousel = ({ products }: CategoryCarouselProps) => {
       >
         {products &&
           products.map((product) => (
-            <div key={product.id} className="rounded-lg mr-3  bg-white dark:bg-slate-900 border shadow-md  overflow-hidden">
-              <Link href={`#`}>
+            <div
+              key={product.id}
+              className="rounded-lg mr-3  bg-white dark:bg-slate-900 border shadow-md  overflow-hidden"
+            >
+              <Link href={`/products/${product?.slug}`}>
                 <Image
                   src={
                     product?.imageUrl?.trim() ? product.imageUrl : defaultImage
@@ -66,7 +69,7 @@ const CategoryCarousel = ({ products }: CategoryCarouselProps) => {
               </Link>
 
               <div className="px-4">
-                <Link href={`#`}>
+                <Link href={`/products/${product?.slug}`}>
                   <h2 className=" text-center font-semibold my-2 dark:text-slate-200  text-slate-800">
                     {product?.title}
                   </h2>

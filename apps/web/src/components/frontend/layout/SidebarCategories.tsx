@@ -20,7 +20,7 @@ const SidebarCategories = async () => {
           <span className="text-sm">({categories?.length})</span>
         </h2>
 
-        <div className="py-3 px-6 h-[300px] overflow-y-auto flex flex-col gap-2 ">
+        <div className="py-3 px-6 h-[300pSSx] overflow-y-auto flex flex-col gap-2 ">
           {categories && categories.length > 0 ? (
             categories.map((category, index) => (
               <Link

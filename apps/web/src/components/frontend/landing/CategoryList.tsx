@@ -20,6 +20,7 @@ const CategoryList = ({ category }: CategoryListProps) => {
           </Link>
         </div>
         <div className="bg-white p-4 dark:bg-slate-700 ">
+          
           {category?.products && (
             <CategoryCarousel products={category?.products} />
           )}

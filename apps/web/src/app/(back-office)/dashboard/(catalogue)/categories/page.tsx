@@ -1,7 +1,20 @@
-import PageHeader from "../../_components/PageHeader";
-import TableActions from "../../_components/TableActions";
+import { DataTable } from '@/components/data-table/DataTable';
+import { getData } from '@/lib/getData';
+import { isCategoryArray } from '@repo/types';
+import PageHeader from '../../_components/PageHeader';
+import { columns } from './_components/columns';
 
-const categoriesPage = () => {
+const categoriesPage = async () => {
+  const categoriesData = await getData('categories');
+
+  let categories = null;
+
+  if (!isCategoryArray(categoriesData)) {
+    categories = null;
+  } else {
+    categories = categoriesData;
+  }
+
   return (
     <div>
       {/* header  */}
@@ -11,15 +24,11 @@ const categoriesPage = () => {
         href="/dashboard/categories/new"
       />
 
-      {/* table action */}
-      <TableActions />
-
       <div className="py-8">
-        <h2>Table</h2>
+        {categories && <DataTable columns={columns} data={categories} />}
       </div>
     </div>
   );
 };
 
 export default categoriesPage;
-

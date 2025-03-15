@@ -1,8 +1,19 @@
-import React from 'react'
-import PageHeader from '../../_components/PageHeader'
-import TableActions from '../../_components/TableActions'
+import { DataTable } from '@/components/data-table/DataTable';
+import { getData } from '@/lib/getData';
+import { isCouponArray } from '@repo/types';
+import PageHeader from '../../_components/PageHeader';
+import { columns } from './_components/columns';
 
-const couponsPage = () => {
+const couponsPage = async () => {
+  const couponsData = await getData('coupons');
+  let coupons = null;
+
+  if (!isCouponArray(couponsData)) {
+    coupons = null;
+  } else {
+    coupons = couponsData;
+  }
+
   return (
     <div>
       {/* header  */}
@@ -12,14 +23,11 @@ const couponsPage = () => {
         href="/dashboard/coupons/new"
       />
 
-      {/* table action */}
-      <TableActions />
-
       <div className="py-8">
-        <h2>Table</h2>
+        {coupons && <DataTable columns={columns} data={coupons} />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default couponsPage
+export default couponsPage;

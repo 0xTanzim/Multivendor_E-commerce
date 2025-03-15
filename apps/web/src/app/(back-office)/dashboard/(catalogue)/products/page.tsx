@@ -1,7 +1,21 @@
-import PageHeader from "../../_components/PageHeader";
-import TableActions from "../../_components/TableActions";
+import { DataTable } from '@/components/data-table/DataTable';
+import { getData } from '@/lib/getData';
+import { isProductArray } from '@repo/types';
+import PageHeader from '../../_components/PageHeader';
+import { columns } from './_components/columns';
 
-const ProductPage = () => {
+const ProductPage = async () => {
+  const productsData = await getData('products');
+
+  let products = null;
+  if (!isProductArray(productsData)) {
+    console.log('error');
+
+    products = null;
+  } else {
+    products = productsData;
+  }
+  console.log(products);
   return (
     <div>
       {/* header  */}
@@ -11,11 +25,8 @@ const ProductPage = () => {
         href="/dashboard/products/new"
       />
 
-      {/* table action */}
-      <TableActions />
-
       <div className="py-8">
-        <h2>Table</h2>
+        {products && <DataTable columns={columns} data={products} />}
       </div>
     </div>
   );

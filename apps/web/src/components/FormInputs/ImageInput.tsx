@@ -51,11 +51,13 @@ export default function ImageInput({
         <UploadDropzone
           endpoint={endpoint}
           onClientUploadComplete={(res) => {
-            setImageUrl(res[0].url);
-            // Do something with the response
-            toast.success("Image uploaded successfully");
-            console.log("Files: ", res);
-            console.log("Upload Completed");
+            if (res && res[0]) {
+              setImageUrl(res[0].url);
+              // Do something with the response
+              toast.success("Image uploaded successfully");
+              console.log("Files: ", res);
+              console.log("Upload Completed");
+            }
           }}
           onUploadError={(error) => {
             // Do something with the error.

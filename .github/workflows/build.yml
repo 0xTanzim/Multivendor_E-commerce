@@ -1,0 +1,35 @@
+name: Build Next.js App
+
+on:
+  push:
+    branches:
+      - main
+      - feat/*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code 🛎️
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 📐
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23.9.0'
+
+      - name: Check Node.js version ✔️
+        run: node -v
+
+      - name: Install pnpm 📦
+        uses: pnpm/action-setup@v4
+        with:
+          version: '10.6.2'
+
+      - name: Install dependencies 🚚
+        run: pnpm install --frozen-lockfile
+
+      - name: Build with Turbo 🚀
+        run: pnpm turbo run build --filter=web
+        env:
+          DATABASE_URL: ${{ secrets.MIND_DATABASE_URL }}

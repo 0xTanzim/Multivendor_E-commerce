@@ -1,7 +1,7 @@
 import { categoryService } from '@/lib/di';
 import { handleError } from '@/utils';
 import { CreateCategory, isCategory } from '@repo/types';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
@@ -26,19 +26,25 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const categories = await categoryService.findAll();
+    const searchParams = req.nextUrl.searchParams;
+    const query = searchParams.get('include');
+
+    let categories = null;
+
+    if (query === 'products') {
+      categories = await categoryService.findAll({
+        include: {
+          products: true,
+        },
+      });
+    } else {
+      categories = await categoryService.findAll();
+    }
+
     return NextResponse.json(categories);
   } catch (err) {
-    console.error(err);
-    return NextResponse.json(
-      {
-        error:
-          err instanceof Error ? err.message : 'An unexpected error occurred',
-        message: 'An error occurred',
-      },
-      { status: 500 }
-    );
+    return handleError(err);
   }
 }

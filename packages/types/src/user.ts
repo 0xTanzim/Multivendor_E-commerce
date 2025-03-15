@@ -37,3 +37,9 @@ export function isUser(data: unknown): data is User {
 export function isUserArray(data: unknown): data is User[] {
   return Array.isArray(data) && data.every(isUser);
 }
+
+
+export type LoginUser = {
+  email: string;
+  password: string;
+}

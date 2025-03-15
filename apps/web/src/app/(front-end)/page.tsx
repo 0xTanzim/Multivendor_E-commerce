@@ -1,11 +1,38 @@
+import CategoryList from '@/components/frontend/landing/CategoryList';
+import CommunityTrainings from '@/components/frontend/landing/CommunityTrainings';
+import MarketList from '@/components/frontend/landing/MarketList';
+import Hero from '@/components/frontend/layout/Hero';
+import { getData } from '@/lib/getData';
+import { isCategoryArray } from '@repo/types';
 import Link from 'next/link';
 
-const Home = () => {
-  return (
-    <div className="flex items-center justify-center flex-col min-h-screen">
-      <h2 className="text-4xl">Welcome to MindFuel Hub</h2>
+const Home = async () => {
+  const categoriesData = await getData('categories?include=products');
+  let categories = null;
 
-      <Link className='my-4 underline ' href={'/register-farmer'}>Become a Farmer/Vendor/Supplier
+  if (!isCategoryArray(categoriesData)) {
+    categories = null;
+  } else {
+    categories = categoriesData;
+  }
+
+  return (
+    <div className="min-h-screen">
+      <Hero />
+      <MarketList />
+
+      {categories &&
+        categories.length > 0 &&
+        categories.map((category) => (
+          <div className="py-12" key={category.id}>
+            <CategoryList category={category} />
+          </div>
+        ))}
+
+      <CommunityTrainings />
+
+      <Link className="my-4 underline " href={'/register-farmer'}>
+        Become a Farmer/Vendor/Supplier
       </Link>
     </div>
   );

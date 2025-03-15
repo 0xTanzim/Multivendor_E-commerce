@@ -2,7 +2,7 @@ import NewFarmerForm from '@/components/backOffice/form/NewFarmerForm';
 import { getData } from '@/lib/getData';
 import { isUser } from '@repo/types';
 
-const Onboarding = async ({ params }: { params: { id: string } }) => {
+const Onboarding = async ({ params }: {params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
   const user: unknown = await getData(`users/${id}`);

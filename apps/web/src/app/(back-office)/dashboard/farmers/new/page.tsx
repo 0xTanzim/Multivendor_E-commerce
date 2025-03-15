@@ -4,7 +4,7 @@ const NewFarmerPage = () => {
   return (
     <div>
       <FormHeader title="New Farmer" />
-      <NewFarmerForm />
+      {/* <NewFarmerForm  /> */}
     </div>
   );
 };

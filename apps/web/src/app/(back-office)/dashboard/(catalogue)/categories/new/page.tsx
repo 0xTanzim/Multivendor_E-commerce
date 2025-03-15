@@ -18,7 +18,6 @@ const NewCategoryPage = () => {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<CreateCategory>({});
   const [imageUrl, setImageUrl] = useState<string | null>(null);

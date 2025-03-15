@@ -1,9 +1,9 @@
-"use client";
-import { ourFileRouter } from "@/app/api/uploadthing/core";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import * as React from "react";
-import { Toaster } from "react-hot-toast";
-import { extractRouterConfig } from "uploadthing/server";
+'use client';
+import { ourFileRouter } from '@/app/api/uploadthing/core';
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin';
+import * as React from 'react';
+import { Toaster } from 'react-hot-toast';
+import { extractRouterConfig } from 'uploadthing/server';
 
 export function CommonProvider({
   children,
@@ -16,4 +16,3 @@ export function CommonProvider({
     </>
   );
 }
-

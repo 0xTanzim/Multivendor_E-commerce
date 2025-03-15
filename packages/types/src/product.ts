@@ -37,39 +37,10 @@ export function isProductArray(obj: unknown): obj is Product[] {
  * @param obj - The object to validate.
  * @returns True if the object is a valid Product, false otherwise.
  */
-// export function isProduct(obj: unknown): obj is Product {
-
-//   if (typeof obj !== 'object' || obj === null) return false;
-//   const productObj = obj as Product;
-
-//   return (
-//     'title' in productObj &&
-//     typeof productObj.title === 'string'
-//   );
-// }
-
-// {
-//   return (
-//     'title' in productObj &&
-//     typeof productObj.title === 'string' &&
-//     'slug' in productObj &&
-//     typeof productObj.slug === 'string' &&
-//     'isActive' in productObj &&
-//     typeof productObj.isActive === 'boolean' &&
-//     'productCode' in productObj &&
-//     typeof productObj.productCode === 'string' &&
-//     'unit' in productObj &&
-//     typeof productObj.unit === 'string' &&
-//     'isWholeSale' in productObj &&
-//     typeof productObj.isWholeSale === 'boolean'
-//   );
-// }
-
 export function isProduct(obj: unknown): obj is Product {
   if (typeof obj !== 'object' || obj === null) {
     return false;
   }
-
   const productObj = obj as Product;
 
   return (
@@ -82,8 +53,6 @@ export function isProduct(obj: unknown): obj is Product {
     'productCode' in productObj &&
     typeof productObj.productCode === 'string' &&
     'unit' in productObj &&
-    typeof productObj.unit === 'string' &&
-    'isWholeSale' in productObj &&
-    typeof productObj.isWholeSale === 'boolean'
+    typeof productObj.unit === 'string'
   );
 }

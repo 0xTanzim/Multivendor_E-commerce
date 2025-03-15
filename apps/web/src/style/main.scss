@@ -2,11 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   min-height: 100vh;
 }
-
 
 @layer base {
   :root {
@@ -64,7 +62,6 @@ body {
   }
 }
 
-
 @layer base {
   * {
     @apply border-border;
@@ -91,4 +88,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
-

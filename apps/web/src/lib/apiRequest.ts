@@ -34,7 +34,10 @@ export async function makePostRequest({
       setLoading(false);
       toast.success(`New ${resourceName} Created Successfully`);
       reset();
-      redirect && redirect();
+      if (redirect) {
+        redirect();
+      }
+      
     } else {
       setLoading(false);
       if (response.status === 409) {

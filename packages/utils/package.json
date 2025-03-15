@@ -2,9 +2,15 @@
   "name": "@repo/utils",
   "version": "1.0.0",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",

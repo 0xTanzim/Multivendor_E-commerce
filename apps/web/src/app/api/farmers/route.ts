@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
   try {
     const farmers = await farmerService.findAll();
     return NextResponse.json(farmers, { status: 200 });

@@ -1,9 +1,19 @@
 {
   "name": "@repo/core",
   "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
   "exports": {
-    ".": "./src/index.ts",
-    "./container": "./src/di/container.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./container": {
+      "types": "./dist/di/container.d.ts",
+      "default": "./dist/di/container.js"
+    }
   },
   "dependencies": {
     "tsyringe": "^4.8.0",
@@ -11,7 +21,10 @@
     "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@repo/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "typescript": "^5.8.2"
   }
 }

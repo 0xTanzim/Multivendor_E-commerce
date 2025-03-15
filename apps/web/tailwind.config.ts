@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+const flowbite = require("flowbite-react/tailwind");
 
 import tailwindcssAnimate from "tailwindcss-animate";
 import tailwindcssForm from "@tailwindcss/forms";
@@ -11,6 +12,8 @@ export default withUt({
 	"./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
 	"./src/components/**/*.{js,ts,jsx,tsx,mdx}",
 	"./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+	"./src/**/*.{js,ts,jsx,tsx,mdx}",
+	flowbite.content(),
 ],
 theme: {
 	extend: {
@@ -63,6 +66,6 @@ theme: {
 		}
 	}
 },
-plugins: [tailwindcssAnimate, tailwindcssForm],
+plugins: [tailwindcssAnimate, tailwindcssForm, flowbite.plugin()],
 }) as unknown as Config;
 

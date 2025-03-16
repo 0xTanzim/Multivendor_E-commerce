@@ -2,6 +2,7 @@ export * from './banner';
 export * from './category';
 export * from './community';
 export * from './coupon';
+export * from './endPoints';
 export * from './farmer';
 export * from './inputTypes';
 export * from './market';

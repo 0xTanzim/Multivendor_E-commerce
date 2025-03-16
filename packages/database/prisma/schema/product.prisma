@@ -19,10 +19,10 @@ model Product {
   stockStatus    String?
   qty            Int
 
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId String   @db.ObjectId
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @db.ObjectId
 
   createdAt DateTime  @default(now())

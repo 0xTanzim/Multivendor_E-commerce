@@ -5,6 +5,7 @@ import {
   InternalServerError,
   NotFoundError,
 } from '@repo/common/error';
+import {} from '@repo/database';
 import { BaseRepository, ID } from '../repository/BaseRepository';
 
 export abstract class BaseService<
@@ -77,12 +78,22 @@ export abstract class BaseService<
     }
   }
 
-  async delete(id: ID): Promise<TModel | null> {
+  async deleteById(id: ID): Promise<TModel | null> {
     try {
       const result = await this.repository.delete(id);
       if (!result) throw new NotFoundError(`Record with ID ${id} not found`);
       return result;
     } catch (error) {
+      if (error.code === 'P2025') {
+        throw new NotFoundError(
+          `[${error.meta?.modelName}]: ${error.meta.cause}`
+        );
+      } else if (error.code === 'P2014') {
+        console.log('Error Message: ', error.message);
+        console.log('Error Meta: ', error.meta);
+        throw new BadRequestError('Failed to delete record due to constraint');
+      }
+
       if (error instanceof BaseError) {
         throw error;
       }
@@ -216,7 +227,12 @@ export abstract class BaseService<
     args: Parameters<TRepository['findUnique']>[0]
   ): Promise<TModel | null> {
     try {
-      return await this.repository.findUnique(args);
+      const result = await this.repository.findUnique(args);
+      if (!result) {
+        throw new NotFoundError(`Record not found`);
+      }
+
+      return result;
     } catch (error) {
       if (error instanceof BaseError) {
         throw error;

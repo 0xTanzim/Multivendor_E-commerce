@@ -1,4 +1,4 @@
-import { categoryService } from '@/lib/di';
+import { couponService } from '@/lib/di';
 import { handleError } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,14 +8,11 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const category = await categoryService.findUnique({
+    const coupons = await couponService.findUnique({
       where: { id: id },
-      include: {
-        products: true,
-      },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(coupons);
   } catch (err) {
     return handleError(err);
   }
@@ -27,8 +24,8 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const category = await categoryService.deleteById(id);
-    return NextResponse.json(category);
+    const coupons = await couponService.deleteById(id);
+    return NextResponse.json(coupons);
   } catch (err) {
     return handleError(err);
   }

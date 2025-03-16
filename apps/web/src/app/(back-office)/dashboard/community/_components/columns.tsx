@@ -5,7 +5,6 @@ import DateColumn from '@/components/data-table-columns/DateColumn';
 import ImageColumn from '@/components/data-table-columns/ImageColumn';
 import SortableColumn from '@/components/data-table-columns/SortableColumn';
 import { Checkbox } from '@/components/ui/checkbox';
-
 import { Column, Row, Table } from '@tanstack/react-table';
 
 export const columns = [
@@ -34,23 +33,24 @@ export const columns = [
   {
     accessorKey: 'title',
     header: ({ column }: { column: Column<any> }) => (
-      <SortableColumn column={column} title="Title" />
+      <SortableColumn column={column} title="Training Title" />
     ),
   },
   {
-    accessorKey: 'imageUrl',
-    header: () => <div className="">Category Image</div>,
+    accessorKey: 'image',
+    header: () => <div className="">Thumbnail</div>,
     cell: ({ row }: { row: Row<any> }) => (
-      <ImageColumn row={row} accessorKey="imageUrl" />
+      <ImageColumn row={row} accessorKey="image" />
     ),
   },
+
   {
     accessorKey: 'isActive',
     header: () => <div className="">Active</div>,
   },
   {
     accessorKey: 'createdAt',
-    header: () => <div className="text-right">Created At</div>,
+    header: () => <div className="text-right">Created</div>,
     cell: ({ row }: { row: Row<any> }) => (
       <DateColumn row={row} accessorKey="createdAt" />
     ),
@@ -59,9 +59,7 @@ export const columns = [
   {
     id: 'actions',
     cell: ({ row }: { row: Row<any> }) => {
-      return (
-        <ActionColumn row={row} title="Category" endPointPath="categories" />
-      );
+      return <ActionColumn row={row} title="Market" endPointPath='trainings' />;
     },
   },
 ];

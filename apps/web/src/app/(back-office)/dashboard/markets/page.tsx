@@ -1,7 +1,20 @@
-import PageHeader from "../_components/PageHeader";
-import TableActions from "../_components/TableActions";
+import { DataTable } from '@/components/data-table/DataTable';
+import { getData } from '@/lib/getData';
+import { isMarketArray } from '@repo/types';
+import PageHeader from '../_components/PageHeader';
+import { columns } from './_components/columns';
 
-const marketsPage = () => {
+const marketsPage = async () => {
+  const marketsData = await getData('markets');
+
+  let markets = null;
+
+  if (!isMarketArray(marketsData)) {
+    markets = null;
+  } else {
+    markets = marketsData;
+  }
+
   return (
     <div>
       {/* header  */}
@@ -11,11 +24,8 @@ const marketsPage = () => {
         href="/dashboard/markets/new"
       />
 
-      {/* table action */}
-      <TableActions />
-
       <div className="py-8">
-        <h2>Table</h2>
+        {markets && <DataTable columns={columns} data={markets} />}
       </div>
     </div>
   );

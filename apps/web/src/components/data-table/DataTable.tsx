@@ -26,16 +26,18 @@ import {
 } from '../ui/table';
 
 import { DataTablePagination } from './DataTablePagination';
-import { DataTableToolbar } from './DataTableToolbar';
+import { DataTableToolbar, FilterKey } from './DataTableToolbar';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterKeys?: FilterKey[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filterKeys = ['title'],
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -68,9 +70,9 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
-      <DataTableToolbar table={table} />
-      <div className="rounded-md border">
+    <div className="space-y-4 dark:text-slate-200 text-slate-800">
+      <DataTableToolbar table={table} filterKeys={filterKeys} />
+      <div className="rounded-md border ">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -98,7 +100,10 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className="dark:text-slate-200 text-slate-800 text-base"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
@@ -111,7 +116,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-center dark:text-slate-200 text-slate-800"
                 >
                   No results.
                 </TableCell>
@@ -120,7 +125,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table}  />
+      <DataTablePagination table={table} />
     </div>
   );
 }

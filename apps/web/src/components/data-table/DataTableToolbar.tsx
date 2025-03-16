@@ -4,57 +4,52 @@ import { Table } from '@tanstack/react-table';
 import { X } from 'lucide-react';
 
 import { DataTableViewOptions } from './DataTableViewOptions';
-
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
-import { DataTableFacetedFilter } from './DataTableFacetedFilter';
+
+export type FilterKey = 'name' | 'email' | 'title';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  filterKeys: FilterKey[];
 }
 
 export function DataTableToolbar<TData>({
   table,
+  filterKeys,
 }: DataTableToolbarProps<TData>) {
-  const isFiltered = table.getState().columnFilters.length > 0;
+  const isFiltered = filterKeys.some((key) => {
+    const filterValue = table.getColumn(key)?.getFilterValue();
+    return filterValue !== undefined && filterValue !== '';
+  });
 
-  const statusColumn = table.getColumn('isActive');
- 
+  const handleInputChange = (key: FilterKey, value: string) => {
+    table.getColumn(key)?.setFilterValue(value);
+  };
+
+  const handleResetClick = () => {
+    filterKeys.forEach((key) => {
+      table.getColumn(key)?.setFilterValue('');
+    });
+  };
 
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <Input
-          placeholder="Filter title..."
-          value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('title')?.setFilterValue(event.target.value)
-          }
-          className="h-8 w-[150px] lg:w-[250px]"
-        />
-
-        
-
-        {/* {table.getColumn('isActive') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('isActive')}
-            title="Status"
-            options={statusColumn?.getFacetedUniqueValues() ?? []}
+        {filterKeys.map((key) => (
+          <Input
+            key={key}
+            placeholder={`Filter ${key}...`}
+            value={(table.getColumn(key)?.getFilterValue() as string) ?? ''}
+            onChange={(event) => handleInputChange(key, event.target.value)}
+            className="h-8 w-[150px] lg:w-[250px]"
           />
-        )} */}
+        ))}
 
-        {/* {table.getColumn('priority') && (
-          <DataTableFacetedFilter
-            column={table.getColumn('priority')}
-            title="Priority"
-            options={priorities}
-          />
-        )} */}
-        
         {isFiltered && (
           <Button
             variant="ghost"
-            onClick={() => table.resetColumnFilters()}
+            onClick={handleResetClick}
             className="h-8 px-2 lg:px-3"
           >
             Reset

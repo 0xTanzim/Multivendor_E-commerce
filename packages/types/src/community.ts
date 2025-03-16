@@ -1,6 +1,6 @@
 export type CreateTraining = {
   title: string;
-  categoryId: string;
+  categoryId?: string;
   slug: string;
   description: string;
   image?: string;
@@ -13,7 +13,7 @@ export type CreateTraining = {
 export type Training = {
   id?: string;
   title: string;
-  categoryId: string;
+  categoryId?: string;
   slug: string;
   description: string;
   image?: string;
@@ -33,8 +33,6 @@ export function isTraining(obj: unknown): obj is Training {
   return (
     'title' in trainingObj &&
     typeof trainingObj.title === 'string' &&
-    'categoryId' in trainingObj &&
-    typeof trainingObj.categoryId === 'string' &&
     'description' in trainingObj &&
     typeof trainingObj.description === 'string' &&
     'slug' in trainingObj &&

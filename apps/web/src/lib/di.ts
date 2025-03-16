@@ -25,3 +25,5 @@ export const farmerService = container.resolve(FarmerService);
 export const productService = container.resolve(ProductService);
 
 export const userService = container.resolve(UserService);
+
+// export const staffService = container.resolve(StaffService);

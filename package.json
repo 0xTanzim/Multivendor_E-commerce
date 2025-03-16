@@ -17,7 +17,7 @@
     "db:push": "turbo run db:push",
     "db:pull": "turbo run db:pull",
     "db:studio": "turbo run db:studio",
-    "prepare": "husky install",
+    "prepare": "husky",
     "clean": "rimraf node_modules .next dist build"
   },
   "devDependencies": {

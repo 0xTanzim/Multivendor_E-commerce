@@ -4,6 +4,7 @@ export * from './coupon';
 export * from './farmer';
 export * from './market';
 export * from './product';
+export * from './staff';
 export * from './test';
 export * from './training';
 export * from './user';

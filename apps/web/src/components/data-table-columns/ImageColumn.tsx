@@ -16,7 +16,7 @@ const ImageColumn = ({
         <Image
           className="w-10 h-10 object-cover rounded-full"
           src={imageUrl}
-          alt="image"
+          alt={accessorKey}
           width={500}
           height={500}
         />

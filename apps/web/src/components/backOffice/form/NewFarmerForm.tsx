@@ -7,6 +7,7 @@ import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
+import { usePatchRequest } from '@/hooks/usePatchRequest';
 import { usePostRequest } from '@/hooks/usePostRequest';
 import { Farmer, User } from '@repo/types';
 import { generateNameCode } from '@repo/utils';
@@ -15,9 +16,10 @@ import { useForm } from 'react-hook-form';
 
 type Props = {
   user: User;
+  updateData?: Farmer;
 };
 
-export default function NewFarmerForm({ user }: Props) {
+export default function NewFarmerForm({ user, updateData }: Props) {
   const {
     register,
     handleSubmit,
@@ -27,10 +29,16 @@ export default function NewFarmerForm({ user }: Props) {
     defaultValues: {
       isActive: true,
       ...user,
+      ...updateData,
     },
   });
+
+  const initialImageUrl = updateData?.profileImageUrl || null;
+  const farmerId = updateData?.id || null;
+
   const makePostRequest = usePostRequest();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const makePatchRequest = usePatchRequest();
+  const [imageUrl, setImageUrl] = useState<string | null>(initialImageUrl);
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<string[]>([]);
 
@@ -39,20 +47,36 @@ export default function NewFarmerForm({ user }: Props) {
       data.profileImageUrl = imageUrl;
     }
 
-    const code = generateNameCode('MFF', data.name);
+    const code = generateNameCode('MFF', user.name);
     data.products = products;
     data.userId = user.id;
     data.code = code;
 
-    makePostRequest({
-      setLoading,
-      endpoint: 'api/farmers',
-      data,
-      resourceName: 'Farmer Profile',
-      reset,
-      redirectPath: '/dashboard/farmers',
-    });
+    console.log(data);
+
+    if (farmerId) {
+      makePatchRequest({
+        setLoading,
+        endpoint: `api/farmers/${farmerId}`,
+        data,
+        resourceName: 'Farmer Profile',
+        reset,
+        redirectPath: '/dashboard/farmers',
+      });
+
+      return;
+    } else {
+      makePostRequest({
+        setLoading,
+        endpoint: 'api/farmers',
+        data,
+        resourceName: 'Farmer Profile',
+        reset,
+        redirectPath: '/dashboard/farmers',
+      });
+    }
   };
+
   return (
     <div>
       <form

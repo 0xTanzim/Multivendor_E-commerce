@@ -8,7 +8,17 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const user = await userService.findById(id);
+    const user = await userService.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+      }
+    });
 
     return NextResponse.json(user, { status: 200 });
   } catch (err) {

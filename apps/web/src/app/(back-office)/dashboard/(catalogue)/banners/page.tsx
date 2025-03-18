@@ -23,9 +23,6 @@ const bannerPage = async () => {
         href="/dashboard/banners/new"
       />
 
-      {/* table action */}
-      {/* <TableActions /> */}
-
       <div className="py-8">
         {banners && <DataTable columns={columns} data={banners} />}
       </div>

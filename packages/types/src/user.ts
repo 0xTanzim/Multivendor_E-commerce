@@ -1,3 +1,4 @@
+import { Farmer } from './farmer';
 import { Product } from './product';
 
 export type UserRole =
@@ -18,6 +19,7 @@ export type User = {
   role: UserRole;
   bio?: string;
   products?: Product[];
+  farmerProfile?: Farmer;
 };
 
 export function isUser(data: unknown): data is User {

@@ -9,6 +9,7 @@ import { API_ENDPOINTS, EndpointKey } from '@repo/types';
 import { Row } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
 import DeleteBtn from '../Actions/DeleteBtn';
+import EditBtn from '../Actions/EditBtn';
 import { Button } from '../ui/button';
 
 const ActionColumn = ({
@@ -22,6 +23,7 @@ const ActionColumn = ({
 }) => {
   const id = row.original.id;
   const endPoint = `${API_ENDPOINTS[endPointPath]}/${id}`;
+  const editEndpoint = `${API_ENDPOINTS[endPointPath]}/update/${id}`;
 
   return (
     <DropdownMenu>
@@ -36,7 +38,9 @@ const ActionColumn = ({
         <DropdownMenuItem>
           <DeleteBtn endpoint={endPoint} title={title} />
         </DropdownMenuItem>
-        <DropdownMenuItem>Edit {title}</DropdownMenuItem>
+        <DropdownMenuItem>
+          <EditBtn editEndpoint={editEndpoint} title={title} />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

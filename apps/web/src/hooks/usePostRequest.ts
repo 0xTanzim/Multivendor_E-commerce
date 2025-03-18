@@ -30,12 +30,11 @@ export function usePostRequest() {
         body: JSON.stringify(data),
       });
 
-      setLoading(false);
-
       const result = await response.json();
       if (response.ok) {
         toast.success(`New ${resourceName} Created Successfully`);
         reset();
+        
         if (redirectPath) {
           router.push(redirectPath);
         }
@@ -43,9 +42,10 @@ export function usePostRequest() {
         toast.error(result.error);
       }
     } catch (error) {
-      setLoading(false);
       console.log(error);
       toast.error('Failed to process the request');
+    } finally {
+      setLoading(false);
     }
   };
 }

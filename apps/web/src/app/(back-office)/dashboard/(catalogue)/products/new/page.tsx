@@ -1,18 +1,23 @@
-import NewProductForm from '@/components/backOffice/product/NewProductForm';
+import FormHeader from '@/components/backOffice/form/FormHeader';
+import ProductForm from '@/components/backOffice/product/ProductForm';
 import { getData } from '@/lib/getData';
-import { isCategoryArray, isFarmers } from '@repo/types';
+import { isCategoryArray, isFarmers, isUserArray } from '@repo/types';
 
 const NewProductPage = async () => {
   // Categories and Farmers
   const categoriesData: unknown = await getData('categories');
-  const farmersData: unknown = await getData('farmers');
+  const farmersData = await getData('farmers');
 
   if (!isCategoryArray(categoriesData)) {
     return <div>Failed to fetch categories</div>;
   }
 
-  if (!isFarmers(farmersData)) {
-    return <div>Failed to fetch users</div>;
+  let allFarmersData = null;
+
+  if (!isFarmers(farmersData) && !isUserArray(farmersData)) {
+    allFarmersData = null;
+  } else {
+    allFarmersData = farmersData;
   }
 
   const categories = categoriesData.map((category) => ({
@@ -20,12 +25,19 @@ const NewProductPage = async () => {
     title: category.title,
   }));
 
-  const farmers = farmersData.map((farmer) => ({
+  const farmers = allFarmersData.map((farmer) => ({
     id: farmer.id!,
     title: farmer.name,
   }));
 
-  return <NewProductForm categories={categories} farmers={farmers} />;
+  console.log(farmersData);
+
+  return (
+    <div>
+      <FormHeader title="New Product" />
+      <ProductForm categories={categories} farmers={farmers} />;
+    </div>
+  );
 };
 
 export default NewProductPage;

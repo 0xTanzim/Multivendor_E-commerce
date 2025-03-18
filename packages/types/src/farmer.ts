@@ -1,9 +1,8 @@
 import { Product } from './product';
+import { User } from './user';
 
 export type Farmer = {
   id?: string;
-  name: string;
-  email: string;
   phone: string;
   physicalAddress: string;
   contactPerson: string;
@@ -13,10 +12,11 @@ export type Farmer = {
   notes?: string;
   isActive: boolean;
   products?: Product[] | string[];
-  mainCrops: string;
+  mainCrop: string;
   farmSize: number | string;
   userId: string;
   code: string;
+  user?: User;
 };
 
 export function isFarmer(data: unknown): data is Farmer {
@@ -31,10 +31,6 @@ export function isFarmer(data: unknown): data is Farmer {
     typeof obj.userId === 'string' &&
     'code' in obj &&
     typeof obj.code === 'string' &&
-    'name' in obj &&
-    typeof obj.name === 'string' &&
-    'email' in obj &&
-    typeof obj.email === 'string' &&
     'phone' in obj &&
     typeof obj.phone === 'string' &&
     'physicalAddress' in obj &&
@@ -48,7 +44,7 @@ export function isFarmer(data: unknown): data is Farmer {
     (typeof obj.notes === 'string' || obj.notes === undefined) &&
     typeof obj.isActive === 'boolean' &&
     (typeof obj.farmSize === 'string' || typeof obj.farmSize === 'number') &&
-    typeof obj.mainCrops === 'string' &&
+    typeof obj.mainCrop === 'string' &&
     (obj.products === undefined ||
       (Array.isArray(obj.products) &&
         obj.products.every((p) => typeof p === 'string' || isProductData(p))))

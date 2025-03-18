@@ -22,6 +22,7 @@ export abstract class BaseService<
     options?: Parameters<TRepository['findAll']>[0]
   ): Promise<TModel[]> {
     try {
+      
       const result = await this.repository.findAll(options);
       return result;
     } catch (err) {

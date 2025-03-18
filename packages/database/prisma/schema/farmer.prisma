@@ -1,7 +1,5 @@
 model FarmerProfile {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  name               String
-  email              String
   phone              String
   physicalAddress    String?
   contactPerson      String?
@@ -10,8 +8,8 @@ model FarmerProfile {
   terms              String?
   notes              String?
   isActive           Boolean  @default(false)
-  products           String[]
-  mainCrops          String
+  products           String[] @default([])
+  mainCrop          String
   farmSize           Float?
   code               String?
 

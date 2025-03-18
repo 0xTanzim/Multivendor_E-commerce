@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 
 export async function GET(_req: Request) {
   try {
-    const farmers = await farmerService.findAll();
+    const farmers = await farmerService.findAllFarmers();
     return NextResponse.json(farmers, { status: 200 });
   } catch (err) {
     return handleError(err);

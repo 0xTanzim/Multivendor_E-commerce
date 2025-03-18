@@ -1,7 +1,6 @@
-"use client";
-import { CommonProvider } from "@/provider/CommonProvider";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
-import * as React from "react";
+'use client';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import * as React from 'react';
 
 export function ThemeProvider({
   children,
@@ -9,10 +8,7 @@ export function ThemeProvider({
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
     <NextThemesProvider {...props} attribute="class" defaultTheme="dark">
-      <CommonProvider>
       {children}
-      </CommonProvider>
     </NextThemesProvider>
   );
 }
-

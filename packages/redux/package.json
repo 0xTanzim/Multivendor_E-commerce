@@ -1,0 +1,27 @@
+{
+  "name": "@repo/redux",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
+    "@repo/backend-services": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/core": "workspace:*",
+    "@repo/types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/utils": "workspace:*",
+    "react-redux": "^9.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

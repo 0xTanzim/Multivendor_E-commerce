@@ -22,8 +22,13 @@ const ActionColumn = ({
   endPointPath: EndpointKey;
 }) => {
   const id = row.original.id;
-  const endPoint = `${API_ENDPOINTS[endPointPath]}/${id}`;
-  const editEndpoint = `${API_ENDPOINTS[endPointPath]}/update/${id}`;
+
+  const apiEndPoint = `${API_ENDPOINTS[endPointPath]}/${id}`;
+
+  const editEndpoint =
+    endPointPath === 'trainings'
+      ? `/community/update/${id}`
+      : `${API_ENDPOINTS[endPointPath]}/update/${id}`;
 
   return (
     <DropdownMenu>
@@ -36,7 +41,7 @@ const ActionColumn = ({
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
         <DropdownMenuItem>
-          <DeleteBtn endpoint={endPoint} title={title} />
+          <DeleteBtn endpoint={apiEndPoint} title={title} />
         </DropdownMenuItem>
         <DropdownMenuItem>
           <EditBtn editEndpoint={editEndpoint} title={title} />

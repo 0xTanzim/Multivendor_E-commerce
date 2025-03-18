@@ -19,6 +19,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
+    
     const user = await userService.findAll({
       select: {
         name: true,

@@ -1,9 +1,12 @@
 import { UserRepository } from '@repo/backend-repository';
 import { BadRequestError, ConflictError } from '@repo/common/error';
 import { BaseService, injectable } from '@repo/core';
-import { prisma } from '@repo/database';
-import { User } from '@repo/types';
+import { prisma, User } from '@repo/database';
+import { sendVerificationEmail } from '@repo/email-service';
+
+import base64url from 'base64url';
 import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 
 @injectable()
 export class UserService extends BaseService<User, UserRepository> {
@@ -26,13 +29,19 @@ export class UserService extends BaseService<User, UserRepository> {
       };
 
       const hashedPassword = await this.hashedPassword(data.password, 10);
+      const token = await this.generateToken();
 
       const user = await prisma.user.create({
         data: {
           ...newUser,
           password: hashedPassword,
+          verificationToken: token,
         },
       });
+
+      if (user.role === 'FARMER') {
+        await this.sendVerifyEmail(user);
+      }
 
       return user;
     } catch (err) {
@@ -41,6 +50,31 @@ export class UserService extends BaseService<User, UserRepository> {
       }
 
       throw new BadRequestError('Failed to create user');
+    }
+  }
+
+  async generateToken() {
+    const token = uuidv4();
+    const base64Token = base64url.encode(token);
+    return base64Token;
+  }
+
+  async sendVerifyEmail(user: User) {
+    try {
+      const userId = user.id;
+
+      const res = await sendVerificationEmail({
+        to: user.email,
+        name: user.name,
+        redirectUrl: `onboarding/${userId}?token=${user.verificationToken}`,
+        linkText: 'Verify your email',
+        subject: 'Verify Account - MindFuel',
+      });
+
+      console.log('Email sent:', res);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw new BadRequestError('Failed to send email');
     }
   }
 

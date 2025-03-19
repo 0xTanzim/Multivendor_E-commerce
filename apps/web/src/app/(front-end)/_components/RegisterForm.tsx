@@ -37,8 +37,8 @@ export default function RegisterForm({ role }: props) {
 
     let redirectPath = '/login';
 
-    if (role === 'FARMER') {
-      redirectPath = `/onboarding/${result.id}`;
+    if (role !== 'USER') {
+      redirectPath = `/verify-email`;
     }
 
     router.push(redirectPath);
@@ -89,15 +89,39 @@ export default function RegisterForm({ role }: props) {
         buttonTitle="Register"
         loadingButtonTitle="Creating Please Wait..."
       />
-      <p className="text-sm font-light py-4 text-gray-500 dark:text-gray-400">
-        Already have an account?{' '}
-        <Link
-          href="/login"
-          className="font-medium text-purple-600 hover:underline dark:text-purple-500"
-        >
-          Login
-        </Link>
-      </p>
+      <div className="flex  flex-col items-center  mt-2">
+        <p className="text-sm font-light py-2 text-gray-500 dark:text-gray-400">
+          Already have an account?{' '}
+          <Link
+            href="/login"
+            className="font-medium text-purple-600 hover:underline dark:text-purple-500"
+          >
+            Login
+          </Link>
+        </p>
+
+        {role === 'USER' ? (
+          <p className="text-sm font-light py-2 text-gray-500 dark:text-gray-400">
+            Are you a Farmer?{' '}
+            <Link
+              href="/register-farmer"
+              className="font-medium text-purple-600 hover:underline dark:text-purple-500"
+            >
+              Register as a Farmer
+            </Link>
+          </p>
+        ) : (
+          <p className="text-sm font-light py-2 text-gray-500 dark:text-gray-400">
+            Are you a User?{' '}
+            <Link
+              href="/register"
+              className="font-medium text-purple-600 hover:underline dark:text-purple-500"
+            >
+              Register as a User
+            </Link>
+          </p>
+        )}
+      </div>
     </form>
   );
 }

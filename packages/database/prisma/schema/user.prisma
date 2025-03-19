@@ -13,15 +13,17 @@ enum Gender {
 }
 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?        @unique
-  emailVerified DateTime?
-  password      String?
-  role          UserRole       @default(USER)
-  gender        Gender         @default(UNKNOWN)
-  bio           String?        @default("")
-  farmerProfile FarmerProfile?
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  name              String?
+  email             String?        @unique
+  emailVerified     Boolean        @default(false)
+  verificationToken String?      
+  password          String?
+  role              UserRole       @default(USER)
+  gender            Gender         @default(UNKNOWN)
+  bio               String?        @default("")
+  farmerProfile     FarmerProfile?
+  profile           UserProfile?
 
   products Product[]
 
@@ -36,4 +38,13 @@ model Profile {
   userId    String    @unique @db.ObjectId
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt
+}
+
+model UserProfile {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @unique @db.ObjectId
+  dateOfBirth DateTime?
+  address     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

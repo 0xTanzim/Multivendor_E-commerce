@@ -43,10 +43,7 @@ export default function NewFarmerForm({ user, updateData }: Props) {
   const [products, setProducts] = useState<string[]>([]);
 
   const onSubmit = async (data: Farmer) => {
-    if (imageUrl) {
-      data.profileImageUrl = imageUrl;
-    }
-
+    data.profileImageUrl = imageUrl ?? '';
     const code = generateNameCode('MFF', user.name);
     data.products = products;
     data.userId = user.id;
@@ -54,6 +51,7 @@ export default function NewFarmerForm({ user, updateData }: Props) {
 
     console.log(data);
 
+    
     if (farmerId) {
       makePatchRequest({
         setLoading,
@@ -72,7 +70,7 @@ export default function NewFarmerForm({ user, updateData }: Props) {
         data,
         resourceName: 'Farmer Profile',
         reset,
-        redirectPath: '/dashboard/farmers',
+        redirectPath: '/login',
       });
     }
   };

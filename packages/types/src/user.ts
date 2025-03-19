@@ -13,13 +13,14 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  emailVerified?: Date;
+  emailVerified?: string;
   gender?: Gender;
   password: string;
   role: UserRole;
   bio?: string;
   products?: Product[];
   farmerProfile?: Farmer;
+  verificationToken?: string;
 };
 
 export function isUser(data: unknown): data is User {
@@ -40,8 +41,7 @@ export function isUserArray(data: unknown): data is User[] {
   return Array.isArray(data) && data.every(isUser);
 }
 
-
 export type LoginUser = {
   email: string;
   password: string;
-}
+};

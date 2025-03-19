@@ -3,7 +3,14 @@ import { CartItem } from '@repo/types';
 
 type CartState = CartItem[];
 
-const initialState: CartState = [];
+const getCartFromLocalStorage = (): CartItem[] => {
+  if (typeof window !== 'undefined') {
+    return JSON.parse(localStorage.getItem('cart') || '[]');
+  }
+  return [];
+};
+
+const initialState: CartState = getCartFromLocalStorage();
 
 export const cartSlice: Slice<CartState> = createSlice({
   name: 'cart',
@@ -16,25 +23,32 @@ export const cartSlice: Slice<CartState> = createSlice({
       if (existingItem) {
         existingItem.qty += qty;
       } else {
-        state.push({ id, imageUrl, qty, salePrice, title });
+        const newItem = { id, title, salePrice, qty: 1, imageUrl };
+        state.push(newItem);
       }
+      localStorage.setItem('cart', JSON.stringify(state));
     },
     removeFromCart(state, action: PayloadAction<string>) {
-      return state.filter((item) => item.id !== action.payload);
+      const newState = state.filter((item) => item.id !== action.payload);
+      localStorage.setItem('cart', JSON.stringify(newState));
+      return newState;
     },
     clearCart() {
+      localStorage.removeItem('cart');
       return [];
     },
     incrementQty(state, action: PayloadAction<string>) {
       const item = state.find((item) => item.id === action.payload);
       if (item) {
         item.qty += 1;
+        localStorage.setItem('cart', JSON.stringify(state));
       }
     },
     decrementQty(state, action: PayloadAction<string>) {
       const item = state.find((item) => item.id === action.payload);
       if (item && item.qty > 1) {
         item.qty -= 1;
+        localStorage.setItem('cart', JSON.stringify(state));
       }
     },
   },

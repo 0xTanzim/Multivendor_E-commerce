@@ -5,19 +5,19 @@ export type ID = string | number;
 export abstract class BaseRepository<
   TModel,
   TDelegate extends {
-    findMany: (...args: any[]) => Promise<any>;
-    findUnique: (...args: any[]) => Promise<any>;
-    create: (...args: any[]) => Promise<any>;
-    update: (...args: any[]) => Promise<any>;
-    delete: (...args: any[]) => Promise<any>;
-    findFirst: (...args: any[]) => Promise<any>;
-    aggregate: (...args: any[]) => Promise<any>;
-    count: (...args: any[]) => Promise<any>;
-    groupBy: (...args: any[]) => Promise<any>;
-    upsert: (...args: any[]) => Promise<any>;
-    updateMany: (...args: any[]) => Promise<any>;
-    deleteMany: (...args: any[]) => Promise<any>;
-    aggregateRaw: (...args: any[]) => Promise<any>;
+    findMany: (...args: any) => any;
+    findUnique: (...args: any) => any;
+    create: (...args: any) => any;
+    update: (...args: any) => any;
+    delete: (...args: any) => any;
+    findFirst: (...args: any) => any;
+    aggregate: (...args: any) => any;
+    count: (...args: any) => any;
+    groupBy: (...args: any) => any;
+    upsert: (...args: any) => any;
+    updateMany: (...args: any) => any;
+    deleteMany: (...args: any) => any;
+    aggregateRaw: (...args: any) => any;
   },
 > {
   protected prisma: PrismaClient;
@@ -31,7 +31,7 @@ export abstract class BaseRepository<
   async findAll(
     args?: Parameters<TDelegate['findMany']>[0]
   ): Promise<TModel[]> {
-    return this.delegate.findMany(args ?? {});
+    return this.delegate.findMany(args);
   }
 
   async findById(id: ID): Promise<TModel | null> {

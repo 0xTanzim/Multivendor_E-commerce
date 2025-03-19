@@ -13,6 +13,9 @@ export class FarmerService extends BaseService<
     super(farmerRepository);
   }
 
+
+  
+
   async createFarmer(data: Farmer) {
     try {
       return await prisma.farmerProfile.create({
@@ -75,25 +78,25 @@ export class FarmerService extends BaseService<
   }
 
 
-  async updateFarmer(id: string, data: Partial<Farmer>) {
-    try {
-      const { name, email, userId, ...farmerProfileData } = data;
+  // async updateFarmer(id: string, data: Partial<Farmer>) {
+  //   try {
+  //     const { name, email, userId, ...farmerProfileData } = data;
 
       
 
-      const [updatedUser, updatedFarmer] = await this.farmerRepository.updateFarmerWithUser(
-        id,
-        userId,
-        farmerProfileData,
-        { name, email }
-      );
+  //     const [updatedUser, updatedFarmer] = await this.farmerRepository.updateFarmerWithUser(
+  //       id,
+  //       userId,
+  //       farmerProfileData,
+  //       { name, email }
+  //     );
 
-      return { user: updatedUser, farmerProfile: updatedFarmer };
-    } catch (error) {
-      console.error("Error updating farmer:", error);
-      throw new BadRequestError("Failed to update farmer");
-    }
-  }
+  //     return { user: updatedUser, farmerProfile: updatedFarmer };
+  //   } catch (error) {
+  //     console.error("Error updating farmer:", error);
+  //     throw new BadRequestError("Failed to update farmer");
+  //   }
+  // }
 
 
 }

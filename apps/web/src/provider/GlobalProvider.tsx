@@ -2,14 +2,17 @@
 import { CommonProvider } from '@/provider/CommonProvider';
 import { ThemeProvider } from '@/provider/ThemeProvider';
 import { AppStore, makeStore } from '@repo/redux';
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import * as React from 'react';
 import { Provider } from 'react-redux';
 
+import { SessionProvider } from 'next-auth/react';
 export function GlobalProvider({
   children,
+  propsData,
   ...props
-}: React.ComponentProps<typeof NextThemesProvider>) {
+}: React.PropsWithChildren<{
+  propsData?: any;
+}>) {
   const storeRef = React.useRef<AppStore | null>(null);
   if (!storeRef.current) {
     storeRef.current = makeStore();
@@ -17,9 +20,11 @@ export function GlobalProvider({
 
   return (
     <ThemeProvider>
-      <Provider store={storeRef.current}>
-        <CommonProvider>{children}</CommonProvider>
-      </Provider>
+      <CommonProvider>
+        <SessionProvider session={propsData}>
+          <Provider store={storeRef.current}>{children} </Provider>
+        </SessionProvider>
+      </CommonProvider>
     </ThemeProvider>
   );
 }

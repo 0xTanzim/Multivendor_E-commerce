@@ -1,4 +1,9 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import {
+  ForbiddenError,
+  InternalServerError,
+  NotFoundError,
+} from '@repo/common/error';
 import { prisma } from '@repo/database';
 import { compare } from 'bcryptjs';
 import { NextAuthConfig } from 'next-auth';
@@ -28,25 +33,26 @@ export const authOptions: NextAuthConfig = {
           const password = credentials?.password as string | undefined;
 
           if (!email || !password) {
-            throw new Error('No Inputs Found');
+            throw new NotFoundError('No Inputs Found');
           }
-          console.log('Passed Check 1');
 
+          console.log('✅ Passed Check 1');
           const existingUser = await prisma.authUser.findUnique({
             where: { email },
           });
+
           if (!existingUser) {
             console.log('No user found');
-            throw new Error('No user found');
+            throw new NotFoundError('No user found');
           }
-          console.log('Passed Check 2');
+          console.log('✅ Passed Check 2');
 
           const passwordMatch = await compare(password, existingUser.password);
           if (!passwordMatch) {
             console.log('Password incorrect');
-            throw new Error('Password Incorrect');
+            throw new ForbiddenError('Password Incorrect');
           }
-          console.log('Pass 3 Checked');
+          console.log('✅ Pass 3 Checked');
 
           const user = {
             id: existingUser.id,
@@ -56,11 +62,11 @@ export const authOptions: NextAuthConfig = {
             emailVerified: existingUser.emailVerified,
           };
 
-          console.log('User Compiled data', user);
+          console.log('User Compiled data');
           return user;
         } catch (error) {
           console.log('All steps failed', error);
-          throw new Error('Something went wrong');
+          throw new InternalServerError('Something went wrong');
         }
       },
     }),
@@ -74,7 +80,6 @@ export const authOptions: NextAuthConfig = {
         session.user.email = token.email as string;
         session.user.role = token.role;
         session.user.emailVerified = token.emailVerified;
-        // Remove session.user.image since it's not in your user object
       }
       return session;
     },
@@ -85,7 +90,6 @@ export const authOptions: NextAuthConfig = {
         token.email = user.email as string;
         token.role = user.role as string;
         token.emailVerified = user.emailVerified as boolean;
-        // Remove token.image since picture isn’t in your user object
       }
       return token;
     },

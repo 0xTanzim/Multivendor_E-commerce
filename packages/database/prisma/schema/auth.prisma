@@ -1,0 +1,54 @@
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  FARMER
+  MODERATOR
+  USER
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+model AuthUser {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  email         String        @unique
+  password      String
+  role          UserRole      @default(USER)
+  emailVerified Boolean       @default(false)
+  accountStatus AccountStatus @default(PENDING)
+  user          User          @relation(fields: [id], references: [id])
+  authSessions  AuthSession[]
+}
+
+enum VerificationCodeType {
+  ACCOUNT_ACTIVATION
+  PASSWORD_RESET
+  EMAIL_CHANGE
+  PHONE_CHANGE
+  TWO_FACTOR_AUTH
+  TWO_FACTOR_AUTH_DISABLE
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  EXPIRED
+}
+
+model AuthSession {
+  id         String               @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String               @db.ObjectId
+  token      String?              @unique
+  code       String?
+  type       VerificationCodeType @default(ACCOUNT_ACTIVATION)
+  expiresAt  DateTime?
+  verified   Boolean              @default(false)
+  status     VerificationStatus   @default(PENDING)
+  verifiedAt DateTime?
+
+  user AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

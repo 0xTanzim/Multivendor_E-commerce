@@ -1,50 +1,14 @@
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  FARMER
-  MODERATOR
-  USER
-}
-
-enum Gender {
-  MALE
-  FEMALE
-  UNKNOWN
-}
-
 model User {
-  id                String         @id @default(auto()) @map("_id") @db.ObjectId
-  name              String?
-  email             String?        @unique
-  emailVerified     Boolean        @default(false)
-  verificationToken String?      
-  password          String?
-  role              UserRole       @default(USER)
-  gender            Gender         @default(UNKNOWN)
-  bio               String?        @default("")
-  farmerProfile     FarmerProfile?
-  profile           UserProfile?
-
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Profile {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  userId    String    @unique @db.ObjectId
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-}
-
-model UserProfile {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String    @unique @db.ObjectId
-  dateOfBirth DateTime?
-  address     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  gender        String         @default("UNKNOWN")
+  bio           String?        @default("")
+  dateOfBirth   DateTime?
+  address       String?
+  settings      Json?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  authUser      AuthUser?
+  products      Product[]
+  farmerProfile FarmerProfile?
 }

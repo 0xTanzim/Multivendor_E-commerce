@@ -8,9 +8,8 @@ model Category {
 
   products  Product[]
   trainings Training[]
-
-  marketIds String[] @db.ObjectId
-  markets   Market[] @relation(fields: [marketIds], references: [id])
+  markets   Market[]   @relation(fields: [marketIds], references: [id])
+  marketIds String[]   @db.ObjectId
 
   createdAt DateTime  @default(now())
   updatedAt DateTime? @updatedAt

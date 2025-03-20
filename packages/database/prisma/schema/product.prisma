@@ -16,7 +16,6 @@ model Product {
   wholeSaleQty   Int
   wholeSalePrice Float
   productStock   Int
-  stockStatus    String?
   qty            Int
 
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)

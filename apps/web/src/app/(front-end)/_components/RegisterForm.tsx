@@ -27,21 +27,30 @@ export default function RegisterForm({ role }: props) {
   const makeAuthRequest = useAuthRequest();
 
   async function onSubmit(data: User) {
+    setLoading(true);
+    // Log the data to be sent
+    console.log('Registering user', data);
+    setLoading(false);
+
+
     const result = await makeAuthRequest({
-      endpoint: '/api/users',
+      endpoint: '/api/register',
       data,
       reset,
       setLoading,
       resourceName: 'Register',
     });
 
-    let redirectPath = '/login';
+    console.log('Register result', result);
+    
 
-    if (role !== 'USER') {
-      redirectPath = `/verify-email`;
-    }
+    // let redirectPath = '/login';
 
-    router.push(redirectPath);
+    // if (role !== 'USER') {
+    //   redirectPath = `/verify-email`;
+    // }
+
+    // router.push(redirectPath);
   }
 
   return (

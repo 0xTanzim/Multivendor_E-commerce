@@ -7,13 +7,11 @@
     "dev": "tsc -w"
   },
   "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./dist/index.js"
-    }
+    ".": "./src/index.ts"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
+    "@repo/database": "workspace:*",
     "@types/eslint": "^9.6.1",
     "@types/node": "^22.13.8",
     "eslint": "^9.21.0",

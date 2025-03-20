@@ -15,7 +15,7 @@ const ProductPage = async () => {
   } else {
     products = productsData;
   }
-  console.log(products);
+
   return (
     <div>
       {/* header  */}

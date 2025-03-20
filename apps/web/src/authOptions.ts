@@ -1,9 +1,10 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@repo/database';
 import { compare } from 'bcryptjs';
+import { NextAuthConfig } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
-export const authOptions = {
+export const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.AUTH_SECRET,
   session: {
@@ -19,37 +20,34 @@ export const authOptions = {
         email: { label: 'Email', type: 'email', placeholder: 'jb@gmail.com' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         try {
-          console.log('Authorize function recieved credentials:', credentials);
-          // Check if user credentials are they are Not empty
-          if (!credentials?.email || !credentials?.password) {
-            throw { error: 'No Inputs Found', status: 401 };
+          console.log('Authorize function received credentials:', credentials);
+          // Type-safe credential access
+          const email = credentials?.email as string | undefined;
+          const password = credentials?.password as string | undefined;
+
+          if (!email || !password) {
+            throw new Error('No Inputs Found');
           }
-          console.log('Passed Check 1 ');
-          //Check if user exists
-          const existingUser = await prisma.user.findUnique({
-            where: { email: credentials.email as string },
+          console.log('Passed Check 1');
+
+          const existingUser = await prisma.authUser.findUnique({
+            where: { email },
           });
           if (!existingUser) {
             console.log('No user found');
-            throw { error: 'No user found', status: 401 };
+            throw new Error('No user found');
           }
-
           console.log('Passed Check 2');
 
-          //Check if Password is correct
-          const passwordMatch = await compare(
-            credentials.password as string,
-            existingUser.password as string
-          );
-
-
+          const passwordMatch = await compare(password, existingUser.password);
           if (!passwordMatch) {
             console.log('Password incorrect');
-            throw { error: 'Password Incorrect', status: 401 };
+            throw new Error('Password Incorrect');
           }
           console.log('Pass 3 Checked');
+
           const user = {
             id: existingUser.id,
             name: existingUser.name,
@@ -59,43 +57,36 @@ export const authOptions = {
           };
 
           console.log('User Compiled data', user);
-
-          //
-          console.log('User Compiled');
-          // console.log(user);
           return user;
         } catch (error) {
-          console.log('all step Failed');
-          console.log(error);
-          throw { error: 'Something went wrong', status: 401 };
+          console.log('All steps failed', error);
+          throw new Error('Something went wrong');
         }
       },
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       if (token) {
-        console.log(`token:${token} in session`);
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
+        console.log(`token: ${JSON.stringify(token)} in session`);
+        session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
         session.user.role = token.role;
-        session.user.image = token.picture;
         session.user.emailVerified = token.emailVerified;
+        // Remove session.user.image since it's not in your user object
       }
-      // console.log('Session:', session.user);
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
-        token.id = user.id;
-        token.name = user.name;
-        token.email = user.email;
-        token.role = user.role;
-        token.image = user.picture;
-        token.emailVerified = user.emailVerified;
+        token.id = user.id as string;
+        token.name = user.name as string;
+        token.email = user.email as string;
+        token.role = user.role as string;
+        token.emailVerified = user.emailVerified as boolean;
+        // Remove token.image since picture isn’t in your user object
       }
-      // console.log('Token:', token);
       return token;
     },
   },

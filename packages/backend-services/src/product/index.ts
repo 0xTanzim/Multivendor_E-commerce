@@ -24,7 +24,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
         categoryId: data.categoryId,
         farmerId: data.farmerId,
         isActive: data.isActive,
-        isWholeSale: data.isWholeSale,
+        isWholesale: data.isWholesale,
         wholeSalePrice: toFloat(data.wholeSalePrice),
         wholeSaleQty: toInt(data.wholeSaleQty),
         unit: data.unit,
@@ -49,7 +49,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
           categoryId: newProduct.categoryId,
           userId: newProduct.farmerId,
           isActive: newProduct.isActive,
-          isWholesale: newProduct.isWholeSale,
+          isWholesale: newProduct.isWholesale,
           wholeSalePrice: newProduct.wholeSalePrice,
           wholeSaleQty: newProduct.wholeSaleQty,
           unit: newProduct.unit,
@@ -70,6 +70,44 @@ export class ProductService extends BaseService<Product, ProductRepository> {
       }
 
       throw new BadRequestError('Failed to create record');
+    }
+  }
+
+  async updateProduct(productId: string, data: IProduct) {
+    try {
+      delete data.id;
+      const { categoryId, userId, id, ...updateData } = data;
+
+      const formattedData = {
+        ...updateData,
+        productPrice: parseFloat(data.productPrice.toString()),
+        sellPrice: parseFloat(data.sellPrice.toString()),
+        wholeSalePrice: parseFloat(data.wholeSalePrice.toString()),
+        wholeSaleQty: Number(data.wholeSaleQty),
+        productStock: Number(data.productStock),
+        qty: Number(data.qty),
+        unit: data.unit.toString(),
+      };
+
+      const updatedProduct = await this.repository.update(productId, {
+        ...formattedData,
+        category: {
+          connect: {
+            id: data.categoryId,
+          },
+        },
+        user: {
+          connect: {
+            id: data.userId,
+          },
+        },
+      });
+
+
+      return updatedProduct;
+    } catch (err) {
+      console.log('Error updating product', err.message);
+      throw new BadRequestError('Failed to update record');
     }
   }
 }

@@ -1,6 +1,5 @@
 model User {
   id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
   gender        String         @default("UNKNOWN")
   bio           String?        @default("")
   dateOfBirth   DateTime?
@@ -10,5 +9,6 @@ model User {
   updatedAt     DateTime       @updatedAt
   authUser      AuthUser?
   products      Product[]
+  
   farmerProfile FarmerProfile?
 }

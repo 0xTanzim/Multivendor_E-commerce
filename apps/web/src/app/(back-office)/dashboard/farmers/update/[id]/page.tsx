@@ -1,7 +1,7 @@
+import FarmerForm from '@/components/backOffice/form/FarmerForm';
 import FormHeader from '@/components/backOffice/form/FormHeader';
-import NewFarmerForm from '@/components/backOffice/form/NewFarmerForm';
 import { getData } from '@/lib/getData';
-import { isUser } from '@repo/types';
+import { isFarmer, isUser } from '@repo/types';
 
 type IParams = {
   params: Promise<{ id: string }>;
@@ -12,7 +12,7 @@ const UpdateFarmerPage = async ({ params }: IParams) => {
   const farmerData = await getData(`/farmers/${id}`);
   let farmer = null;
 
-  if (!isUser(farmerData.user)) {
+  if (!isFarmer(farmerData)) {
     return (
       <div>
         <p>Farmer not found. Please check the ID or try again later.</p>
@@ -22,12 +22,20 @@ const UpdateFarmerPage = async ({ params }: IParams) => {
     farmer = farmerData;
   }
 
-  // console.log(farmer);
+  const user = farmer.user;
+
+  if (!isUser(user)) {
+    return (
+      <div>
+        <p>User not found. Please check the ID or try again later.</p>
+      </div>
+    );
+  }
 
   return (
     <div>
       <FormHeader title="Update Farmer" />
-      {farmer && <NewFarmerForm updateData={farmer} user={farmerData.user} />}
+      {farmer && <FarmerForm updateData={farmer} user={user} />}
     </div>
   );
 };

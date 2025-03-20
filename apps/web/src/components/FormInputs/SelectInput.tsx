@@ -8,7 +8,7 @@ interface SelectInputProps {
   name: string;
   setValue: (name: any, value: any) => void;
   className?: string;
-  options?: { id: number | string; title: string }[];
+  options?: { id: number | string; title?: string }[];
   hasMultiple?: boolean;
   defaultValue?: string | string[];
 }

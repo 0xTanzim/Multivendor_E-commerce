@@ -1,102 +1,121 @@
-import { FarmerProfileRepository } from '@repo/backend-repository';
-import { BadRequestError, ConflictError } from '@repo/common/error';
+import {
+  AuthRepository,
+  FarmerProfileRepository,
+} from '@repo/backend-repository';
+import { ConflictError, NotFoundError } from '@repo/common/error';
 import { BaseService, injectable } from '@repo/core';
 import { FarmerProfile } from '@repo/database';
-import { Farmer } from '@repo/types';
+import { FarmerInput } from '@repo/types';
 
 @injectable()
 export class FarmerService extends BaseService<
   FarmerProfile,
   FarmerProfileRepository
 > {
-  constructor(private readonly farmerRepository: FarmerProfileRepository) {
+  constructor(
+    private readonly farmerRepository: FarmerProfileRepository,
+    private readonly authRepository: AuthRepository
+  ) {
     super(farmerRepository);
   }
 
-
-  
-
-  async createFarmer(data: Farmer) {
+  async createFarmer(data: FarmerInput) {
     try {
-      return await prisma.farmerProfile.create({
-        data: {
-          products: Array.isArray(data.products)
-            ? data.products.map(String)
-            : [],
-          farmSize:
-            typeof data.farmSize === 'string'
-              ? parseFloat(data.farmSize) || 0
-              : (data.farmSize ?? 0),
+      const { name, email, ...farmerData } = data;
 
-          isActive: data.isActive ?? false,
-          profileImageUrl: data.profileImageUrl ?? '',
-          mainCrop: data.mainCrop ?? '',
-          notes: data.notes ?? '',
-          contactPerson: data.contactPerson,
-          contactPersonPhone: data.contactPersonPhone,
-          physicalAddress: data.physicalAddress,
-          terms: data.terms,
-          phone: data.phone,
-          code: data.code,
-          userId: data.userId,
-        },
-      });
-    } catch (error) {
-      if (error.code === 'P2002') {
-        throw new ConflictError('Record already exists');
+      console.log('Farmer data', data);
+
+      // Step 1: Check if email already exists in the database
+      const existFarmer = await this.farmerRepository.checkById(data.userId);
+      if (existFarmer) {
+        throw new ConflictError('UserID already exists in the database');
       }
-      console.error('Error creating farmer status:', error.code, error.status);
-      console.error('Error creating farmer message:', error.message);
-      console.log('====================================');
 
-      // console.error('Error creating farmer:', error);
+      console.log('checked email', data.userId);
+      console.log('Existing farmer', existFarmer);
 
-      throw new BadRequestError('Failed to create farmer');
+      // Step 2: get user by email and check is name & email are same, f not same then update the user
+      const user = await this.authRepository.getUserById(data.userId);
+      if (!user) {
+        throw new NotFoundError('User not found');
+      }
+
+      if (user.name !== name || user.email !== email) {
+        await this.authRepository.update(user.id, {
+          name,
+          email,
+        });
+      }
+
+      // Step 3: Create a new farmer profile
+      const farmerProfile =
+        await this.farmerRepository.createFarmer(farmerData);
+
+      console.log('Farmer profile', farmerProfile);
+
+      return {};
+    } catch (err) {
+      console.log(
+        'Error creating farmer',
+        err.message,
+        'metadata',
+        err?.meta,
+        'code',
+        err?.code
+      );
     }
   }
 
   async findAllFarmers() {
     try {
-      return await prisma.user.findMany({
-        where: {
-          role: 'FARMER',
-        },
-        include: {
-          farmerProfile: true,
-        },
-        orderBy: {
-          createdAt: 'desc',
-        },
-        omit: {
-          password: true,
-          
-        },
-      });
+      const farmers = await this.farmerRepository.getAllFarmer();
+      return farmers;
     } catch (err) {
-      throw new BadRequestError('Failed to fetch farmers');
+      console.error('Error fetching farmers', err);
+      throw new NotFoundError('Farmers not found');
     }
   }
 
+  async findFarmerById(id: string) {
+    try {
+      const farmerDetails = await this.farmerRepository.getFarmerById(id);
+      if (!farmerDetails) {
+        throw new NotFoundError('Farmer not found');
+      }
+      return farmerDetails;
+    } catch (err) {
+      console.error('Error fetching farmer', err.message);
+      throw new NotFoundError('Farmer not found');
+    }
+  }
 
-  // async updateFarmer(id: string, data: Partial<Farmer>) {
-  //   try {
-  //     const { name, email, userId, ...farmerProfileData } = data;
+  async updateFarmer(id: string, data: FarmerInput) {
+    try {
+      const existFarmer = await this.farmerRepository.checkById(id);
 
-      
+      if (!existFarmer) {
+        throw new NotFoundError('Farmer not found');
+      }
 
-  //     const [updatedUser, updatedFarmer] = await this.farmerRepository.updateFarmerWithUser(
-  //       id,
-  //       userId,
-  //       farmerProfileData,
-  //       { name, email }
-  //     );
+      // Step 2: get user by email and check is name & email are same, f not same then update the user
+      const user = await this.authRepository.getUserById(data.userId);
+      if (!user) {
+        throw new NotFoundError('User not found');
+      }
 
-  //     return { user: updatedUser, farmerProfile: updatedFarmer };
-  //   } catch (error) {
-  //     console.error("Error updating farmer:", error);
-  //     throw new BadRequestError("Failed to update farmer");
-  //   }
-  // }
+      if (user.name !== data.name || user.email !== data.email) {
+        await this.authRepository.update(user.id, {
+          name: data.name,
+          email: data.email,
+        });
+      }
 
+      const farmer = await this.farmerRepository.updateFarmer(id, data);
 
+      return farmer;
+    } catch (err) {
+      console.error('Error updating farmer', err.message);
+      throw new NotFoundError('Farmer not found');
+    }
+  }
 }

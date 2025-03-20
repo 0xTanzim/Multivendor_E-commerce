@@ -28,26 +28,33 @@ const UpdateProductPage = async ({ params }: IParams) => {
     return <div>Failed to fetch categories</div>;
   }
 
-  if (!isFarmers(farmersData)) {
-    return <div>Failed to fetch users</div>;
-  }
-
   const categories = categoriesData.map((category) => ({
     id: category.id!,
     title: category.title,
   }));
 
-  const farmers = farmersData.map((farmer) => ({
-    id: farmer.id!,
-    title: farmer.name,
-  }));
+  let allFarmersData = null;
+
+  if (!isFarmers(farmersData)) {
+    allFarmersData = null;
+  } else {
+    allFarmersData = farmersData;
+  }
+
+  const farmers =
+    (allFarmersData &&
+      allFarmersData.map((farmer) => ({
+        id: farmer.id!,
+        title: farmer.user?.name,
+      }))) ||
+    [];
 
   return (
     <div>
       <FormHeader title="Update Product" />
       {product && (
         <ProductForm
-          product={product}
+          updateData={product}
           categories={categories}
           farmers={farmers}
         />

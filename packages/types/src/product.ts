@@ -10,11 +10,12 @@ export type Product = {
   productPrice: number;
   sellPrice?: number;
   farmerId?: string;
+  userId?: string;
   categoryId?: string;
   tags?: string[];
   isActive: boolean;
   productCode: string;
-  isWholeSale: boolean;
+  isWholesale: boolean;
   wholeSalePrice?: number;
   wholeSaleQty?: number;
   unit: string;

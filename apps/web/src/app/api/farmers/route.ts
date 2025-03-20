@@ -13,7 +13,7 @@ export async function POST(req: Request) {
 
     const newFarmer = await farmerService.createFarmer(data);
 
-    return NextResponse.json(newFarmer, { status: 201 });
+    return NextResponse.json(data, { status: 201 });
   } catch (error: unknown) {
     return handleError(error);
   }

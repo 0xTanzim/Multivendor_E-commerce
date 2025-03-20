@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     }
 
     const newProduct = await productService.createProduct(data);
-    console.log(newProduct);
+
     return NextResponse.json(newProduct, { status: 201 });
   } catch (error: unknown) {
     return handleError(error);

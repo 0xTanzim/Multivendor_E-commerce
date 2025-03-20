@@ -14,14 +14,17 @@ enum AccountStatus {
 }
 
 model AuthUser {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
-  email         String        @unique
+  id            String         @id @default(auto()) @map("_id") @db.ObjectId
+  email         String         @unique
   password      String
-  role          UserRole      @default(USER)
-  emailVerified Boolean       @default(false)
-  accountStatus AccountStatus @default(PENDING)
-  user          User          @relation(fields: [id], references: [id])
+  name          String?
+  role          UserRole       @default(USER)
+  emailVerified Boolean        @default(false)
+  accountStatus AccountStatus  @default(PENDING)
+  user          User           @relation(fields: [id], references: [id])
+  verificationToken String? 
   authSessions  AuthSession[]
+  loginHistory  LoginHistory[]
 }
 
 enum VerificationCodeType {
@@ -51,4 +54,19 @@ model AuthSession {
   verifiedAt DateTime?
 
   user AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum LoginAttemptStatus {
+  SUCCESS
+  FAILED
+}
+
+model LoginHistory {
+  id        String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String             @db.ObjectId
+  user      AuthUser           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ipAddress String?
+  userAgent String?
+  attempt   LoginAttemptStatus @default(SUCCESS)
+  loginAt   DateTime           @default(now())
 }

@@ -1,4 +1,4 @@
-import NewFarmerForm from '@/components/backOffice/form/NewFarmerForm';
+import FarmerForm from '@/components/backOffice/form/FarmerForm';
 import { getData } from '@/lib/getData';
 import { isUser } from '@repo/types';
 
@@ -19,7 +19,7 @@ const Onboarding = async ({ params }: { params: Promise<{ id: string }> }) => {
         </h2>
       </div>
 
-      <NewFarmerForm user={user} />
+      <FarmerForm user={user} />
     </div>
   );
 };

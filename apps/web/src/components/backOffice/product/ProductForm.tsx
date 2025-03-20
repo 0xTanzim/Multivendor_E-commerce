@@ -18,14 +18,14 @@ import toast from 'react-hot-toast';
 
 type ProductFormProps = {
   categories: { id: string; title: string }[];
-  farmers: { id: string; title: string }[];
-  product?: Partial<Product>;
+  farmers: { id: string; title?: string }[];
+  updateData?: Partial<Product>;
 };
 
 const ProductForm = ({
   categories,
   farmers,
-  product = {},
+  updateData = {},
 }: ProductFormProps) => {
   const {
     register,
@@ -39,21 +39,24 @@ const ProductForm = ({
   } = useForm<Product>({
     defaultValues: {
       isActive: true,
-      isWholeSale: false,
-      ...product,
+      isWholesale: updateData?.isWholesale ?? false,
+      ...updateData,
     },
   });
 
-  const initialImageUrl = product?.imageUrl ?? null;
-  const productId = product?.id;
+  const initialImageUrl = updateData?.imageUrl ?? null;
+  const productId = updateData?.id;
+  const initialTags = updateData?.tags ?? [];
 
   const [imageUrl, setImageUrl] = useState<string | null>(initialImageUrl);
   const [loading, setLoading] = useState(false);
+
   const makePostRequest = usePostRequest();
   const makePatchRequest = usePatchRequest();
 
-  const [tags, setTags] = useState<string[]>([]);
-  const isWholeSale = watch('isWholeSale');
+  const [tags, setTags] = useState<string[]>(initialTags);
+
+  const isWholesale = watch('isWholesale');
   const categoryId = watch('categoryId');
   const farmerId = watch('farmerId');
 
@@ -77,7 +80,7 @@ const ProductForm = ({
       return;
     }
 
-    if (!data.farmerId) {
+    if (!data.userId) {
       toast.error('Please select a farmer');
       setError('farmerId', {
         type: 'manual',
@@ -88,23 +91,34 @@ const ProductForm = ({
 
     const slug = generateSlug(data?.title);
     const productCode = generateNameCode('MLP', data.title);
-
+    
     data.slug = slug;
-    data.images = imageUrl ? [imageUrl] : [];
     data.tags = tags ?? [];
     data.qty = 1;
     data.imageUrl = imageUrl ?? '';
-
     data.productCode = productCode;
 
-    makePostRequest({
-      setLoading,
-      endpoint: 'api/products',
-      data,
-      resourceName: 'Product',
-      reset,
-      redirectPath: '/dashboard/products',
-    });
+
+
+    if (productId) {
+      makePatchRequest({
+        setLoading,
+        endpoint: `api/products/${productId}`,
+        data,
+        resourceName: 'Product',
+        reset,
+        redirectPath: '/dashboard/products',
+      });
+    } else {
+      makePostRequest({
+        setLoading,
+        endpoint: 'api/products',
+        data,
+        resourceName: 'Product',
+        reset,
+        redirectPath: '/dashboard/products',
+      });
+    }
 
     setTags([]);
     setImageUrl(null);
@@ -175,25 +189,29 @@ const ProductForm = ({
           options={categories}
           className="w-full"
           setValue={setValue}
+          defaultValue={updateData?.categoryId}
         />
 
-        <SelectInput
-          label="Select Farmer"
-          name="farmerId"
-          options={farmers}
-          className="w-full"
-          setValue={setValue}
-        />
+        {farmers && (
+          <SelectInput
+            label="Select Farmer"
+            name="farmerId"
+            options={farmers}
+            className="w-full"
+            setValue={setValue}
+            defaultValue={updateData?.userId}
+          />
+        )}
 
         <ToggleInput
           label="Is WholeSale"
-          name="isWholeSale"
+          name="isWholesale"
           trueTitle="Supported"
           falseTitle="Not Supported"
           register={register}
         />
 
-        {isWholeSale && (
+        {isWholesale && (
           <>
             <TextInput
               label="WholeSale Price"

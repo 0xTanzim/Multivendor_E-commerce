@@ -8,3 +8,4 @@ export * from './staff';
 export * from './test';
 export * from './training';
 export * from './user';
+export * from './auth';

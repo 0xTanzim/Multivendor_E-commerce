@@ -4,7 +4,7 @@ model FarmerProfile {
   physicalAddress    String?
   contactPerson      String?
   contactPersonPhone String?
-  profileImageUrl    String?
+  profileImageUrl    String?  @default("")
   terms              String?
   notes              String?
   isActive           Boolean  @default(false)

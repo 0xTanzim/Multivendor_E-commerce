@@ -128,10 +128,15 @@ const MarketForm = ({ categories, updateData = {} }: MarketFormProps) => {
           trueTitle="Active"
         />
       </div>
+
       <SubmitButton
         isLoading={loading}
-        buttonTitle="Create Market"
-        loadingButtonTitle="Creating Market please wait..."
+        buttonTitle={marketId ? 'Update Market' : 'Create Market'}
+        loadingButtonTitle={
+          marketId
+            ? 'Updating Market please wait...'
+            : 'Creating Market please wait...'
+        }
       />
     </form>
   );

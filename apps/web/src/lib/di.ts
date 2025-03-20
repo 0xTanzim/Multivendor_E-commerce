@@ -1,4 +1,5 @@
 import {
+  AuthService,
   BannerService,
   CategoryService,
   CouponService,
@@ -25,5 +26,7 @@ export const farmerService = container.resolve(FarmerService);
 export const productService = container.resolve(ProductService);
 
 export const userService = container.resolve(UserService);
+
+export const authService = container.resolve(AuthService);
 
 // export const staffService = container.resolve(StaffService);

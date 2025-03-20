@@ -1,17 +1,17 @@
 import { DataTable } from '@/components/data-table/DataTable';
 import { getData } from '@/lib/getData';
-import { isUserArray } from '@repo/types';
+import { isFarmers } from '@repo/types';
 import PageHeader from '../_components/PageHeader';
 import { columns } from './_components/columns';
 
 const farmersPage = async () => {
   const farmersData = await getData('farmers');
+
   let farmers = null;
-  if (!isUserArray(farmersData)) {
+  if (!isFarmers(farmersData)) {
     return null;
   }
-
-  farmers = farmersData.filter((farmer) => farmer.farmerProfile !== null);
+  farmers = farmersData.filter((farmer) => farmer.user !== null);
 
   return (
     <div>

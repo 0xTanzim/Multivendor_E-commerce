@@ -22,10 +22,19 @@ export abstract class BaseService<
     options?: Parameters<TRepository['findAll']>[0]
   ): Promise<TModel[]> {
     try {
-      
       const result = await this.repository.findAll(options);
       return result;
-    } catch (err) {
+    } catch (error) {
+      console.log(
+        '[BaseService] findAll error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
+
       throw new InternalServerError('Error fetching records');
     }
   }
@@ -41,7 +50,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] findById error', error);
+      console.error(
+        '[BaseService] findById error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error fetching records');
     }
   }
@@ -56,7 +73,15 @@ export abstract class BaseService<
       if (error.code === 'P2002') {
         throw new ConflictError('Record already exists');
       }
-      console.error('[BaseService] create error', error);
+      console.error(
+        '[BaseService] create error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new BadRequestError('Failed to create record');
     }
   }
@@ -74,7 +99,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] update error', error);
+      console.error(
+        '[BaseService] update error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new BadRequestError('Failed to update record');
     }
   }
@@ -98,7 +131,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] delete error', error);
+      console.error(
+        '[BaseService] delete error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new BadRequestError('Failed to delete record');
     }
   }
@@ -125,7 +166,15 @@ export abstract class BaseService<
     try {
       return await this.repository.aggregate(args);
     } catch (error) {
-      console.error('[BaseService] aggregate error', error);
+      console.error(
+        '[BaseService] aggregate error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error performing aggregate operation');
     }
   }
@@ -134,7 +183,15 @@ export abstract class BaseService<
     try {
       return await this.repository.count(args);
     } catch (error) {
-      console.error('[BaseService] count error', error);
+      console.error(
+        '[BaseService] count error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error counting records');
     }
   }
@@ -148,7 +205,15 @@ export abstract class BaseService<
       if (error.code === 'P2002') {
         throw new ConflictError('Record already exists');
       }
-      console.error('[BaseService] upsert error', error);
+      console.error(
+        '[BaseService] upsert error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new BadRequestError('Failed to upsert record');
     }
   }
@@ -166,7 +231,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] findFirst error', error);
+      console.error(
+        '[BaseService] findFirst error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error finding record');
     }
   }
@@ -177,7 +250,15 @@ export abstract class BaseService<
     try {
       return await this.repository.aggregateRaw(args);
     } catch (error) {
-      console.error('[BaseService] aggregateRaw error', error);
+      console.error(
+        '[BaseService] aggregateRaw error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error performing raw aggregate operation');
     }
   }
@@ -191,7 +272,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] findMany error', error);
+      console.error(
+        '[BaseService] findMany error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error finding records');
     }
   }
@@ -205,7 +294,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] deleteMany error', error);
+      console.error(
+        '[BaseService] deleteMany error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new BadRequestError('Failed to delete records');
     }
   }
@@ -219,7 +316,15 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] updateMany error', error);
+      console.error(
+        '[BaseService] updateMany error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new BadRequestError('Failed to update records');
     }
   }
@@ -238,8 +343,19 @@ export abstract class BaseService<
       if (error instanceof BaseError) {
         throw error;
       }
-      console.error('[BaseService] findUnique error', error);
+      console.error(
+        '[BaseService] findUnique error',
+        error.message,
+        '\n',
+        '[meta]:',
+        error.meta,
+        '\t \t [code]:',
+        error.code
+      );
       throw new InternalServerError('Error finding unique record');
     }
   }
+
+
+
 }

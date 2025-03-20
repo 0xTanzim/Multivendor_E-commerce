@@ -119,4 +119,9 @@ export abstract class BaseRepository<
   ): Promise<any> {
     return this.delegate.aggregateRaw(args);
   }
+
+  async checkById(id: ID): Promise<boolean> {
+    const result = await this.delegate.findUnique({ where: { id } });
+    return !!result;
+  }
 }

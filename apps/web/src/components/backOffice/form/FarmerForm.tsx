@@ -9,42 +9,40 @@ import ToggleInput from '@/components/FormInputs/ToggleInput';
 import { FileRoutes } from '@/config';
 import { usePatchRequest } from '@/hooks/usePatchRequest';
 import { usePostRequest } from '@/hooks/usePostRequest';
-import { Farmer, User } from '@repo/types';
+import { Farmer, FarmerInput, User } from '@repo/types';
 import { generateNameCode } from '@repo/utils';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
-  user: User | any;
+  user: User;
   updateData?: Farmer;
 };
 
-export default function NewFarmerForm({ user, updateData }: Props) {
+export default function FarmerForm({ user, updateData }: Props) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Farmer>({
+  } = useForm<FarmerInput>({
     defaultValues: {
       isActive: true,
-      ...user,
+      name: user.name,
+      email: user.email,
       ...updateData,
     },
   });
-
-  console.log('Farmer data', updateData);
-  console.log('User data', user);
-  
+  const makePostRequest = usePostRequest();
+  const makePatchRequest = usePatchRequest();
 
   const initialImageUrl = updateData?.profileImageUrl || null;
   const farmerId = updateData?.id || null;
+  const initialProducts = updateData?.products || [];
 
-  const makePostRequest = usePostRequest();
-  const makePatchRequest = usePatchRequest();
   const [imageUrl, setImageUrl] = useState<string | null>(initialImageUrl);
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState<string[]>([]);
+  const [products, setProducts] = useState<string[]>(initialProducts);
 
   const onSubmit = async (data: Farmer) => {
     data.profileImageUrl = imageUrl ?? '';
@@ -52,8 +50,7 @@ export default function NewFarmerForm({ user, updateData }: Props) {
     data.products = products;
     data.userId = user.id;
     data.code = code;
-
-    console.log(data);
+    delete data.user;
 
     if (farmerId) {
       makePatchRequest({
@@ -64,8 +61,6 @@ export default function NewFarmerForm({ user, updateData }: Props) {
         reset,
         redirectPath: '/dashboard/farmers',
       });
-
-      return;
     } else {
       makePostRequest({
         setLoading,
@@ -77,7 +72,6 @@ export default function NewFarmerForm({ user, updateData }: Props) {
       });
     }
   };
-
   return (
     <div>
       <form
@@ -188,10 +182,15 @@ export default function NewFarmerForm({ user, updateData }: Props) {
             register={register}
           />
         </div>
+
         <SubmitButton
           isLoading={loading}
-          buttonTitle="Create Farmer"
-          loadingButtonTitle="Creating Farmer please wait..."
+          buttonTitle={farmerId ? 'Update Farmer' : 'Create Farmer'}
+          loadingButtonTitle={
+            farmerId
+              ? 'Updating Farmer please wait...'
+              : 'Creating Farmer please wait...'
+          }
         />
       </form>
     </div>

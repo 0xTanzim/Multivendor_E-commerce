@@ -9,12 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const farmer = await farmerService.findUnique({
-      where: { userId: id },
-      include: {
-        user: true,
-      }
-    });
+    const farmer = await farmerService.findFarmerById(id);
 
     return NextResponse.json(farmer);
   } catch (err) {
@@ -22,18 +17,18 @@ export async function GET(
   }
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-    const farmer = await farmerService.deleteById(id);
-    return NextResponse.json(farmer);
-  } catch (err) {
-    return handleError(err);
-  }
-}
+// export async function DELETE(
+//   req: NextRequest,
+//   { params }: { params: Promise<{ id: string }> }
+// ) {
+//   try {
+//     const { id } = await params;
+//     const farmer = await farmerService.deleteById(id);
+//     return NextResponse.json(farmer);
+//   } catch (err) {
+//     return handleError(err);
+//   }
+// }
 
 export async function PATCH(
   req: NextRequest,
@@ -47,33 +42,8 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const farmerProfileData = {
-      products: Array.isArray(data.products)
-        ? data.products.map(String)
-        : [],
-      farmSize:
-        typeof data.farmSize === 'string'
-          ? parseFloat(data.farmSize) || 0
-          : (data.farmSize ?? 0),
-
-      isActive: data.isActive ?? false,
-      profileImageUrl: data.profileImageUrl ?? '',
-      mainCrop: data.mainCrop ?? '',
-      notes: data.notes ?? '',
-      contactPerson: data.contactPerson,
-      contactPersonPhone: data.contactPersonPhone,
-      physicalAddress: data.physicalAddress,
-      terms: data.terms,
-      phone: data.phone,
-      code: data.code,
-      userId: data.userId,
-    };
-
-    console.log(data);
-
-    // const farmer = await farmerService.update(id, farmerProfileData);
-
-    return NextResponse.json(farmerProfileData);
+    const farmer = await farmerService.updateFarmer(id, data);
+    return NextResponse.json(data);
   } catch (err) {
     return handleError(err);
   }

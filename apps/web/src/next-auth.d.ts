@@ -1,3 +1,4 @@
+import { $Enums } from '@repo/database';
 import { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
@@ -6,16 +7,18 @@ declare module 'next-auth' {
     id: string;
     name?: string | null;
     email?: string | null;
-    role: string;
+    role: $Enums.UserRole;
     emailVerified: boolean | null;
+    profileImage?: string | null;
   }
 
   // Extend the Session type to include custom properties in session.user
   interface Session {
     user: {
       id: string;
-      role: string;
+      role: $Enums.UserRole;
       emailVerified: boolean | null;
+      profileImage?: string | null;
     } & DefaultSession['user'];
   }
 }
@@ -24,7 +27,7 @@ declare module 'next-auth/jwt' {
   // Extend the JWT type to include custom properties in the token
   interface JWT {
     id: string;
-    role: string;
+    role: $Enums.UserRole;
     emailVerified: boolean | null;
   }
 }
@@ -36,7 +39,7 @@ declare module '@auth/core/adapters' {
     email: string;
     emailVerified: Date | null;
     name?: string | null;
-    image?: string | null;
-    role: string;
+    profileImage?: string | null;
+    role: $Enums.UserRole;
   }
 }

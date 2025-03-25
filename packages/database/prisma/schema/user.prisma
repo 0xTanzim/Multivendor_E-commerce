@@ -1,14 +1,15 @@
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  gender        String         @default("UNKNOWN")
-  bio           String?        @default("")
-  dateOfBirth   DateTime?
-  address       String?
-  settings      Json?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  authUser      AuthUser?
-  products      Product[]
-  
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  gender       String    @default("UNKNOWN")
+  bio          String?   @default("")
+  dateOfBirth  DateTime?
+  address      String?
+  profileImage String?   @default("")
+  settings     Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  authUser     AuthUser?
+  products     Product[]
+
   farmerProfile FarmerProfile?
 }

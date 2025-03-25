@@ -1,9 +1,11 @@
 'use client';
+import Loading from '@/app/loading';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+
 import {
   BadgePercent,
   Box,
@@ -12,6 +14,7 @@ import {
   ChevronRight,
   CircleDollarSign,
   ExternalLink,
+  HeartHandshake,
   LayoutGrid,
   LayoutList,
   LogOut,
@@ -21,9 +24,11 @@ import {
   Tractor,
   Truck,
   User,
+  User2,
   Users2,
   Warehouse,
 } from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -35,9 +40,20 @@ type SidebarProps = {
 };
 
 const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
-  const pathname = usePathname();
+  const { data: session, status } = useSession();
 
-  const sidebarLinks = [
+  const pathname = usePathname();
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+
+  if (status === 'loading') {
+    return <Loading />;
+  }
+
+
+  let userLinks;
+  const role = session?.user?.role;
+
+  let sidebarLinks = [
     {
       title: 'Customers',
       icon: Users2,
@@ -64,7 +80,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: '/dashboard/staff',
     },
     {
-      title: ' Community',
+      title: 'Community',
       icon: Building2,
       href: '/dashboard/community',
     },
@@ -72,6 +88,11 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       title: 'Wallet',
       icon: CircleDollarSign,
       href: '/dashboard/wallet',
+    },
+    {
+      title: 'Farmer Support',
+      icon: HeartHandshake,
+      href: '/dashboard/farmer-support',
     },
 
     {
@@ -86,7 +107,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     },
   ];
 
-  const catalogLinks = [
+  let catalogLinks = [
     {
       title: 'Products',
       icon: Box,
@@ -109,7 +130,25 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     },
   ];
 
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  if (role === 'ADMIN') {
+    userLinks = sidebarLinks;
+  } else if (role === 'FARMER') {
+    userLinks = sidebarLinks.filter((link) => link.title !== 'Staff');
+  } else {
+    userLinks = sidebarLinks.filter(
+      (link) => link.title === 'Orders' || link.title === 'Online Store'
+    );
+
+    userLinks.push({
+      title: 'Profile',
+      icon: User2,
+      href: '/dashboard/profile',
+    });
+  }
+
+  const handleLogout = async () => {
+    await signOut({ redirectTo: '/' });
+  };
 
   return (
     <div
@@ -147,36 +186,38 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
           <span>Dashboard</span>
         </Link>
 
-        <Collapsible className="px-6 py-2">
-          <CollapsibleTrigger onClick={() => setIsOpenMenu(!isOpenMenu)}>
-            <div className={'flex items-center space-x-2  py-2'}>
-              <div className="flex items-center space-x-2">
-                <Slack />
-                <span>Catalogue</span>
+        {role && role !== 'USER' && (
+          <Collapsible className="px-6 py-2">
+            <CollapsibleTrigger onClick={() => setIsOpenMenu(!isOpenMenu)}>
+              <div className={'flex items-center space-x-2  py-2'}>
+                <div className="flex items-center space-x-2">
+                  <Slack />
+                  <span>Catalogue</span>
+                </div>
+                {isOpenMenu ? <ChevronDown /> : <ChevronRight />}
               </div>
-              {isOpenMenu ? <ChevronDown /> : <ChevronRight />}
-            </div>
-          </CollapsibleTrigger>
-          <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-100 dark:text-slate-300 dark:dark:bg-slate-800 rounded-lg">
-            {catalogLinks.map((item, index) => (
-              <Link
-                key={index}
-                href={item.href}
-                onClick={() => setShowSidebar(false)}
-                className={
-                  item.href === pathname
-                    ? ' flex items-center space-x-2 py-1 text-sm border-green-600 text-green-500'
-                    : 'flex items-center space-x-2  py-1 '
-                }
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.title}</span>
-              </Link>
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="px-3 pl-6 py-3 bg-slate-100 dark:text-slate-300 dark:dark:bg-slate-800 rounded-lg">
+              {catalogLinks.map((item, index) => (
+                <Link
+                  key={index}
+                  href={item.href}
+                  onClick={() => setShowSidebar(false)}
+                  className={
+                    item.href === pathname
+                      ? ' flex items-center space-x-2 py-1 text-sm border-green-600 text-green-500'
+                      : 'flex items-center space-x-2  py-1 '
+                  }
+                >
+                  <item.icon className="w-4 h-4" />
+                  <span>{item.title}</span>
+                </Link>
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
+        )}
 
-        {sidebarLinks.map((itemLink, index) => (
+        {userLinks.map((itemLink, index) => (
           <Link
             key={index}
             href={itemLink.href}
@@ -192,7 +233,10 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
           </Link>
         ))}
         <div className="py-2 px-6">
-          <button className="bg-emerald-700 rounded flex items-center space-x-2 py-2 px-4  ">
+          <button
+            className="dark:bg-emerald-700 dark:text-slate-300 text-slate-50 bg-emerald-500   rounded flex items-center space-x-2 py-2 px-4"
+            onClick={handleLogout}
+          >
             <LogOut />
             <span>Logout</span>
           </button>

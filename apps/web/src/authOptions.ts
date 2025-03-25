@@ -39,6 +39,19 @@ export const authOptions: NextAuthConfig = {
           console.log('✅ Passed Check 1');
           const existingUser = await prisma.authUser.findUnique({
             where: { email },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              password: true,
+              role: true,
+              emailVerified: true,
+              user: {
+                select: {
+                  profileImage: true,
+                },
+              },
+            },
           });
 
           if (!existingUser) {
@@ -60,6 +73,7 @@ export const authOptions: NextAuthConfig = {
             email: existingUser.email,
             role: existingUser.role,
             emailVerified: existingUser.emailVerified,
+            profileImage: existingUser.user?.profileImage,
           };
 
           console.log('User Compiled data');
@@ -80,16 +94,18 @@ export const authOptions: NextAuthConfig = {
         session.user.email = token.email as string;
         session.user.role = token.role;
         session.user.emailVerified = token.emailVerified;
+        session.user.profileImage = token.profileImage;
       }
       return session;
     },
-    async jwt({ token, user }: { token: any; user: any }) {
+    async jwt({ token, user }) {
       if (user) {
         token.id = user.id as string;
         token.name = user.name as string;
         token.email = user.email as string;
         token.role = user.role as string;
         token.emailVerified = user.emailVerified as boolean;
+        token.profileImage = user.profileImage ?? null;
       }
       return token;
     },

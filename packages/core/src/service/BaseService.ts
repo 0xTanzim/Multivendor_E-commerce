@@ -185,6 +185,7 @@ export abstract class BaseService<
   }
 
   protected handlePrismaError(error: any, operation: string): never {
+    console.log(`Error Details For:- (${operation}) :2`, JSON.stringify(error, null, 2));
     if (error && error.name === 'PrismaClientKnownRequestError' && error.code) {
       switch (error.code) {
         case 'P2001':

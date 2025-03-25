@@ -1,10 +1,13 @@
 import LargeCards from '@/components/backOffice/card/LargeCards';
 import SmallCards from '@/components/backOffice/card/SmallCards';
 import Heading from '@/components/backOffice/layout/Heading';
+import { getRole } from '@/lib';
 import CustomDataTable from './_components/CustomDataTable';
 import DashboardCarts from './_components/DashboardCarts';
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
+  const role = await getRole();
+
   return (
     <div>
       <Heading title="Dashboard Overview" />

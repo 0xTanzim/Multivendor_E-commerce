@@ -22,10 +22,36 @@ export async function sendVerificationEmail({
   linkText?: string;
   subject?: string;
 }) {
+  let description =
+    'Thank you, for Creating an Account with Us. We request you to click on the link Below to verify your Account. Thank you!';
+
   return resend.emails.send({
     from: Email_From ?? 'onboarding@resend.dev',
     to,
     subject,
-    react: EmailTemplate({ name, redirectUrl, linkText }),
+    react: EmailTemplate({ name, redirectUrl, linkText, description }),
+  });
+}
+
+export async function sendEmail({
+  to,
+  name,
+  redirectUrl,
+  linkText = 'Click Here',
+  subject,
+  description,
+}: {
+  to: string;
+  name: string;
+  redirectUrl: string;
+  linkText?: string;
+  subject: string;
+  description: string;
+}) {
+  return resend.emails.send({
+    from: Email_From ?? 'onboarding@resend.dev',
+    to,
+    subject,
+    react: EmailTemplate({ name, redirectUrl, linkText, description }),
   });
 }

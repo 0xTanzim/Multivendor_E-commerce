@@ -19,18 +19,20 @@ interface EmailTemplateProps {
   name?: string;
   redirectUrl?: string;
   linkText: string;
+  description: string;
+  Subject?: string;
 }
 
 export const EmailTemplate = ({
   name = '',
   redirectUrl = '/login',
   linkText,
+  description,
+  Subject = '',
 }: EmailTemplateProps) => (
   <Html>
     <Head />
-    <Preview>
-      A fine-grained personal access token has been added to your account
-    </Preview>
+    <Preview>{Subject || ''}</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
@@ -46,10 +48,7 @@ export const EmailTemplate = ({
           <Text style={text}>
             Hey <strong>{name}</strong>!
           </Text>
-          <Text style={text}>
-            Thank you, for Creating an Account with Us. We request you to click
-            on the link Below to verify your Account. Thank you!
-          </Text>
+          <Text style={text}>{description}</Text>
 
           <Link style={button} href={`${baseUrl}/${redirectUrl}`}>
             {linkText}
@@ -58,21 +57,13 @@ export const EmailTemplate = ({
 
         <Section>
           <Row style={footerLogos}>
-            <Column style={{ width: '66%' }}>
-              <Img
-                src={`${baseUrl}/static/slack-logo.png`}
-                width="120"
-                height="36"
-                alt="Slack"
-              />
-            </Column>
             <Column>
               <Section>
                 <Row>
                   <Column>
                     <Link href="/">
                       <Img
-                        src={`${baseUrl}/static/slack-twitter.png`}
+                        src={`${baseUrl}/static/twitter.png`}
                         width="32"
                         height="32"
                         alt="Slack"
@@ -80,21 +71,11 @@ export const EmailTemplate = ({
                       />
                     </Link>
                   </Column>
+
                   <Column>
                     <Link href="/">
                       <Img
-                        src={`${baseUrl}/static/slack-facebook.png`}
-                        width="32"
-                        height="32"
-                        alt="Slack"
-                        style={socialMediaIcon}
-                      />
-                    </Link>
-                  </Column>
-                  <Column>
-                    <Link href="/">
-                      <Img
-                        src={`${baseUrl}/static/slack-linkedin.png`}
+                        src={`${baseUrl}/static/fb.png`}
                         width="32"
                         height="32"
                         alt="Slack"

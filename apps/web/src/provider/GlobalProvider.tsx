@@ -1,5 +1,4 @@
 'use client';
-import { CommonProvider } from '@/provider/CommonProvider';
 import { ThemeProvider } from '@/provider/ThemeProvider';
 import { AppStore, makeStore } from '@repo/redux';
 import * as React from 'react';
@@ -20,11 +19,9 @@ export function GlobalProvider({
 
   return (
     <ThemeProvider>
-      <CommonProvider>
-        <SessionProvider session={propsData}>
-          <Provider store={storeRef.current}>{children} </Provider>
-        </SessionProvider>
-      </CommonProvider>
+      <SessionProvider session={propsData}>
+        <Provider store={storeRef.current}>{children} </Provider>
+      </SessionProvider>
     </ThemeProvider>
   );
 }

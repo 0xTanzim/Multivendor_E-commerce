@@ -6,7 +6,6 @@ import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
-import { FileRoutes } from '@/config';
 import { usePatchRequest } from '@/hooks/usePatchRequest';
 import { usePostRequest } from '@/hooks/usePostRequest';
 import { Market } from '@repo/types';
@@ -110,7 +109,6 @@ const MarketForm = ({ categories, updateData = {} }: MarketFormProps) => {
           label="Market Logo"
           setImageUrl={setLogoUrl}
           imageUrl={logoUrl}
-          endpoint={FileRoutes.marketLogoUploader}
         />
 
         <TextareaInput

@@ -86,7 +86,7 @@ const BannerForm = ({ updateData = {} }: BannerFormProps) => {
           label="Banner Image"
           setImageUrl={setImageUrl}
           imageUrl={imageUrl}
-          endpoint={FileRoutes.bannerImageUploader}
+         
         />
         <ToggleInput
           label="Publish your Banner"

@@ -161,7 +161,7 @@ export default function NewFarmerForm({ user, updateData }: Props) {
             label="Farmer Profile"
             setImageUrl={setImageUrl}
             imageUrl={imageUrl}
-            endpoint={FileRoutes.farmerImageUploader}
+      
           />
 
           <TextareaInput

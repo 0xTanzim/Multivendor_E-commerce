@@ -2,7 +2,7 @@ import { AuthRepository } from '@repo/backend-repository';
 import { BadRequestError } from '@repo/common/error';
 import { BaseService, injectable } from '@repo/core';
 import { AuthUser, User } from '@repo/database';
-import { sendVerificationEmail } from '@repo/email-service';
+import { sendEmail, sendVerificationEmail } from '@repo/email-service';
 import { IAuthUser } from '@repo/types';
 
 import base64url from 'base64url';
@@ -86,11 +86,53 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
     return this.repository.findUnique({ where: { email } });
   }
 
+  async updatePassword(data: { password: string; id: string }) {
+    try {
+      const hashedPassword = await this.hashedPassword(data.password, 10);
+
+      const res = await this.repository.update(data.id, {
+        password: hashedPassword,
+      });
+
+      if (!res) {
+        throw new BadRequestError('Failed to reset password');
+      }
+
+      return res;
+    } catch (err) {
+      throw new BadRequestError('Failed to reset password');
+    }
+  }
+
   async testDeleteAllUserandAuthUser() {
     return await this.repository.testDeleteAllUserandAuthUser();
   }
 
-  
+  async sendForgetPasswordEmail(existingUser: AuthUser) {
+    try {
+      const userId = existingUser.id;
 
+      const name = existingUser.name;
 
+      const token = await this.generateToken();
+
+      const redirectUrl = `reset-password?token=${token}&id=${userId}`;
+
+      const description = `Click the link below to reset your password`;
+
+      const res = await sendEmail({
+        to: existingUser.email,
+        name,
+        redirectUrl,
+        linkText: 'Reset Password',
+        subject: 'Reset Password - MindFuel',
+        description,
+      });
+
+      console.log('Email sent:', res);
+    } catch (err) {
+      console.error('Error sending forget password email:', err);
+      throw new BadRequestError('Failed to send forget password email');
+    }
+  }
 }

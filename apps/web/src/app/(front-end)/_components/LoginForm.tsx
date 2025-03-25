@@ -22,9 +22,8 @@ const LoginForm = () => {
 
   async function onSubmit(data: any) {
     try {
-
       setLoading(true);
-    
+
       const loginData = await signIn('credentials', {
         ...data,
         redirect: false,
@@ -65,37 +64,20 @@ const LoginForm = () => {
           className="sm:col-span-2 mb-3"
         />
 
-        <SubmitButton
-          isLoading={loading}
-          buttonTitle="Login"
-          loadingButtonTitle="Logging In Please Wait..."
-        />
+        <div className="flex items-center justify-between">
+          <SubmitButton
+            isLoading={loading}
+            buttonTitle="Login"
+            loadingButtonTitle="Logging In Please Wait..."
+          />
 
-        {/* <div className="flex items-center">
-          <div className="w-full bg-slate-500 h-[1px]"></div>
-          <span className="mx-2">or</span>
-          <div className="w-full bg-slate-500 h-[1px]"></div>
-          </div>
-
-        <div className="">
-          <button
-            type="button"
-            className="w-full text-slate-950 bg-white hover:bg-slate-50 focus:ring-4 focus:outline-none focus:ring-slate-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center justify-center flex items-center dark:focus:ring-slate-100 me-2 mb-4 border border-slate-200"
-            onClick={() => signIn('google')}
+          <Link
+            href="/forgot-password"
+            className="ml-4 text-sm font-light text-gray-500 dark:text-gray-400 hover:underline"
           >
-            <FaGoogle className="mr-2 text-red-600 w-4 h-4" />
-            Sign in with Google
-          </button>
-          <button
-            onClick={() => signIn('github')}
-            type="button"
-            className="w-full justify-center text-white bg-[#24292F] hover:bg-[#24292F]/90 focus:ring-4 focus:outline-none focus:ring-[#24292F]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30 me-2 mb-2"
-          >
-      
-            <FaGithub className="mr-2 w-4 h-4" />
-            Sign in with Github
-          </button>
-        </div> */}
+            Forget Password?
+          </Link>
+        </div>
 
         <p className="text-sm font-light py-4 text-gray-500 dark:text-gray-400">
           Don't have an account?{' '}

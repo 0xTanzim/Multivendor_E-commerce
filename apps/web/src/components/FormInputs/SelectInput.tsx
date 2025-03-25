@@ -53,6 +53,7 @@ export default function SelectInput({
       <div className="mt-2">
         <Select
           id={name}
+          instanceId={name}
           options={selectOptions}
           isMulti={hasMultiple}
           onChange={handleChange}

@@ -87,7 +87,7 @@ const CategoryForm = ({ updateData = {} }: CategoryFormProps) => {
           label="Category Image"
           setImageUrl={setImageUrl}
           imageUrl={imageUrl}
-          endpoint={FileRoutes.categoryImageUploader}
+         
         />
 
         <ToggleInput

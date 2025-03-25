@@ -123,7 +123,7 @@ const TrainingForm = ({ categories, updateData = {} }: TrainingFormProps) => {
           label="Training Image"
           setImageUrl={setImageUrl}
           imageUrl={imageUrl}
-          endpoint={FileRoutes.trainingImageUploader}
+         
         />
       </div>
 

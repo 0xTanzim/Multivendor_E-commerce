@@ -18,7 +18,8 @@
     "db:pull": "turbo run db:pull",
     "db:studio": "turbo run db:studio",
     "prepare": "husky",
-    "clean": "rimraf node_modules .next dist build"
+    "clean": "rimraf node_modules .next dist build",
+    "zx": "pnpm build --filter=@repo/backend-services --filter=@repo/backend-repository"
   },
   "devDependencies": {
     "@types/node": "^22.13.9",

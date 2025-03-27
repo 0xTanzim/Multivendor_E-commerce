@@ -9,14 +9,14 @@ export function usePostRequest() {
     endpoint,
     data,
     resourceName,
-    reset,
+    reset = () => {},
     redirectPath,
   }: {
     setLoading: (value: boolean) => void;
     endpoint: string;
     data: unknown;
     resourceName: string;
-    reset: () => void;
+    reset?: () => void;
     redirectPath?: string;
   }) => {
     try {
@@ -34,7 +34,7 @@ export function usePostRequest() {
       if (response.ok) {
         toast.success(`New ${resourceName} Created Successfully`);
         reset();
-        
+
         if (redirectPath) {
           router.push(redirectPath);
         }

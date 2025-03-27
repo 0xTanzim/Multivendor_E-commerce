@@ -8,6 +8,7 @@ import {
   ProductService,
   TrainingService,
   UserService,
+  OrderService
 } from '@repo/backend-services';
 import { container } from '@repo/core/container';
 
@@ -28,5 +29,6 @@ export const productService = container.resolve(ProductService);
 export const userService = container.resolve(UserService);
 
 export const authService = container.resolve(AuthService);
+export const orderService = container.resolve(OrderService);
 
 // export const staffService = container.resolve(StaffService);

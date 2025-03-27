@@ -8,8 +8,11 @@ model User {
   settings     Json?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime? @map("deletedAt")
   authUser     AuthUser?
   products     Product[]
+  orders       Order[]
 
   farmerProfile FarmerProfile?
 }

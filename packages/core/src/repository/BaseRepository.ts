@@ -18,6 +18,7 @@ export abstract class BaseRepository<
     updateMany: (...args: any) => any;
     deleteMany: (...args: any) => any;
     aggregateRaw: (...args: any) => any;
+    createMany: (...args: any) => any;
   },
 > {
   protected prisma: PrismaClient;
@@ -65,6 +66,18 @@ export abstract class BaseRepository<
       select,
     }) as Promise<T>;
   }
+
+  async createMany(
+    data: Parameters<TDelegate['createMany']>[0]['data'],
+    skipDuplicates?: Parameters<TDelegate['createMany']>[0]['skipDuplicates']
+  ): Promise<{ count: number }> {
+    return this.delegate.createMany({
+      data,
+      skipDuplicates,
+    });
+  }
+
+
 
   async update(
     id: ID,

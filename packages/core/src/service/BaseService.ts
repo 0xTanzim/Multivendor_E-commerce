@@ -48,6 +48,18 @@ export abstract class BaseService<
     }
   }
 
+  async createMany<T = TModel>(
+    data: Parameters<TRepository['createMany']>[0],
+    skipDuplicates?: Parameters<TRepository['createMany']>[1]
+  ): Promise<{ count: number }> {
+    try {
+      const result = await this.repository.createMany(data, skipDuplicates);
+      return result;
+    } catch (error) {
+      return this.handlePrismaError(error, 'createMany');
+    }
+  }
+
   async update(
     id: ID,
     data: Parameters<TRepository['update']>[1]
@@ -185,7 +197,10 @@ export abstract class BaseService<
   }
 
   protected handlePrismaError(error: any, operation: string): never {
-    console.log(`Error Details For:- (${operation}) :2`, JSON.stringify(error, null, 2));
+    console.log(
+      `Error Details For:- (${operation}) :2`,
+      JSON.stringify(error, null, 2)
+    );
     if (error && error.name === 'PrismaClientKnownRequestError' && error.code) {
       switch (error.code) {
         case 'P2001':

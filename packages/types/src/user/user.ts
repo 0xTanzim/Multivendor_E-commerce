@@ -1,5 +1,6 @@
+import { Product } from '../product';
 import { Farmer } from './farmer';
-import { Product } from './product';
+
 
 export type UserRole =
   | 'SUPER_ADMIN'

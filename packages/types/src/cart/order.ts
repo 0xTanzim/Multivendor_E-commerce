@@ -9,6 +9,7 @@ export type IOrder = IPerson &
     id?: string;
     orderStatus?: $Enums.OrderStatus;
     paymentToken?: string;
+    orderNumber?: string;
     createdAt?: Date;
     updatedAt?: Date;
     OrderItem: IOrderItem[];
@@ -20,6 +21,8 @@ export type IOrderItem = {
   productId: string;
   qty: number;
   price: number;
+  imageUrl?: string;
+  title: string;
   createdAt?: Date;
   updatedAt?: Date;
 
@@ -65,10 +68,7 @@ export function isOrderItem(obj: unknown): obj is IOrderItem {
 
   console.log('Checking order item', orderItemObj);
 
-  return (
-    'qty' in orderItemObj &&
-    typeof orderItemObj.qty === 'number'
-  );
+  return 'qty' in orderItemObj && typeof orderItemObj.qty === 'number';
 }
 
 export function isOrderItemArray(obj: unknown): obj is IOrderItem[] {

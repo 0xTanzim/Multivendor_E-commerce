@@ -1,26 +1,11 @@
-'use client';
-
-import toast from 'react-hot-toast';
-
-type apiProps = {
-  setLoading: (value: boolean) => void;
-  endpoint: string;
-  data: unknown;
-  resourceName: string;
-  reset: () => void;
-  redirect: () => void;
-};
-
-export async function makePostRequest({
-  setLoading,
+export async function postRequest({
   endpoint,
   data,
-  resourceName,
-  reset,
-  redirect,
-}: apiProps) {
+}: {
+  endpoint: string;
+  data: unknown;
+}) {
   try {
-    setLoading(true);
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     const response = await fetch(`${baseUrl}/${endpoint}`, {
       method: 'POST',
@@ -30,24 +15,21 @@ export async function makePostRequest({
       body: JSON.stringify(data),
     });
 
-    if (response.ok) {
-      setLoading(false);
-      toast.success(`New ${resourceName} Created Successfully`);
-      reset();
-      if (redirect) {
-        redirect();
-      }
-      
-    } else {
-      setLoading(false);
-      if (response.status === 409) {
-        toast.error('The Giving Warehouse Stock is NOT Enough');
-      } else {
-        toast.error('Something Went wrong');
-      }
+    const result = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: result.error || 'Failed to process the request',
+      };
     }
+
+    return { success: true, data: result };
   } catch (error) {
-    setLoading(false);
-    console.log(error);
+    console.error('Error in postRequest:', error);
+    return {
+      success: false,
+      error: 'Something went wrong. Please try again later.',
+    };
   }
 }

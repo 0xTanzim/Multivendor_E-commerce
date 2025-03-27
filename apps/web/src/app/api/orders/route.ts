@@ -1,5 +1,6 @@
 import { orderService } from '@/lib/di';
 import { handleError } from '@/utils';
+import { generateOrderNumber } from '@/utils/generate';
 import { ICombinedData, isOrder } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
       userId: checkoutFormData.userId,
       shippingCost: Number(checkoutFormData.shippingCost),
       paymentMethod: checkoutFormData.paymentMethod,
+      orderNumber: generateOrderNumber(8),
     });
 
     const newOrderItems = await orderService.createOrderItems(
@@ -36,6 +38,8 @@ export async function POST(req: NextRequest) {
         qty: Number(item.qty),
         price: Number(item.salePrice),
         orderId: orderRes.id,
+        imageUrl: item.imageUrl ?? '',
+        title: item.title,
       }))
     );
 

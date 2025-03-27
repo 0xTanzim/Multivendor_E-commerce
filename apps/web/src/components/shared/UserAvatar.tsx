@@ -60,12 +60,26 @@ const UserAvatar = ({ user }: UserAvatarProps) => {
               <span>Dashboard</span>
             </Link>
           </DropdownMenuItem>
+
           <DropdownMenuItem>
             <Link href="/profile" className="flex items-center space-x-2">
               <Settings className=" h-4 w-4" />
               <span>Edit Profile</span>
             </Link>
           </DropdownMenuItem>
+
+          {
+            user.role === 'USER' && (
+              <DropdownMenuItem>
+              <Link href="/dashboard/orders" className="flex items-center space-x-2">
+                <Settings className=" h-4 w-4" />
+                <span>My Orders</span>
+              </Link>
+            </DropdownMenuItem>
+            )
+            
+          }
+
           <DropdownMenuItem>
             <button
               className="flex items-center space-x-2"

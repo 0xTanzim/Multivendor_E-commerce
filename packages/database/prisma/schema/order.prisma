@@ -7,8 +7,8 @@ enum OrderStatus {
 }
 
 model Order {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String?     @db.ObjectId
+  id            String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String? @db.ObjectId
   firstName     String
   lastName      String
   email         String
@@ -19,20 +19,25 @@ model Order {
   postalCode    String
   shippingCost  Float
   paymentMethod String
-  orderStatus   OrderStatus @default(PENDING)
-  paymentToken  String      @default("")
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
-  OrderItem     OrderItem[]
+  orderNumber   String?
+
+  orderStatus  OrderStatus @default(PENDING)
+  paymentToken String      @default("")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  user         User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  OrderItem    OrderItem[]
 }
 
 model OrderItem {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  orderId   String   @db.ObjectId
-  productId String   @db.ObjectId
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String @db.ObjectId
+  productId String @db.ObjectId
+
   qty       Int
   price     Float
+  title     String
+  imageUrl  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   order     Order    @relation(fields: [orderId], references: [id])

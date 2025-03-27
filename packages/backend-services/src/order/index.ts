@@ -14,10 +14,10 @@ export class OrderService extends BaseService<Order, OrderRepository> {
       qty: number;
       price: number;
       orderId: string;
+      imageUrl?: string;
+      title: string;
     }[]
   ) {
     return this.repository.createManyOrderItems(orderItems);
   }
-  
-  
 }

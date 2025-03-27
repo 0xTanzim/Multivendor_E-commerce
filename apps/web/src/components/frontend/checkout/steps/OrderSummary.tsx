@@ -1,11 +1,13 @@
 'use client'; // Ensure this is a Client Component
 
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { usePostRequest } from '@/hooks/usePostRequest';
+import { postRequest } from '@/lib';
 import { selectCartDetails, setCurrentStep } from '@repo/redux';
 import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const OrderSummary = () => {
   const { cartItems, totalPrice: subTotal } =
@@ -19,7 +21,7 @@ const OrderSummary = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useAppDispatch();
-  const makePost = usePostRequest();
+  const router = useRouter();
 
   useEffect(() => {
     setIsMounted(true);
@@ -37,20 +39,31 @@ const OrderSummary = () => {
   }
 
   async function submitData() {
-    const combinedData = {
-      checkoutFormData,
-      cartItems,
-    };
+    try {
+      const combinedData = {
+        checkoutFormData,
+        cartItems,
+      };
 
-    const response = await makePost({
-      endpoint: '/api/orders',
-      data: combinedData,
-      setLoading,
-      resourceName: 'Order',
-      redirectPath: '/order-confirmation',
-    });
+      setLoading(true);
 
-    console.log(response);
+      const response = await postRequest({
+        data: combinedData,
+        endpoint: '/api/orders',
+      });
+
+      if (response.success) {
+        toast.success('Order submitted successfully');
+        router.push(`/order-confirmation/${response.data.orderRes.id}`);
+      } else {
+        toast.error(response.error);
+      }
+    } catch (err) {
+      console.error('Error submitting order:', err);
+      toast.error('Failed to submit order. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (

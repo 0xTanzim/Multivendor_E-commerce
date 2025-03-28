@@ -49,7 +49,6 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     return <Loading />;
   }
 
-
   let userLinks;
   const role = session?.user?.role;
 
@@ -70,9 +69,14 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: '/dashboard/farmers',
     },
     {
-      title: 'Orders',
+      title: 'My Orders',
       icon: Truck,
       href: '/dashboard/orders',
+    },
+    {
+      title: 'Sales',
+      icon: Truck,
+      href: '/dashboard/sales',
     },
     {
       title: 'Staff',
@@ -136,7 +140,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     userLinks = sidebarLinks.filter((link) => link.title !== 'Staff');
   } else {
     userLinks = sidebarLinks.filter(
-      (link) => link.title === 'Orders' || link.title === 'Online Store'
+      (link) => link.title === 'My Orders' || link.title === 'Online Store'
     );
 
     userLinks.push({

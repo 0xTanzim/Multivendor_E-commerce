@@ -8,6 +8,23 @@ export class OrderService extends BaseService<Order, OrderRepository> {
     super(orderRepository);
   }
 
+  // async create(order: {
+  //   firstName: string;
+  //   lastName: string;
+  //   email: string;
+  //   phoneNumber: string;
+  //   streetAddress: string;
+  //   city: string;
+  //   country: string;
+  //   postalCode: string;
+  //   userId: string;
+  //   shippingCost: number | string;
+  //   paymentMethod: string;
+  //   orderNumber: string;
+  // }) {
+  //   return this.repository.createOrder(order);
+  // }
+
   async createOrderItems(
     orderItems: {
       productId: string;
@@ -16,8 +33,14 @@ export class OrderService extends BaseService<Order, OrderRepository> {
       orderId: string;
       imageUrl?: string;
       title: string;
+      vendorId: string;
     }[]
   ) {
-    return this.repository.createManyOrderItems(orderItems);
+    try {
+      return this.repository.createManyOrderItems(orderItems);
+    } catch (err) {
+      this.handlePrismaError(err, 'createOrderItems');
+
+    }
   }
 }

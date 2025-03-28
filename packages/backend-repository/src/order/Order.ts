@@ -15,10 +15,18 @@ export class OrderRepository extends BaseRepository<
     super(prisma, prisma.order);
   }
 
+  async createOrder(order: Prisma.OrderCreateInput) {
+    return this.create(order);
+  }
 
   async createManyOrderItems(orderItems: Prisma.OrderItemCreateManyInput[]) {
     return this.orderItemRepository.createMany(orderItems);
   }
+
+  
+
+
+
 
 
 

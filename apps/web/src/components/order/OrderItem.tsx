@@ -1,4 +1,5 @@
 import { IOrderItem } from '@repo/types';
+import { generateSlug } from '@repo/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -7,6 +8,8 @@ type OrderItemProps = {
 };
 
 const OrderItem = ({ orderItem }: OrderItemProps) => {
+  const slug = generateSlug(orderItem.title);
+
   return (
     <>
       <li className="relative flex pb-10 sm:pb-0">
@@ -41,8 +44,8 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
           <div className="absolute bottom-0 left-0 sm:relative">
             <div className="flex space-x-5">
               <Link
-                href="#"
-                title=""
+                href={`/products/${slug}`}
+                title={orderItem.title}
                 className="p-1 -m-1 text-sm font-medium text-gray-500 transition-all duration-200 rounded hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >
                 View Product
@@ -51,7 +54,7 @@ const OrderItem = ({ orderItem }: OrderItemProps) => {
               <span className="text-gray-200"> | </span>
 
               <Link
-                href="#"
+                href={`#`}
                 title=""
                 className="p-1 -m-1 text-sm font-medium text-gray-500 transition-all duration-200 rounded hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900"
               >

@@ -93,6 +93,9 @@ importers:
       '@repo/redux':
         specifier: workspace:*
         version: link:../../packages/redux
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@repo/utils':
         specifier: workspace:*
         version: link:../../packages/utils
@@ -190,9 +193,6 @@ importers:
       '@repo/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint-config
-      '@repo/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../../tooling/typescript-config

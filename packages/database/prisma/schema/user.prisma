@@ -13,6 +13,7 @@ model User {
   authUser     AuthUser?
   products     Product[]
   orders       Order[]
+  sales        Sale[]
 
   farmerProfile FarmerProfile?
 }

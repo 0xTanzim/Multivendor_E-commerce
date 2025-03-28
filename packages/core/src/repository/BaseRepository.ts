@@ -32,8 +32,15 @@ export abstract class BaseRepository<
   async findAll(
     args?: Parameters<TDelegate['findMany']>[0]
   ): Promise<TModel[]> {
-    return this.delegate.findMany(args);
+    const defaultOrder = { orderBy: { createdAt: 'desc' } };
+    const options = {
+      ...defaultOrder,
+      ...args,
+      orderBy: args?.orderBy ?? defaultOrder.orderBy,
+    };
+    return this.delegate.findMany(options);
   }
+  
 
   async findById(id: ID): Promise<TModel | null> {
     return this.delegate.findUnique({ where: { id } });

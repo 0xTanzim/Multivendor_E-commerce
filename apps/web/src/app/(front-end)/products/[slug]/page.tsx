@@ -1,7 +1,6 @@
-import CategoryCarousel from '@/components/frontend/landing/CategoryCarousel';
 import BreadCamp from '@/components/shared/BreadCamp';
 import { getData } from '@/lib/getData';
-import { isCategory } from '@repo/types';
+import { isProduct } from '@repo/types';
 import { BaggageClaim, Minus, Plus, Send, Share2, Tag } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -12,14 +11,23 @@ const ProductDetailsPage = async ({
   params: Promise<{ slug: string }>;
 }) => {
   const { slug } = await params;
-  const categoryData = await getData(`categories/67cabd8c077764d1596a2217`);
+  // const categoryData = await getData(`categories/67cabd8c077764d1596a2217`);
+  const productData = await getData(`products/product/${slug}`);
+  console.log('productData', productData);
+  // console.log('categoryData', categoryData);
 
-  let category;
-  if (!isCategory(categoryData)) {
-    category = null;
+  if (!isProduct(productData)) {
+    return <div>Product not found</div>;
   }
 
-  category = categoryData;
+  let product = productData;
+
+  // let category;
+  // if (!isCategory(categoryData)) {
+  //   category = null;
+  // }
+
+  // category = categoryData;
 
   return (
     <div>
@@ -28,7 +36,7 @@ const ProductDetailsPage = async ({
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-3">
           <Image
-            src={'/images/tometo.webp'}
+            src={product.imageUrl ?? '/images/tometo.webp'}
             alt="Product Image"
             className="w-full"
             width={500}
@@ -37,32 +45,33 @@ const ProductDetailsPage = async ({
         </div>
         <div className="col-span-6">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg lg:text-2xl font-semibold">{slug}</h2>
+            <h2 className="text-lg lg:text-2xl font-semibold">
+              {product.title}
+            </h2>
             <button>
               <Share2 />
             </button>
           </div>
           <div className="border-b border-gray-300 dark:border-gray-600">
-            <p className="py-2 ">
-              Details about the product will go here. Lorem ipsum dolor sit amet
-              consectetur adipisicing elit. Recusandae dolorem fugiat soluta
-              totam ratione sit ipsum expedita labore nobis architecto.
-            </p>
+            <p className="py-2 ">{product.description}</p>
             <div className="flex items-center gap-4 pb-4">
               <p>
-                SKU <span className="font-semibold">123456</span>
+                SKU <span className="font-semibold">{product.sku}</span>
               </p>
               <p className="bg-lime-200  py-1.5 px-4 rounded-full ml-4 text-slate-900 ">
-                Stock: <span className="font-semibold">In Stock</span>
+                Stock:{' '}
+                <span className="font-semibold">{product.productStock}</span>
               </p>
             </div>
           </div>
           <div className="flex justify-between items-center gap-4 pt-4">
             <div className="flex items-center gap-4">
               <h4 className="text-slate-800 dark:text-slate-100 text-2xl font-semibold">
-                $100
+                ${product.sellPrice}
               </h4>
-              <del className="text-slate-400 text-sm ">$120</del>
+              <del className="text-slate-400 text-sm ">
+                ${product.productPrice}
+              </del>
             </div>
 
             <p className="flex items-center">
@@ -152,9 +161,9 @@ const ProductDetailsPage = async ({
         <h2 className="mb-4 text-xl font-semibold text-slate-200 ml-3">
           Simillar Products
         </h2>
-        {category && category?.products && (
+        {/* {category && category?.products && (
           <CategoryCarousel products={category?.products} />
-        )}
+        )} */}
       </div>
     </div>
   );

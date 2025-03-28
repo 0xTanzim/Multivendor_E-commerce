@@ -5,10 +5,11 @@ import {
   CouponService,
   FarmerService,
   MarketService,
+  OrderService,
   ProductService,
+  SaleService,
   TrainingService,
   UserService,
-  OrderService
 } from '@repo/backend-services';
 import { container } from '@repo/core/container';
 
@@ -30,5 +31,6 @@ export const userService = container.resolve(UserService);
 
 export const authService = container.resolve(AuthService);
 export const orderService = container.resolve(OrderService);
+export const saleService = container.resolve(SaleService);
 
 // export const staffService = container.resolve(StaffService);

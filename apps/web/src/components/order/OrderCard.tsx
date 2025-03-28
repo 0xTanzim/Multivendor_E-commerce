@@ -1,6 +1,7 @@
 import { IOrder } from '@repo/types';
 import { calculateSubTotal, convertIsoDateToNormalDate } from '@repo/utils';
 import OrderItem from './OrderItem';
+import Link from 'next/link';
 
 type OrderCardProps = {
   order: IOrder;
@@ -99,12 +100,12 @@ const OrderCard = ({ order }: OrderCardProps) => {
                 View Order
               </button>
 
-              <button
-                type="button"
+              <Link
+                href={`/dashboard/orders/${order.id}/invoice`}
                 className="inline-flex items-center justify-center px-4 py-2.5 text-sm font-bold text-gray-900 transition-all duration-200 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 hover:bg-gray-100"
               >
                 View Invoice
-              </button>
+              </Link>
             </div>
           </div>
         </div>

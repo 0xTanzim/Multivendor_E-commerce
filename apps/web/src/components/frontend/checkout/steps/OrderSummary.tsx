@@ -52,9 +52,11 @@ const OrderSummary = () => {
         endpoint: '/api/orders',
       });
 
+      console.log(response);
+
       if (response.success) {
         toast.success('Order submitted successfully');
-        router.push(`/order-confirmation/${response.data.orderRes.id}`);
+        router.push(`/order-confirmation/${response.data.newOrder.id}`);
       } else {
         toast.error(response.error);
       }

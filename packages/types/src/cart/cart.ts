@@ -4,6 +4,7 @@ export type CartItem = {
   salePrice: number;
   imageUrl: string;
   qty: number;
+  vendorId: string;
 };
 
 export const isCartItem = (item: any): item is CartItem => {

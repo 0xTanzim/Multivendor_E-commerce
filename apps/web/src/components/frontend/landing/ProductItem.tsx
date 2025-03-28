@@ -17,14 +17,15 @@ const ProductItem = ({ product }: ProductItemProps) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart);
 
-  const handleAddCart = () => {
+  const handleAddCart = (product: Product) => {
     dispatch(
       addToCart({
-        id: product.id,
+        id: product.id ?? '',
         title: product.title,
-        salePrice: product.sellPrice,
+        salePrice: product.sellPrice ?? 0,
         imageUrl: product.imageUrl || defaultImage,
         qty: 1,
+        vendorId: product.userId ?? '',
       })
     );
 
@@ -59,7 +60,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
           <p>$ {product?.sellPrice}</p>
 
           <button
-            onClick={() => handleAddCart()}
+            onClick={() => handleAddCart(product)}
             className="flex items-center text-white  space-x-2 bg-lime-600 px-4 py-2 rounded-md "
           >
             <BaggageClaim /> <span>Add</span>

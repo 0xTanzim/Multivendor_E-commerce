@@ -6,6 +6,9 @@ The backend follows **OOP principles**, reducing code duplication with a **BaseR
 
 A custom Error Library is implemented to handle errors effectively, and an **Error Handler** is used to catch unhandled exceptions.
 
+
+we are use [landingfolio](https://www.landingfolio.com/) for inspiration for the landing page design.
+
 ## Features
 
 - **Admin Panel:**

@@ -55,14 +55,7 @@ export class FarmerService extends BaseService<
 
       return {};
     } catch (err) {
-      console.log(
-        'Error creating farmer',
-        err.message,
-        'metadata',
-        err?.meta,
-        'code',
-        err?.code
-      );
+      this.handlePrismaError(err, 'Error creating farmer');
     }
   }
 
@@ -84,8 +77,7 @@ export class FarmerService extends BaseService<
       }
       return farmerDetails;
     } catch (err) {
-      console.error('Error fetching farmer', err.message);
-      throw new NotFoundError('Farmer not found');
+      this.handlePrismaError(err, 'Error fetching farmer by ID');
     }
   }
 
@@ -114,8 +106,16 @@ export class FarmerService extends BaseService<
 
       return farmer;
     } catch (err) {
-      console.error('Error updating farmer', err.message);
-      throw new NotFoundError('Farmer not found');
+      this.handlePrismaError(err, 'Error updating farmer');
+    }
+  }
+
+  async getFarmerAllProducts(id: string) {
+    try {
+      const products = await this.farmerRepository.fetchFarmerProducts(id);
+      return products;
+    } catch (err) {
+      this.handlePrismaError(err, 'Error fetching farmer products');
     }
   }
 }

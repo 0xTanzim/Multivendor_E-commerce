@@ -14,6 +14,8 @@ model User {
   products     Product[]
   orders       Order[]
   sales        Sale[]
+  coupons      Coupon[]
 
   farmerProfile FarmerProfile?
+  isActive      Boolean        @default(true)
 }

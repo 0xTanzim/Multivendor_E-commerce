@@ -2,7 +2,7 @@ import { couponService } from '@/lib/di';
 import { handleError } from '@/utils';
 import { isCoupon } from '@repo/types';
 import { isoFormate } from '@repo/utils';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: Request): Promise<NextResponse> {
   try {
@@ -12,8 +12,19 @@ export async function POST(req: Request): Promise<NextResponse> {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
+    if (!data.vendorId) {
+      return NextResponse.json(
+        { error: 'vendorId is required' },
+        { status: 400 }
+      );
+    }
+
     const newCoupon = await couponService.create({
       ...data,
+      startDate:
+        data.startDate instanceof Date
+          ? data.startDate
+          : isoFormate(data.startDate),
       expiryDate:
         data.expiryDate instanceof Date
           ? data.expiryDate
@@ -29,11 +40,10 @@ export async function POST(req: Request): Promise<NextResponse> {
   }
 }
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
-    const coupons = await couponService.findAll({
-      orderBy: { createdAt: 'desc' },
-    });
+  
+    const coupons = await couponService.findAll();
     return NextResponse.json(coupons);
   } catch (err) {
     return handleError(err);

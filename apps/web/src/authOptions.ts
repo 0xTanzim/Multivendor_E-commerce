@@ -103,7 +103,7 @@ export const authOptions: NextAuthConfig = {
         token.id = user.id as string;
         token.name = user.name as string;
         token.email = user.email as string;
-        token.role = user.role as string;
+        token.role = user.role;
         token.emailVerified = user.emailVerified as boolean;
         token.profileImage = user.profileImage ?? null;
       }

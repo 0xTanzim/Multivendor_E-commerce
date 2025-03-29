@@ -8,7 +8,10 @@ interface SelectInputProps {
   name: string;
   setValue: (name: any, value: any) => void;
   className?: string;
-  options?: { id: number | string; title?: string }[];
+  options?: {
+    id: number | string;
+    title?: string;
+  }[];
   hasMultiple?: boolean;
   defaultValue?: string | string[];
 }
@@ -26,6 +29,9 @@ export default function SelectInput({
     value: option.id,
     label: option.title,
   }));
+
+  console.log('====== selectOptions ====', selectOptions);
+  console.log('====== defaultValue ====', defaultValue);
 
   const defaultSelected = hasMultiple
     ? selectOptions.filter((opt) =>

@@ -1,9 +1,27 @@
+enum DiscountType {
+  FIXED
+  PERCENTAGE
+}
+
 model Coupon {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
   title      String
-  couponCode String   @unique
-  expiryDate DateTime
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  couponCode String @unique
+  vendorId   String @db.ObjectId
+
+  discount     Float?       @default(0)
+  discountType DiscountType @default(FIXED)
+
+  maxUses     Int?
+  usedCount   Int      @default(0)
+  startDate   DateTime
+  minSpend    Float    @default(0)
+  maxDiscount Float    @default(0)
+  expiryDate  DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  vendor      User     @relation(fields: [vendorId], references: [id])
+
+  @@index([vendorId])
 }

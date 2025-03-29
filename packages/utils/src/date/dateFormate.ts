@@ -11,7 +11,7 @@ export const isoFormate = (date: string) => {
   return isoString;
 };
 
-export function convertIsoDateToNormalDate(isoDate: string) {
+export function convertIsoDateToNormalDate(isoDate: string | Date) {
   if (!isoDate) {
     return '';
   }

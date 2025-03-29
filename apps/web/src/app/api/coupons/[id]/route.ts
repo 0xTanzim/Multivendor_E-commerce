@@ -52,6 +52,11 @@ export async function PATCH(
         ? data.expiryDate
         : isoFormate(data.expiryDate);
 
+    data.startDate =
+      data.startDate instanceof Date
+        ? data.startDate
+        : isoFormate(data.startDate);
+
     const coupons = await couponService.update(id, data);
 
     return NextResponse.json(coupons);

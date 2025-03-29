@@ -1,3 +1,4 @@
+import { calculateTax } from '@repo/utils';
 import Link from 'next/link';
 
 type CartSubTotalProps = {
@@ -6,7 +7,7 @@ type CartSubTotalProps = {
 
 const CartSubTotal = ({ subTotal }: CartSubTotalProps) => {
   const shipping = 10;
-  const tax = 1;
+  const tax = calculateTax(parseFloat(subTotal));
 
   const total = parseFloat(subTotal) + shipping + tax;
   const formattedTotal = total.toFixed(2);

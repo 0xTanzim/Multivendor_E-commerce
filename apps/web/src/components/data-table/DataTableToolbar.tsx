@@ -3,11 +3,11 @@
 import { Table } from '@tanstack/react-table';
 import { X } from 'lucide-react';
 
-import { DataTableViewOptions } from './DataTableViewOptions';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
+import { DataTableViewOptions } from './DataTableViewOptions';
 
-export type FilterKey = 'name' | 'email' | 'title';
+export type FilterKey = 'name' | 'email' | 'title' | 'productTitle';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;

@@ -1,17 +1,14 @@
 import { IOrder } from '@repo/types';
 import { calculateSubTotal, convertIsoDateToNormalDate } from '@repo/utils';
-import OrderItem from './OrderItem';
 import Link from 'next/link';
+import OrderItem from './OrderItem';
 
 type OrderCardProps = {
   order: IOrder;
 };
 
 const OrderCard = ({ order }: OrderCardProps) => {
-  const orderDate = new Date(order.createdAt || '');
-  const formattedDate = convertIsoDateToNormalDate(
-    order.createdAt?.toString() || ''
-  );
+  const formattedDate = convertIsoDateToNormalDate(order.createdAt ?? '');
 
   const subtotal = calculateSubTotal(order.OrderItem);
 

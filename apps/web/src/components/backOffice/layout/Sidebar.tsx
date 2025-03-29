@@ -137,7 +137,12 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
   if (role === 'ADMIN') {
     userLinks = sidebarLinks;
   } else if (role === 'FARMER') {
-    userLinks = sidebarLinks.filter((link) => link.title !== 'Staff');
+    userLinks = sidebarLinks.filter(
+      (link) =>
+        link.title !== 'Staff' &&
+        link.title !== 'Categories' &&
+        link.title !== 'store Banners'
+    );
   } else {
     userLinks = sidebarLinks.filter(
       (link) => link.title === 'My Orders' || link.title === 'Online Store'

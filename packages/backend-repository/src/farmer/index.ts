@@ -172,4 +172,13 @@ export class FarmerProfileRepository extends BaseRepository<
       name: farmer.user.authUser.name,
     };
   }
+
+  async fetchFarmerProducts(id: string): Promise<any[]> {
+    const products = await this.prisma.product.findMany({
+      where: {
+        userId: id,
+      },
+    });
+    return products;
+  }
 }

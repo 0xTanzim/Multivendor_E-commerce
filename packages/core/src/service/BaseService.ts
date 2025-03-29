@@ -197,11 +197,13 @@ export abstract class BaseService<
   }
 
   protected handlePrismaError(error: any, operation: string): never {
-    console.log(
-      `Error Details For:- (${operation}) :2`,
-      JSON.stringify(error, null, 2)
-    );
+    console.log('Prisma Error', error.message);
+
     if (error && error.name === 'PrismaClientKnownRequestError' && error.code) {
+      console.log(
+        `Error Details For:- (${operation})==> Prisma Client Error ===> :`,
+        JSON.stringify(error, null, 2)
+      );
       switch (error.code) {
         case 'P2001':
           throw new NotFoundError(`Record not found in where condition`);

@@ -33,7 +33,7 @@ export const columns = [
   {
     accessorKey: 'productTitle',
     header: ({ column }: { column: Column<any> }) => (
-      <SortableColumn column={column} title="Product Title"  />
+      <SortableColumn column={column} title="Product Title" />
     ),
   },
 
@@ -54,7 +54,7 @@ export const columns = [
   },
   {
     accessorKey: 'total',
-    header: () => <div className="">Image</div>,
+    header: () => <div className="">Total</div>,
   },
 
   {

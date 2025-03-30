@@ -12,7 +12,13 @@ export class AuthRepository extends BaseRepository<
     super(prisma, prisma.authUser);
   }
 
-  async registerUser({ name, email, password, role,verificationToken }: IAuthUser) {
+  async registerUser({
+    name,
+    email,
+    password,
+    role,
+    verificationToken,
+  }: IAuthUser) {
     return await this.prisma.$transaction(async (tx) => {
       const authUser = await tx.authUser.create({
         data: {
@@ -27,15 +33,23 @@ export class AuthRepository extends BaseRepository<
       const user = await tx.user.create({
         data: {
           id: authUser.id,
+          username: await this.generateUserName(email),
         },
       });
 
       delete authUser.password;
 
-      return {authUser,user };
+      return { authUser, user };
     });
   }
 
+  async generateUserName(email: string): Promise<string> {
+    const emailParts = email.split('@');
+    const namePart = emailParts[0];
+    const randomString = Math.random().toString(36).substring(2, 8);
+    const userName = `${namePart}${randomString}`;
+    return userName;
+  }
 
   async testDeleteAllUserandAuthUser() {
     return await this.prisma.$transaction(async (tx) => {
@@ -45,7 +59,6 @@ export class AuthRepository extends BaseRepository<
       return { authUser, user };
     });
   }
-
 
   async checkEmailExists(email: string): Promise<boolean> {
     const existingUser = await this.prisma.authUser.findUnique({
@@ -91,7 +104,4 @@ export class AuthRepository extends BaseRepository<
 
     return users;
   }
-
-  
-
 }

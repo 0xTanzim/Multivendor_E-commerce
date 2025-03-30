@@ -1,13 +1,12 @@
 'use client';
 
 import ArrayItemsInput from '@/components/FormInputs/ArrayItemsInput';
-import ImageInput from '@/components/FormInputs/ImageInput';
+import MultipleImageInput from '@/components/FormInputs/MultipleImageInput';
 import SelectInput from '@/components/FormInputs/SelectInput';
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
-import { FileRoutes } from '@/config';
 import { usePatchRequest } from '@/hooks/usePatchRequest';
 import { usePostRequest } from '@/hooks/usePostRequest';
 import { Product } from '@repo/types';
@@ -38,29 +37,27 @@ const ProductForm = ({
     formState: { errors },
   } = useForm<Product>({
     defaultValues: {
+      ...updateData,
       isActive: true,
       isWholesale: updateData?.isWholesale ?? false,
-      ...updateData,
     },
   });
 
-  const initialImageUrl = updateData?.imageUrl ?? null;
   const productId = updateData?.id;
   const initialTags = updateData?.tags ?? [];
+  const initialImages = updateData?.productImages ?? [];
 
-  const [imageUrl, setImageUrl] = useState<string | null>(initialImageUrl);
   const [loading, setLoading] = useState(false);
+  const [images, setImages] = useState<string[]>(initialImages);
+  const [tags, setTags] = useState<string[]>(initialTags);
 
   const makePostRequest = usePostRequest();
   const makePatchRequest = usePatchRequest();
-
-  const [tags, setTags] = useState<string[]>(initialTags);
 
   const isWholesale = watch('isWholesale');
   const categoryId = watch('categoryId');
   const farmerId = watch('farmerId');
 
-  // Watch changes and clear errors if they exist
   useEffect(() => {
     if (categoryId) clearErrors('categoryId');
   }, [categoryId]);
@@ -80,7 +77,7 @@ const ProductForm = ({
       return;
     }
 
-    if (!data.userId) {
+    if (!data.farmerId) {
       toast.error('Please select a farmer');
       setError('farmerId', {
         type: 'manual',
@@ -91,14 +88,13 @@ const ProductForm = ({
 
     const slug = generateSlug(data?.title);
     const productCode = generateNameCode('MLP', data.title);
-    
+
     data.slug = slug;
     data.tags = tags ?? [];
     data.qty = 1;
-    data.imageUrl = imageUrl ?? '';
+    data.productImages = images;
+    data.imageUrl = data.productImages?.[0] ?? '';
     data.productCode = productCode;
-
-
 
     if (productId) {
       makePatchRequest({
@@ -121,7 +117,6 @@ const ProductForm = ({
     }
 
     setTags([]);
-    setImageUrl(null);
   };
 
   return (
@@ -233,11 +228,13 @@ const ProductForm = ({
           </>
         )}
 
-        <ImageInput
-          label="Category Image"
-          setImageUrl={setImageUrl}
-          imageUrl={imageUrl}
+        <MultipleImageInput
+          label="Product Images"
+          images={images}
+          setImages={setImages}
+          className="col-span-2"
         />
+
         <ArrayItemsInput items={tags} setItems={setTags} itemTitle="Tag" />
         <TextareaInput
           label="Product Description"

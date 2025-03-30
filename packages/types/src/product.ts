@@ -3,7 +3,7 @@ export type Product = {
   title: string;
   slug: string;
   description?: string;
-  images?: string[];
+  productImages?: string[];
   imageUrl?: string;
   sku?: string;
   barcode?: string;
@@ -22,6 +22,7 @@ export type Product = {
   qty?: number;
   productStock: number;
   stockStatus?: string;
+  sales?: string[];
 };
 
 /**

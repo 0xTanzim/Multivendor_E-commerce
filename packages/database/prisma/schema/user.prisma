@@ -1,9 +1,19 @@
 model User {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  gender       String    @default("UNKNOWN")
-  bio          String?   @default("")
-  dateOfBirth  DateTime?
-  address      String?
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  username      String?    @unique
+  gender        String    @default("UNKNOWN")
+  firstName     String?
+  lastName      String?
+  bio           String?   @default("")
+  dateOfBirth   DateTime?
+  address       String?
+  phone         String    @default("")
+  city          String?
+  country       String?
+  postalCode    String?
+  district      String?
+  streetAddress String?
+
   profileImage String?   @default("")
   settings     Json?
   createdAt    DateTime  @default(now())

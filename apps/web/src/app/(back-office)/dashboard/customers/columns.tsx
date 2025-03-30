@@ -1,10 +1,10 @@
 'use client';
 
+import ActionColumn from '@/components/data-table-columns/ActionColumn';
 import DateColumn from '@/components/data-table-columns/DateColumn';
 import ImageColumn from '@/components/data-table-columns/ImageColumn';
 import SortableColumn from '@/components/data-table-columns/SortableColumn';
 import { Checkbox } from '@/components/ui/checkbox';
-
 import { Column, Row, Table } from '@tanstack/react-table';
 
 export const columns = [
@@ -31,37 +31,41 @@ export const columns = [
     enableHiding: false,
   },
   {
-    accessorKey: 'productTitle',
+    accessorKey: 'name',
     header: ({ column }: { column: Column<any> }) => (
-      <SortableColumn column={column} title="Product Title"  />
+      <SortableColumn column={column} title="Name" />
     ),
   },
-
   {
-    accessorKey: 'productImageUrl',
-    header: () => <div className="">Product Image</div>,
+    accessorKey: 'profileImage',
+    header: () => <div className=""> Profile Image</div>,
     cell: ({ row }: { row: Row<any> }) => (
-      <ImageColumn row={row} accessorKey="productImageUrl" />
+      <ImageColumn row={row} accessorKey="profileImage" />
     ),
   },
-  {
-    accessorKey: 'productPrice',
-    header: () => <div className="">Price</div>,
-  },
-  {
-    accessorKey: 'productQty',
-    header: () => <div className="">Qty</div>,
-  },
-  {
-    accessorKey: 'total',
-    header: () => <div className="">Image</div>,
-  },
 
+  {
+    accessorKey: 'email',
+    header: () => <div className="">Email</div>,
+  },
+  {
+    accessorKey: 'role',
+    header: () => <div className="">Role</div>,
+  },
   {
     accessorKey: 'createdAt',
-    header: () => <div className="text-right">Created At</div>,
+    header: () => <div className="text-right">Date Created</div>,
     cell: ({ row }: { row: Row<any> }) => (
       <DateColumn row={row} accessorKey="createdAt" />
     ),
+  },
+
+  {
+    id: 'actions',
+    cell: ({ row }: { row: Row<any> }) => {
+      return (
+        <ActionColumn row={row} title="Customer" endPointPath="customers" />
+      );
+    },
   },
 ];

@@ -18,6 +18,13 @@ export async function GET(
         name: true,
         email: true,
         role: true,
+
+        user: {
+          select: {
+            id: true,
+            profileImage: true,
+          },
+        },
       },
     });
 
@@ -26,7 +33,6 @@ export async function GET(
     return handleError(err);
   }
 }
-
 
 // export async function DELETE(
 //   req: NextRequest,

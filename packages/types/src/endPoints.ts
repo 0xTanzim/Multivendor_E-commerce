@@ -9,6 +9,7 @@ export const API_ENDPOINTS = {
   staffs: '/staffs',
   trainings: '/trainings',
   markets: '/markets',
+  customers: '/customers',
 } as const;
 
 export const ROUTE_ENDPOINTS = {
@@ -23,6 +24,7 @@ export const ROUTE_ENDPOINTS = {
   staffs: '/staffs',
   trainings: '/trainings',
   markets: '/markets',
+  customers: '/customers',
 } as const;
 
 export type EndpointKey = keyof typeof API_ENDPOINTS;

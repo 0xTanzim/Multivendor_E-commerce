@@ -1,8 +1,10 @@
 'use client';
 
+import { getPublicIdFromUrl } from '@/utils';
 import { Pencil } from 'lucide-react';
 import { CldUploadWidget } from 'next-cloudinary';
 import Image from 'next/image';
+import { useState } from 'react';
 
 type ImageInputProps = {
   label: string;
@@ -17,9 +19,41 @@ export default function ImageInput({
   setImageUrl,
   className = 'col-span-full',
 }: ImageInputProps) {
-  const handleUpload = (result: any) => {
+  const [oldImageUrl, setOldImageUrl] = useState<string | null>(null);
+
+  const handleChangeImage = () => {
+    if (imageUrl) {
+      setOldImageUrl(imageUrl);
+    }
+    setImageUrl('');
+  };
+
+  const handleUpload = async (result: any) => {
     if (typeof result.info === 'object' && 'secure_url' in result.info) {
-      setImageUrl(result.info.secure_url);
+      const newImageUrl = result.info.secure_url;
+
+      if (oldImageUrl) {
+        const publicId = getPublicIdFromUrl(oldImageUrl);
+        try {
+          const response = await fetch('/api/cloudinary/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ publicId }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Failed to delete old image:', errorData.error);
+          } else {
+            console.log(`Old image ${publicId} deleted from Cloudinary`);
+          }
+        } catch (error) {
+          console.error('Error deleting old image:', error);
+        }
+      }
+
+      setImageUrl(newImageUrl);
+      setOldImageUrl(null);
       document.body.style.overflow = 'auto';
     }
   };
@@ -32,7 +66,7 @@ export default function ImageInput({
         </label>
         {imageUrl && (
           <button
-            onClick={() => setImageUrl('')}
+            onClick={handleChangeImage}
             type="button"
             className="flex space-x-2 bg-slate-900 rounded-md shadow text-slate-50 py-2 px-4"
           >

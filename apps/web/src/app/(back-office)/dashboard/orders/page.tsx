@@ -1,9 +1,12 @@
 import OrderCard from '@/components/order/OrderCard';
+import { authDetails } from '@/lib';
 import { getData } from '@/lib/getData';
 import { isOrderArray } from '@repo/types';
 
 const OrdersPage = async () => {
-  const orderData = await getData('/orders/user/67e6144b8c95157ef813e8f8');
+  const { userId } = await authDetails();
+
+  const orderData = await getData(`/orders/user/${userId}`);
 
   let orders;
   if (!isOrderArray(orderData)) {

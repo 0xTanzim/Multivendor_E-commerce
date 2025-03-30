@@ -9,9 +9,6 @@ export async function GET(
   try {
     const { id } = await params;
 
-    console.log('====== id ====', id);
-    console.log('====== req ====', await params);
-
     const farmer = await farmerService.getFarmerAllProducts(id);
 
     return NextResponse.json(farmer);

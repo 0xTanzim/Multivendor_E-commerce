@@ -37,8 +37,9 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
 
       await this.sendVerifyEmail(res.authUser);
 
-      return res;
+      return res as { authUser: AuthUser; user: User };
     } catch (err) {
+      console.error('Error registering user:', err);
       throw new BadRequestError('Failed to register user');
     }
   }

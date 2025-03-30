@@ -25,10 +25,12 @@ const NewProductPage = async () => {
     allFarmersData = farmersData;
   }
 
+  console.log('allFarmersData', allFarmersData);
+
   const farmers =
     (allFarmersData &&
       allFarmersData.map((farmer) => ({
-        id: farmer.id!,
+        id: farmer.user?.id,
         title: farmer.user?.name,
       }))) ||
     [];
@@ -36,7 +38,10 @@ const NewProductPage = async () => {
   return (
     <div>
       <FormHeader title="New Product" />
-      <ProductForm categories={categories} farmers={farmers}  />;
+      {
+        // @ts-ignore
+        <ProductForm categories={categories} farmers={farmers} />
+      }
     </div>
   );
 };

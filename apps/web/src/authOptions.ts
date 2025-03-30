@@ -6,7 +6,7 @@ import {
 } from '@repo/common/error';
 import { prisma } from '@repo/database';
 import { compare } from 'bcryptjs';
-import { NextAuthConfig } from 'next-auth';
+import { AuthError, NextAuthConfig } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthConfig = {
@@ -79,7 +79,16 @@ export const authOptions: NextAuthConfig = {
           console.log('User Compiled data');
           return user;
         } catch (error) {
-          console.log('All steps failed', error);
+          if (error instanceof NotFoundError) {
+            console.log('NotFoundError:', error);
+            throw new AuthError('User not found');
+          }
+          if (error instanceof ForbiddenError) {
+            console.log('ForbiddenError:', error);
+            throw new AuthError('Incorrect credentials');
+          }
+
+          console.log('Unhandled Error:', error);
           throw new InternalServerError('Something went wrong');
         }
       },

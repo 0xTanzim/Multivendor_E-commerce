@@ -33,3 +33,8 @@ export function isAuthUser(obj: unknown): obj is IAuthUser {
       authUserObj.role === 'USER')
   );
 }
+
+export type LoginUser = {
+  email: string;
+  password: string;
+};

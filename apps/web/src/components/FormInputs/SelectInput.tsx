@@ -30,8 +30,6 @@ export default function SelectInput({
     label: option.title,
   }));
 
-  console.log('====== selectOptions ====', selectOptions);
-  console.log('====== defaultValue ====', defaultValue);
 
   const defaultSelected = hasMultiple
     ? selectOptions.filter((opt) =>

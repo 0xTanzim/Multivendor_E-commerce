@@ -1,6 +1,7 @@
 import { DataTable } from '@/components/data-table/DataTable';
 import { authDetails } from '@/lib';
 import { getData } from '@/lib/getData';
+import { flattenObject } from '@/utils';
 import { columns } from './columns';
 
 const salePage = async () => {
@@ -10,39 +11,18 @@ const salePage = async () => {
     return <div>Unauthorized</div>;
   }
 
-  let saleUrl;
+  const customersData = await getData('customers');
 
-  if (role === 'ADMIN') {
-    saleUrl = 'sales';
-  } else if (role === 'FARMER') {
-    saleUrl = `sales/vendor/${userId}`;
-  } else {
-    return <div>Unauthorized</div>;
-  }
+  // Ensure customersData is an array before processing
+  const customer = Array.isArray(customersData) ? customersData.map(flattenObject) : [];
 
-  const salesData = await getData(saleUrl);
-
-  let sales = salesData;
-
-  // if (!isOrderArray(salesData)) {
-  //   sales = null;
-  // } else {
-  //   sales = salesData;
-  // }
-
-  console.log('==== sales ====', sales);
-
-  // return;
+  console.log('customer', customer);
 
   return (
     <div>
       <div className="py-8">
-        {sales && (
-          <DataTable
-            columns={columns}
-            data={sales}
-            filterKeys={['productTitle']}
-          />
+        {customer && (
+          <DataTable columns={columns} data={customer} filterKeys={['name']} />
         )}
       </div>
     </div>

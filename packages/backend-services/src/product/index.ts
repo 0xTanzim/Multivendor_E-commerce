@@ -12,6 +12,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
   }
 
   async createProduct(data: IProduct) {
+   
     try {
       const newProduct = {
         title: data.title,
@@ -31,7 +32,8 @@ export class ProductService extends BaseService<Product, ProductRepository> {
         qty: data.qty,
         productStock: toInt(data.productStock),
         productCode: data.productCode,
-        images: data.images ?? [],
+        productImages: data.productImages ?? [],
+
         imageUrl: data.imageUrl ?? '',
         sellPrice: toFloat(
           data.sellPrice,
@@ -60,6 +62,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
           sellPrice: newProduct.sellPrice,
           slug: newProduct.slug,
           title: newProduct.title,
+          productImages: newProduct.productImages,
         },
       });
 
@@ -76,7 +79,10 @@ export class ProductService extends BaseService<Product, ProductRepository> {
   async updateProduct(productId: string, data: IProduct) {
     try {
       delete data.id;
-      const { categoryId, userId, id, ...updateData } = data;
+
+      console.log('Update product data========================>', data);
+
+      const { categoryId, userId, farmerId, id, ...updateData } = data;
 
       const formattedData = {
         ...updateData,
@@ -102,7 +108,6 @@ export class ProductService extends BaseService<Product, ProductRepository> {
           },
         },
       });
-
 
       return updatedProduct;
     } catch (err) {

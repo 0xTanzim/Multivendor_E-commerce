@@ -1,7 +1,6 @@
 import { Product } from '../product';
 import { Farmer } from './farmer';
 
-
 export type UserRole =
   | 'SUPER_ADMIN'
   | 'ADMIN'
@@ -12,16 +11,28 @@ export type Gender = 'MALE' | 'FEMALE' | 'UNKNOWN';
 
 export type User = {
   id: string;
-  name: string;
-  email: string;
-  emailVerified?: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
   gender?: Gender;
-  password: string;
-  role: UserRole;
   bio?: string;
+  dateOfBirth?: Date;
+  address?: string;
+  phone?: string;
+  city?: string;
+  country?: string;
+  postalCode?: string;
+  district?: string;
+  streetAddress?: string;
+  profileImage?: string;
   products?: Product[];
   farmerProfile?: Farmer;
-  verificationToken?: string;
+  isActive: boolean;
+  isDeleted: boolean;
+  deletedAt?: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export function isUser(data: unknown): data is User {
@@ -31,18 +42,15 @@ export function isUser(data: unknown): data is User {
   const user = data as User;
 
   return (
-    'name' in user &&
-    typeof user.name === 'string' &&
-    'email' in user &&
-    typeof user.email === 'string'
+    (typeof user.firstName === 'string' ||
+      typeof user.firstName === 'undefined') &&
+    (typeof user.lastName === 'string' ||
+      typeof user.lastName === 'undefined') &&
+    (typeof user.gender === 'string' || typeof user.gender === 'undefined') &&
+    (typeof user.bio === 'string' || typeof user.bio === 'undefined')
   );
 }
 
 export function isUserArray(data: unknown): data is User[] {
   return Array.isArray(data) && data.every(isUser);
 }
-
-export type LoginUser = {
-  email: string;
-  password: string;
-};

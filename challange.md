@@ -1,0 +1,1 @@
+- [] fix delete image in editing mode!

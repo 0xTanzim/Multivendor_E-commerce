@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
     const minPrice = searchParams.get('minPrice');
     const maxPrice = searchParams.get('maxPrice');
     const page = parseInt(searchParams.get('page') || '1', 10);
+    const searchTerm = searchParams.get('search');
     const pageSize = PAGE_SIZE;
 
     const skip = (page - 1) * pageSize; // Calculate how many items to skip
@@ -63,6 +64,18 @@ export async function GET(req: NextRequest) {
       orderBy.sellPrice = sortBy === 'asc' ? 'asc' : 'desc';
     }
 
+    // Search by product name
+    if (searchTerm) {
+      where.OR = [
+        { title: { contains: searchTerm, mode: 'insensitive' } },
+        { description: { contains: searchTerm, mode: 'insensitive' } },
+        { tags: { has: searchTerm } },
+        { sku: { contains: searchTerm, mode: 'insensitive' } },
+        { barcode: { contains: searchTerm, mode: 'insensitive' } },
+        { productCode: { contains: searchTerm, mode: 'insensitive' } },
+      ];
+    }
+
     // Fetch products based on filters
     const products = await productService.findAll({
       where,
@@ -77,7 +90,6 @@ export async function GET(req: NextRequest) {
     });
     const totalPages = Math.ceil(totalCount / pageSize);
 
-
     return NextResponse.json({
       products,
       totalPages,
@@ -87,3 +99,37 @@ export async function GET(req: NextRequest) {
     return handleError(error);
   }
 }
+
+// model Product {
+//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
+//   title          String
+//   slug           String   @unique
+//   description    String
+//   imageUrl       String?
+//   productImages  String[] @default([])
+//   sku            String?
+//   barcode        String?
+//   productPrice   Float
+//   sellPrice      Float?
+//   isActive       Boolean  @default(false)
+//   tags           String[]
+//   isWholesale    Boolean  @default(false)
+//   productCode    String?
+//   unit           String?
+//   wholeSaleQty   Int
+//   wholeSalePrice Float
+//   productStock   Int
+//   qty            Int
+
+//   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   categoryId String   @db.ObjectId
+
+//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   userId String @db.ObjectId
+
+//   OrderItem OrderItem[]
+//   sales     Sale[]
+
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime? @updatedAt
+// }

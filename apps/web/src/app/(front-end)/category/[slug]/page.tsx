@@ -51,8 +51,6 @@ const CategoryPage = async ({ params, searchParams }: IParams) => {
     return <div>Invalid data</div>;
   }
 
-  console.log(await getData(productsEndpoint));
-
   return (
     <div>
       <FilterProvider

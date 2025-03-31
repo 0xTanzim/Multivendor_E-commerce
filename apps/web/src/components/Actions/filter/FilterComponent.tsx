@@ -7,9 +7,14 @@ import Sorting from './Sorting';
 type FilterComponentProps = {
   category: Category;
   products: Product[];
+  isSearch?: boolean;
 };
 
-const FilterComponent = ({ category, products }: FilterComponentProps) => {
+const FilterComponent = ({
+  category,
+  products,
+  isSearch = false,
+}: FilterComponentProps) => {
   const { title, slug } = category;
 
   const productCount = products.length;
@@ -18,7 +23,7 @@ const FilterComponent = ({ category, products }: FilterComponentProps) => {
     <div>
       <div className="bg-white space-y-6 text-slate-900 py-6 px-4 ">
         <Breadcrumb title={title} resultCount={productCount} />
-        <Sorting title={title} slug={slug} />
+        <Sorting title={title} isSearch={isSearch}  />
       </div>
 
       <div className="grid grid-cols-12 py-8 px-2 gap-4">

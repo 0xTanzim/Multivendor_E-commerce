@@ -20,6 +20,7 @@ const Hero = async () => {
   return (
     <div className="grid grid-cols-12 gap-8 mb-6">
       <SidebarCategories />
+      
 
       <div className="col-span-full sm:col-span-7   rounded-md">
         {banners && <HeroCarousel banners={banners} />}
@@ -58,6 +59,7 @@ const Hero = async () => {
 
         <Image src={advert} alt="Advert" className="w-full rounded-lg" />
       </div>
+
     </div>
   );
 };

@@ -4,9 +4,9 @@ import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextInput from '@/components/FormInputs/TextInput';
 import { useAuthRequest } from '@/hooks/useAuthRequest';
 
-import { User, UserRole } from '@repo/types';
+import { IAuthUser, UserRole } from '@repo/types';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
@@ -16,21 +16,28 @@ type props = {
 
 export default function RegisterForm({ role }: props) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const plan = searchParams.get('plan');
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<User>();
+  } = useForm<IAuthUser>();
   const [loading, setLoading] = useState(false);
 
   const makeAuthRequest = useAuthRequest();
 
-  async function onSubmit(data: User) {
+  async function onSubmit(data: IAuthUser) {
     setLoading(true);
     // Log the data to be sent
     console.log('Registering user', data);
     setLoading(false);
+
+    if (plan) {
+      data.plan = plan;
+    }
 
     const result = await makeAuthRequest({
       endpoint: '/api/register',
@@ -43,7 +50,7 @@ export default function RegisterForm({ role }: props) {
     let redirectPath = '/login';
 
     if (role !== 'USER') {
-      redirectPath = `/verify-email`;
+      redirectPath = `/verify-email?userId=${result?.id}`;
     }
 
     router.push(redirectPath);
@@ -109,7 +116,7 @@ export default function RegisterForm({ role }: props) {
           <p className="text-sm font-light py-2 text-gray-500 dark:text-gray-400">
             Are you a Farmer?{' '}
             <Link
-              href="/register-farmer"
+              href="/farmer-pricing"
               className="font-medium text-purple-600 hover:underline dark:text-purple-500"
             >
               Register as a Farmer

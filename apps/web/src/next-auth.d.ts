@@ -10,6 +10,7 @@ declare module 'next-auth' {
     role: $Enums.UserRole;
     emailVerified: boolean | null;
     profileImage?: string | null;
+    accountStatus?: $Enums.AccountStatus;
   }
 
   // Extend the Session type to include custom properties in session.user
@@ -19,6 +20,7 @@ declare module 'next-auth' {
       role: $Enums.UserRole;
       emailVerified: boolean | null;
       profileImage?: string | null;
+      accountStatus?: $Enums.AccountStatus;
     } & DefaultSession['user'];
   }
 }
@@ -29,6 +31,10 @@ declare module 'next-auth/jwt' {
     id: string;
     role: $Enums.UserRole;
     emailVerified: boolean | null;
+    profileImage?: string | null;
+    accountStatus?: $Enums.AccountStatus;
+    email?: string | null;
+    name?: string | null;
   }
 }
 
@@ -41,5 +47,7 @@ declare module '@auth/core/adapters' {
     name?: string | null;
     profileImage?: string | null;
     role: $Enums.UserRole;
+    accountStatus: $Enums.AccountStatus;
+    
   }
 }

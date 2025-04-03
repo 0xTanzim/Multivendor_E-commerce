@@ -1,7 +1,19 @@
 import { User } from './user';
 
+export enum FarmerStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  SUSPENDED = 'SUSPENDED',
+  BLOCKED = 'BLOCKED',
+}
+
+export type FarmerStatusType = (typeof FarmerStatus)[keyof typeof FarmerStatus];
+
 export type Farmer = {
   id?: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   physicalAddress: string;
   contactPerson: string;
@@ -9,7 +21,7 @@ export type Farmer = {
   profileImageUrl?: string;
   terms: string;
   notes?: string;
-  isActive: boolean;
+  isActive?: boolean;
   products?: string[];
   mainCrop: string;
   farmSize: number | string;
@@ -18,12 +30,11 @@ export type Farmer = {
   user?: User;
 };
 
-
 export type FarmerInput = Farmer & {
   name?: string;
   email?: string;
   role?: string;
-}
+};
 
 export function isFarmer(data: unknown): data is Farmer {
   if (typeof data !== 'object' || data === null) {
@@ -48,7 +59,6 @@ export function isFarmer(data: unknown): data is Farmer {
     'terms' in obj &&
     typeof obj.terms === 'string' &&
     (typeof obj.notes === 'string' || obj.notes === undefined) &&
-    typeof obj.isActive === 'boolean' &&
     (typeof obj.farmSize === 'string' || typeof obj.farmSize === 'number') &&
     typeof obj.mainCrop === 'string'
   );

@@ -1,6 +1,6 @@
 import { Training } from './community';
 import { Market } from './market';
-import { Product } from './product';
+import { Product } from './products';
 
 export interface CreateCategory {
   title: string;

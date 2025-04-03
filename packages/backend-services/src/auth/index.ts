@@ -28,6 +28,7 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
         password: hashedPassword,
         role: data.role,
         verificationToken: token,
+        plan: data.plan ?? 'free',
       };
 
       const res = await this.repository.registerUser(newUser);
@@ -44,7 +45,7 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
     }
   }
 
-  async sendVerifyEmail(user: AuthUser) {
+  async sendVerifyEmail(user: IAuthUser) {
     let redirectUrl = '';
     if (user.role === 'FARMER') {
       redirectUrl = `onboarding/${user.id}?token=${user.verificationToken}`;

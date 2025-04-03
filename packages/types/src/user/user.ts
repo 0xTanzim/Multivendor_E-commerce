@@ -1,4 +1,5 @@
-import { Product } from '../product';
+
+import { Product } from '../products';
 import { Farmer } from './farmer';
 
 export type UserRole =

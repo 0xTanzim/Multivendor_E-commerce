@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     if (!isFarmer(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
-
+    console.log('Creating farmer with data', data);
     const newFarmer = await farmerService.createFarmer(data);
 
     return NextResponse.json(data, { status: 201 });

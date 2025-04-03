@@ -10,6 +10,7 @@ export async function POST(req: Request) {
     if (!isAuthUser(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
+
     const res = await authService.register(data);
 
     return NextResponse.json(res, { status: 201 });
@@ -27,7 +28,6 @@ export async function POST(req: Request) {
 //     return handleError(error);
 //   }
 // }
-
 
 // export async function DELETE(req: Request) {
 //   try {

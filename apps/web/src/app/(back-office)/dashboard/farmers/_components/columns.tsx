@@ -6,6 +6,7 @@ import ImageColumn from '@/components/data-table-columns/ImageColumn';
 import SortableColumn from '@/components/data-table-columns/SortableColumn';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Column, Row, Table } from '@tanstack/react-table';
+import Status from './Status';
 
 export const columns = [
   {
@@ -47,6 +48,16 @@ export const columns = [
   {
     accessorKey: 'email',
     header: () => <div className="">Email</div>,
+  },
+
+  {
+    accessorKey: 'plan',
+    header: () => <div className="">Plan</div>,
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    cell: ({ row }: { row: Row<any> }) => <Status row={row} accessorKey="status" />,
   },
   {
     accessorKey: 'isActive',

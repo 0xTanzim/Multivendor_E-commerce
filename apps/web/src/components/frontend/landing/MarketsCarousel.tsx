@@ -54,7 +54,7 @@ const MarketsCarousel = ({ markets }: MarketsCarouselProps) => {
         {markets &&
           markets.map((market) => (
             <Link
-              href="#"
+              href={`/market/${market?.slug}`}
               key={market?.id}
               className="rounded-lg mr-3  bg-red-300"
             >

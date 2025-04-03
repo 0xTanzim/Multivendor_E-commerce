@@ -1,4 +1,5 @@
-import { Product } from '../product';
+
+import { Product } from '../products';
 import { IPayMethod, IPerson, IShippingData } from './checkout';
 
 import { $Enums } from '@repo/database';

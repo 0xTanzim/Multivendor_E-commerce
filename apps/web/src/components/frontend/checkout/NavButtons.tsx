@@ -1,10 +1,10 @@
 'use client';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { setCurrentStep } from '@repo/redux';
+import { setOnboardingCurrentStep } from '@repo/redux';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const NavButtons = () => {
-  const currentStep = useAppSelector((state) => state.checkout.currentStep);
+  const currentStep = useAppSelector((state) => state.onboarding.currentStep);
   const dispatch = useAppDispatch();
 
   return (
@@ -13,7 +13,7 @@ const NavButtons = () => {
         <button
           type="button"
           className="inline-flex items-center px-5 py-3 text-sm font-medium text-center text-white bg-slate-900 rounded-lg hover:bg-lime-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-lime-600 dark:hover:bg-lime-700 dark:focus:ring-lime-800"
-          onClick={() => dispatch(setCurrentStep(currentStep - 1))}
+          onClick={() => dispatch(setOnboardingCurrentStep(currentStep - 1))}
         >
           <ChevronLeft className="w-4 h-4 mr-1" />
           <span>Previous</span>

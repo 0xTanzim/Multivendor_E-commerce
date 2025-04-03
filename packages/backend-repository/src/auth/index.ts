@@ -18,6 +18,7 @@ export class AuthRepository extends BaseRepository<
     password,
     role,
     verificationToken,
+    plan,
   }: IAuthUser) {
     return await this.prisma.$transaction(async (tx) => {
       const authUser = await tx.authUser.create({
@@ -27,6 +28,7 @@ export class AuthRepository extends BaseRepository<
           name,
           role,
           verificationToken,
+          plan,
         },
       });
 

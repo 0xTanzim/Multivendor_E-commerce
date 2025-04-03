@@ -1,8 +1,13 @@
+import ProductImageCarousel from '@/components/frontend/carousel/ProductImageCarousel';
+import CategoryCarousel from '@/components/frontend/landing/CategoryCarousel';
+import { ProductShareBtn } from '@/components/frontend/product/ProductShareBtn';
+
+import AddCartButton from '@/components/shared/AddCartButton';
 import BreadCamp from '@/components/shared/BreadCamp';
+import { appConfig } from '@/config/app.config';
 import { getData } from '@/lib/getData';
-import { isProduct } from '@repo/types';
-import { BaggageClaim, Minus, Plus, Send, Share2, Tag } from 'lucide-react';
-import Image from 'next/image';
+import { isProduct, isProductArray } from '@repo/types';
+import { Send, Tag } from 'lucide-react';
 import Link from 'next/link';
 
 const ProductDetailsPage = async ({
@@ -11,10 +16,8 @@ const ProductDetailsPage = async ({
   params: Promise<{ slug: string }>;
 }) => {
   const { slug } = await params;
-  // const categoryData = await getData(`categories/67cabd8c077764d1596a2217`);
+
   const productData = await getData(`products/product/${slug}`);
-  console.log('productData', productData);
-  // console.log('categoryData', categoryData);
 
   if (!isProduct(productData)) {
     return <div>Product not found</div>;
@@ -22,35 +25,40 @@ const ProductDetailsPage = async ({
 
   let product = productData;
 
-  // let category;
-  // if (!isCategory(categoryData)) {
-  //   category = null;
-  // }
+  const catId = product.categoryId;
 
-  // category = categoryData;
+  const categoryProductData = await getData(`products/category/${catId}`);
+
+  if (!isProductArray(categoryProductData)) {
+    return <div>Category not found</div>;
+  }
+
+  const categoryProducts = categoryProductData.filter(
+    (item) => item.id !== product.id
+  );
+
+  const calculatePercentage = (sellPrice: number, productPrice: number) => {
+    const discount = ((productPrice - sellPrice) / productPrice) * 100;
+    return discount.toFixed(0);
+  };
+
+  const productUrl = `${appConfig.baseUrl}/products/${product.slug}`;
 
   return (
     <div>
       <BreadCamp />
 
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-3">
-          <Image
-            src={product.imageUrl ?? '/images/tometo.webp'}
-            alt="Product Image"
-            className="w-full"
-            width={500}
-            height={500}
-          />
-        </div>
+        <ProductImageCarousel
+          thumbnail={product.imageUrl ?? ''}
+          productImages={product.productImages ?? []}
+        />
         <div className="col-span-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg lg:text-2xl font-semibold">
               {product.title}
             </h2>
-            <button>
-              <Share2 />
-            </button>
+            <ProductShareBtn productUrl={productUrl} />
           </div>
           <div className="border-b border-gray-300 dark:border-gray-600">
             <p className="py-2 ">{product.description}</p>
@@ -76,25 +84,18 @@ const ProductDetailsPage = async ({
 
             <p className="flex items-center">
               <Tag className="w-5 h-5 text-slate-400 me-2" />
-              <span>Save 20% right now</span>
+
+              <span>
+                Save{' '}
+                {calculatePercentage(
+                  product.sellPrice ?? 0,
+                  product.productPrice ?? 0
+                )}
+                % right now
+              </span>
             </p>
           </div>
-          <div className="flex justify-between items-center py-6">
-            <div className=" rounded-xl border-gray-400 border flex gap-3 items-center">
-              <button className="border-r border-gray-400 py-2  px-4">
-                <Minus />
-              </button>
-              <p className="flex-grow">1</p>
-
-              <button className="border-l border-gray-400 py-2  px-4 ">
-                <Plus />
-              </button>
-            </div>
-
-            <button className="flex items-center text-white  space-x-2 bg-lime-600 px-4 py-2 rounded-md ">
-              <BaggageClaim /> <span>Add to Cart</span>
-            </button>
-          </div>
+          <AddCartButton product={product} />
         </div>
 
         <div className=" col-span-3 hidden sm:block bg-white border border-gray-300 rounded-lg  dark:bg-gray-700 dark:border-gray-700 text-slate-800 dark:text-slate-100 overflow-hidden">
@@ -161,9 +162,9 @@ const ProductDetailsPage = async ({
         <h2 className="mb-4 text-xl font-semibold text-slate-200 ml-3">
           Simillar Products
         </h2>
-        {/* {category && category?.products && (
-          <CategoryCarousel products={category?.products} />
-        )} */}
+        {categoryProducts && categoryProducts && (
+          <CategoryCarousel products={categoryProducts} />
+        )}
       </div>
     </div>
   );

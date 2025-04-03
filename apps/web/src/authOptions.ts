@@ -46,6 +46,7 @@ export const authOptions: NextAuthConfig = {
               password: true,
               role: true,
               emailVerified: true,
+              accountStatus: true,
               user: {
                 select: {
                   profileImage: true,
@@ -74,6 +75,7 @@ export const authOptions: NextAuthConfig = {
             role: existingUser.role,
             emailVerified: existingUser.emailVerified,
             profileImage: existingUser.user?.profileImage,
+            accountStatus: existingUser.accountStatus,
           };
 
           console.log('User Compiled data');
@@ -104,6 +106,7 @@ export const authOptions: NextAuthConfig = {
         session.user.role = token.role;
         session.user.emailVerified = token.emailVerified;
         session.user.profileImage = token.profileImage;
+        session.user.accountStatus = token.accountStatus;
       }
       return session;
     },
@@ -115,6 +118,7 @@ export const authOptions: NextAuthConfig = {
         token.role = user.role;
         token.emailVerified = user.emailVerified as boolean;
         token.profileImage = user.profileImage ?? null;
+        token.accountStatus = user.accountStatus;
       }
       return token;
     },

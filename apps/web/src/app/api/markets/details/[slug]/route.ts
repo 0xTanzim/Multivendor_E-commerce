@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { id } = await params;
+    const { slug } = await params;
     const market = await marketService.findUnique({
-      where: { id: id },
+      where: { slug },
     });
 
     return NextResponse.json(market);

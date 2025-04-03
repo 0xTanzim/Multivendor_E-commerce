@@ -14,17 +14,18 @@ enum AccountStatus {
 }
 
 model AuthUser {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  email         String         @unique
-  password      String
-  name          String?
-  role          UserRole       @default(USER)
-  emailVerified Boolean        @default(false)
-  accountStatus AccountStatus  @default(PENDING)
-  user          User           @relation(fields: [id], references: [id])
-  verificationToken String? 
-  authSessions  AuthSession[]
-  loginHistory  LoginHistory[]
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  email             String         @unique
+  password          String
+  name              String?
+  role              UserRole       @default(USER)
+  emailVerified     Boolean        @default(false)
+  accountStatus     AccountStatus  @default(PENDING)
+  plan              String?
+  user              User           @relation(fields: [id], references: [id])
+  verificationToken String?
+  authSessions      AuthSession[]
+  loginHistory      LoginHistory[]
 }
 
 enum VerificationCodeType {

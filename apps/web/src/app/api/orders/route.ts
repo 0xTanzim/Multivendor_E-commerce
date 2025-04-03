@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    return NextResponse.json({ orderRes });
+    return NextResponse.json(orderRes);
   } catch (err) {
     console.log('Error fetching orders:', JSON.stringify(err, null, 2));
 

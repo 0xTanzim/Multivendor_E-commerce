@@ -1,4 +1,5 @@
 'use client';
+import { defaultProductImage } from '@/constants';
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { addToCart } from '@repo/redux';
 import { Product } from '@repo/types';
@@ -11,8 +12,6 @@ type ProductItemProps = {
   product: Product;
 };
 
-const defaultImage = '/images/tometo.webp';
-
 const ProductItem = ({ product }: ProductItemProps) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart);
@@ -23,7 +22,7 @@ const ProductItem = ({ product }: ProductItemProps) => {
         id: product.id ?? '',
         title: product.title,
         salePrice: product.sellPrice ?? 0,
-        imageUrl: product.imageUrl || defaultImage,
+        imageUrl: product.imageUrl || defaultProductImage,
         qty: 1,
         vendorId: product.userId ?? '',
       })
@@ -41,7 +40,9 @@ const ProductItem = ({ product }: ProductItemProps) => {
     >
       <Link href={`/products/${product?.slug}`}>
         <Image
-          src={product?.imageUrl?.trim() ? product.imageUrl : defaultImage}
+          src={
+            product?.imageUrl?.trim() ? product.imageUrl : defaultProductImage
+          }
           alt={product?.title || 'Product Image'}
           width={550}
           height={550}

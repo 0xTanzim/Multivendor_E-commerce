@@ -4,29 +4,33 @@ import { Product } from '@repo/types';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import ProductItem from './ProductItem';
-const responsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 4,
-    slidesToSlide: 3,
-  },
-  tablet: {
-    breakpoint: { max: 1024, min: 464 },
-    items: 3,
-    slidesToSlide: 2,
-  },
-  mobile: {
-    breakpoint: { max: 464, min: 0 },
-    items: 2,
-    slidesToSlide: 1,
-  },
-};
 
 type CategoryCarouselProps = {
   products: Product[];
+  isMarketPage?: boolean;
 };
 
-const CategoryCarousel = ({ products }: CategoryCarouselProps) => {
+const CategoryCarousel = ({
+  products,
+  isMarketPage,
+}: CategoryCarouselProps) => {
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: isMarketPage ? 3 : 4,
+      slidesToSlide: 3,
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
+      items: isMarketPage ? 2 : 3,
+      slidesToSlide: 2,
+    },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
+      items: 2,
+      slidesToSlide: 1,
+    },
+  };
   return (
     <>
       <Carousel

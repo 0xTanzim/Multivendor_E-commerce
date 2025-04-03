@@ -100,36 +100,3 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// model Product {
-//   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-//   title          String
-//   slug           String   @unique
-//   description    String
-//   imageUrl       String?
-//   productImages  String[] @default([])
-//   sku            String?
-//   barcode        String?
-//   productPrice   Float
-//   sellPrice      Float?
-//   isActive       Boolean  @default(false)
-//   tags           String[]
-//   isWholesale    Boolean  @default(false)
-//   productCode    String?
-//   unit           String?
-//   wholeSaleQty   Int
-//   wholeSalePrice Float
-//   productStock   Int
-//   qty            Int
-
-//   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   categoryId String   @db.ObjectId
-
-//   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-//   userId String @db.ObjectId
-
-//   OrderItem OrderItem[]
-//   sales     Sale[]
-
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime? @updatedAt
-// }

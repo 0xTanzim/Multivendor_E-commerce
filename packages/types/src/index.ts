@@ -8,5 +8,6 @@ export * from './coupon';
 export * from './endPoints';
 export * from './inputTypes';
 export * from './market';
-export * from './product';
+
+export * from './products';
 export * from './user';

@@ -32,7 +32,11 @@ export async function POST(req: Request) {
 
 export async function GET() {
   try {
-    const trainings = await trainingService.findAll();
+    const trainings = await trainingService.findAll({
+      include: {
+        category: true,
+      },
+    });
 
     return NextResponse.json(trainings, { status: 200 });
   } catch (error: unknown) {

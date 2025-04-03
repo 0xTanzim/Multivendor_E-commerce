@@ -1,7 +1,7 @@
 import { BaseRepository } from '@repo/core';
 import { inject, injectable, PrismaClientToken } from '@repo/core/container';
 import { FarmerProfile, Prisma, PrismaClient } from '@repo/database';
-import { FarmerInput } from '@repo/types';
+import { FarmerInput, FarmerStatus } from '@repo/types';
 import { AuthRepository } from '../auth';
 
 @injectable()
@@ -24,8 +24,37 @@ export class FarmerProfileRepository extends BaseRepository<
   }
 
   async createFarmer(data: FarmerInput) {
-    const { userId, role, ...farmerData } = data;
+    const { userId, role, firstName, lastName, ...farmerData } = data;
     return await this.prisma.$transaction(async (tx) => {
+      // set name to user
+
+      const user = await tx.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      // Update the user with new name
+      const updatedUser = await tx.user.update({
+        where: { id: userId },
+        data: {
+          firstName,
+          lastName,
+        },
+      });
+
+      // Check if the user is already a farmer
+      const existingFarmer = await tx.farmerProfile.findUnique({
+        where: { userId },
+      });
+
+      if (existingFarmer) {
+        throw new Error('User is already a farmer');
+      }
+
+      // Create a new farmer profile
       const farmerProfile = await tx.farmerProfile.create({
         data: {
           ...farmerData,
@@ -90,6 +119,7 @@ export class FarmerProfileRepository extends BaseRepository<
         products: true,
         profileImageUrl: true,
         terms: true,
+        status: true,
 
         user: {
           select: {
@@ -100,6 +130,7 @@ export class FarmerProfileRepository extends BaseRepository<
                 email: true,
                 role: true,
                 emailVerified: true,
+                plan: true,
               },
             },
           },
@@ -118,6 +149,7 @@ export class FarmerProfileRepository extends BaseRepository<
       },
       email: farmer.user.authUser.email,
       name: farmer.user.authUser.name,
+      plan: farmer.user.authUser.plan,
     }));
   }
 
@@ -180,5 +212,19 @@ export class FarmerProfileRepository extends BaseRepository<
       },
     });
     return products;
+  }
+
+  async updateFarmerStatus(
+    id: string,
+    data: { status: FarmerStatus }
+  ): Promise<FarmerProfile> {
+    const farmerProfile = await this.prisma.farmerProfile.update({
+      where: { id },
+      data: {
+        status: data.status,
+      },
+    });
+
+    return farmerProfile;
   }
 }

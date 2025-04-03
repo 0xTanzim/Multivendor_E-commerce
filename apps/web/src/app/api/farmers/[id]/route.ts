@@ -17,32 +17,23 @@ export async function GET(
   }
 }
 
-// export async function DELETE(
-//   req: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//   try {
-//     const { id } = await params;
-//     const farmer = await farmerService.deleteById(id);
-//     return NextResponse.json(farmer);
-//   } catch (err) {
-//     return handleError(err);
-//   }
-// }
-
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
+
     const data: unknown = await req.json();
+    //    console.log('before isFarmer', data);
 
     if (!isFarmer(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const farmer = await farmerService.updateFarmer(id, data);
+    //    console.log('Updating farmer with data', data);
+
+    // const farmer = await farmerService.updateFarmer(id, data);
     return NextResponse.json(data);
   } catch (err) {
     return handleError(err);

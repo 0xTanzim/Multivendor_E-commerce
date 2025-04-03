@@ -1,9 +1,9 @@
-import { CheckCheck, Loader, RefreshCcw, ShoppingCart } from "lucide-react";
+import { CheckCheck, Loader, RefreshCcw, ShoppingCart } from 'lucide-react';
 
 type SmallCardProps = {
   data: {
     title?: string;
-    number?: number;
+    number?: number | string;
     iconColor?: string;
     icon?: string;
   };
@@ -17,10 +17,10 @@ const SmallCard = ({ data }: SmallCardProps) => {
           className={`w-12 h-12 rounded-full items-center flex justify-center ${data.iconColor}`}
         >
           <div className="text-slate-50 dark:text-slate-200">
-            {data.icon === "Cart" && <ShoppingCart />}
-            {data.icon === "Loader" && <Loader />}
-            {data.icon === "RefreshCcw" && <RefreshCcw />}
-            {data.icon === "CheckCheck" && <CheckCheck />}
+            {data.icon === 'Cart' && <ShoppingCart />}
+            {data.icon === 'Loader' && <Loader />}
+            {data.icon === 'RefreshCcw' && <RefreshCcw />}
+            {data.icon === 'CheckCheck' && <CheckCheck />}
           </div>
         </div>
 
@@ -34,4 +34,3 @@ const SmallCard = ({ data }: SmallCardProps) => {
 };
 
 export default SmallCard;
-

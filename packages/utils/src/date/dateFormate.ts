@@ -40,3 +40,17 @@ export const formatDate = (date: unknown): string => {
   const year = dateObj.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export function convertToNormalDate(isoDate: string | Date): string {
+  if (!isoDate) {
+    return '';
+  }
+
+  const date = new Date(isoDate);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+  };
+  return date.toLocaleDateString('en-US', options);
+}

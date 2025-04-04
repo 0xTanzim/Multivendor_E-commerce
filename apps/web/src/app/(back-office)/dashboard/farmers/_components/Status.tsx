@@ -61,8 +61,7 @@ export default function Status({ row, accessorKey }: StatusProps) {
         ? 'green'
         : status === FarmerStatus.REJECTED ||
             status === FarmerStatus.SUSPENDED ||
-            status === FarmerStatus.BLOCKED ||
-            status === FarmerStatus.DELETED
+            status === FarmerStatus.BLOCKED
           ? 'red'
           : 'orange',
   };

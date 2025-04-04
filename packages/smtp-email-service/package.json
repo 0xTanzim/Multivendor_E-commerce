@@ -1,6 +1,7 @@
 {
-  "name": "@repo/backend-services",
-  "version": "1.0.0",
+  "name": "@repo/smtp-email-service",
+  "private": true,
+  "version": "1.0.2",
   "scripts": {
     "build": "tsc",
     "dev": "tsc -w"
@@ -9,24 +10,33 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    }
+    },
+    "./email": "./src/index.ts"
   },
   "dependencies": {
-    "@repo/backend-repository": "workspace:*",
+    "@react-email/render": "^1.0.5",
     "@repo/common": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
-    "@repo/email-service": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@repo/smtp-email-service": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@types/nodemailer": "^6.4.17",
     "base64url": "^3.0.1",
     "bcryptjs": "^3.0.2",
+    "dotenv": "^16.4.7",
+    "nodemailer": "^6.10.0",
+    "prettier": "3.4.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
+    "@react-email/components": "0.0.34",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "react-email": "3.0.7",
     "typescript": "^5.8.2"
   }
 }

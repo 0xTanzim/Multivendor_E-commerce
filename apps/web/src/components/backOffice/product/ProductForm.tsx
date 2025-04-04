@@ -95,7 +95,6 @@ const ProductForm = ({
     data.productImages = images;
     data.imageUrl = data.productImages?.[0] ?? '';
     data.productCode = productCode;
-
     if (productId) {
       makePatchRequest({
         setLoading,

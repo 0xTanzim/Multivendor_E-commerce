@@ -9,6 +9,7 @@ const UpdateMarketPage = async ({ params }: IParams) => {
   const { id } = await params;
 
   const marketData = await getData(`markets/${id}`);
+  console.log(marketData);
 
   let market = null;
 

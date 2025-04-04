@@ -19,7 +19,39 @@ export default function ImageInput({
   setImageUrl,
   className = 'col-span-full',
 }: ImageInputProps) {
+  const [isUploading, setIsUploading] = useState(false);
   const [oldImageUrl, setOldImageUrl] = useState<string | null>(null);
+
+  const deleteImage = async (urlToDelete: string): Promise<boolean> => {
+    const publicId = getPublicIdFromUrl(urlToDelete);
+    if (!publicId) {
+      console.error(
+        'Invalid URL or publicId could not be extracted:',
+        urlToDelete
+      );
+      return false;
+    }
+
+    try {
+      const response = await fetch('/api/cloudinary/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ publicId }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Failed to delete image:', errorData.error);
+        return false;
+      }
+
+      console.log(`Image ${publicId} deleted from Cloudinary`);
+      return true;
+    } catch (error) {
+      console.error('Error deleting image:', error);
+      return false;
+    }
+  };
 
   const handleChangeImage = () => {
     if (imageUrl) {
@@ -29,32 +61,45 @@ export default function ImageInput({
   };
 
   const handleUpload = async (result: any) => {
-    if (typeof result.info === 'object' && 'secure_url' in result.info) {
-      const newImageUrl = result.info.secure_url;
+    if (typeof result.info !== 'object' || !('secure_url' in result.info)) {
+      console.error('Upload failed or invalid result:', result);
+      return;
+    }
 
-      if (oldImageUrl) {
-        const publicId = getPublicIdFromUrl(oldImageUrl);
-        try {
-          const response = await fetch('/api/cloudinary/delete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ publicId }),
-          });
+    const newImageUrl = result.info.secure_url;
+    setIsUploading(true);
 
-          if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Failed to delete old image:', errorData.error);
-          } else {
-            console.log(`Old image ${publicId} deleted from Cloudinary`);
-          }
-        } catch (error) {
-          console.error('Error deleting old image:', error);
+    // Store the old image URL for potential revert
+    const previousImageUrl = imageUrl;
+
+    // Optimistically set the new image URL
+    setImageUrl(newImageUrl);
+
+    try {
+      // If there was a previous image, delete it
+      if (previousImageUrl) {
+        const deletionSuccess = await deleteImage(previousImageUrl);
+        if (!deletionSuccess) {
+          // Revert to the old image if deletion fails
+          setImageUrl(previousImageUrl);
+          setIsUploading(false);
+          return;
         }
       }
 
-      setImageUrl(newImageUrl);
-      setOldImageUrl(null);
+      // Upload succeeded and old image (if any) was deleted
+      setIsUploading(false);
       document.body.style.overflow = 'auto';
+    } catch (error) {
+      console.error('Unexpected error during upload process:', error);
+      // Revert to the previous image if something goes wrong
+      setImageUrl(previousImageUrl || '');
+      setIsUploading(false);
+
+      // Optionally, delete the new image from Cloudinary if it was uploaded
+      if (newImageUrl && previousImageUrl) {
+        await deleteImage(newImageUrl);
+      }
     }
   };
 
@@ -64,7 +109,7 @@ export default function ImageInput({
         <label className="block text-sm font-medium leading-6 text-slate-800 dark:text-slate-100 mb-2">
           {label}
         </label>
-        {imageUrl && (
+        {imageUrl && !isUploading && (
           <button
             onClick={handleChangeImage}
             type="button"
@@ -75,7 +120,7 @@ export default function ImageInput({
           </button>
         )}
       </div>
-      {imageUrl ? (
+      {imageUrl && !isUploading ? (
         <Image
           src={imageUrl}
           alt="Uploaded image"
@@ -92,9 +137,14 @@ export default function ImageInput({
             <button
               onClick={() => open()}
               type="button"
-              className="w-full py-10 text-center bg-gray-200 dark:bg-gray-700 border border-dashed border-gray-400 dark:border-gray-500 rounded-lg"
+              disabled={isUploading}
+              className={`w-full py-10 text-center border border-dashed border-gray-400 dark:border-gray-500 rounded-lg ${
+                isUploading
+                  ? 'bg-gray-300 dark:bg-gray-600 cursor-not-allowed'
+                  : 'bg-gray-200 dark:bg-gray-700'
+              }`}
             >
-              Click to Upload Image
+              {isUploading ? 'Uploading...' : 'Click to Upload Image'}
             </button>
           )}
         </CldUploadWidget>

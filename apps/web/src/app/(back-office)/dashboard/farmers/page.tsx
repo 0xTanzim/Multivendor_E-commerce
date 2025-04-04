@@ -13,8 +13,6 @@ const farmersPage = async () => {
   }
   farmers = farmersData.filter((farmer) => farmer.user !== null);
 
-  console.log('farmers', farmers);
-
   return (
     <div>
       <PageHeader

@@ -23,7 +23,7 @@ const ProductDetailsPage = async ({
     return <div>Product not found</div>;
   }
 
-  let product = productData;
+  const product = productData;
 
   const catId = product.categoryId;
 

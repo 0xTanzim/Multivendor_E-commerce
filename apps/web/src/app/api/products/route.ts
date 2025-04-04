@@ -32,8 +32,8 @@ export async function GET(req: NextRequest) {
     const skip = (page - 1) * pageSize; // Calculate how many items to skip
     const take = pageSize; // Set the number of items to fetch
 
-    let where: any = {};
-    let orderBy: any = {};
+    const where: any = {};
+    const orderBy: any = {};
 
     // Filter by category ID
     if (categoryId) {

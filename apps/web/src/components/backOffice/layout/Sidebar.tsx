@@ -52,7 +52,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
   let userLinks;
   const role = session?.user?.role;
 
-  let sidebarLinks = [
+  const sidebarLinks = [
     {
       title: 'Customers',
       icon: Users2,
@@ -111,7 +111,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
     },
   ];
 
-  let catalogLinks = [
+  const catalogLinks = [
     {
       title: 'Products',
       icon: Box,

@@ -13,6 +13,8 @@ export async function POST(req: Request) {
 
     const res = await authService.register(data);
 
+    console.log(' result for creating', res);
+
     return NextResponse.json(res, { status: 201 });
   } catch (error: unknown) {
     return handleError(error);
@@ -22,16 +24,6 @@ export async function POST(req: Request) {
 // export async function GET(req: Request) {
 //   try {
 //     const res = await authService.findAll();
-
-//     return NextResponse.json(res, { status: 200 });
-//   } catch (error: unknown) {
-//     return handleError(error);
-//   }
-// }
-
-// export async function DELETE(req: Request) {
-//   try {
-//     const res = await authService.testDeleteAllUserandAuthUser();
 
 //     return NextResponse.json(res, { status: 200 });
 //   } catch (error: unknown) {

@@ -36,12 +36,22 @@ export class FarmerProfileRepository extends BaseRepository<
         throw new Error('User not found');
       }
 
-      // Update the user with new name
-      const updatedUser = await tx.user.update({
+      // Update the user's name
+      await tx.user.update({
         where: { id: userId },
         data: {
           firstName,
           lastName,
+        },
+      });
+
+      // Update AuthUser
+      await tx.authUser.update({
+        where: { id: userId },
+        data: {
+          emailVerified: true,
+          role: 'FARMER',
+          verificationToken: null,
         },
       });
 
@@ -226,5 +236,70 @@ export class FarmerProfileRepository extends BaseRepository<
     });
 
     return farmerProfile;
+  }
+
+  async getFarmerByUserId(userId: string): Promise<any | null> {
+    const farmerProfile = await this.prisma.farmerProfile.findUnique({
+      where: { userId },
+      select: {
+        id: true,
+        isActive: true,
+        code: true,
+        contactPerson: true,
+        contactPersonPhone: true,
+        createdAt: true,
+        userId: true,
+        farmSize: true,
+        mainCrop: true,
+        notes: true,
+        phone: true,
+        physicalAddress: true,
+        products: true,
+        profileImageUrl: true,
+        terms: true,
+        status: true,
+
+        user: {
+          select: {
+            username: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+
+            authUser: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                emailVerified: true,
+                accountStatus: true,
+                plan: true,
+                verificationToken: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!farmerProfile) {
+      return null;
+    }
+
+    return {
+      ...farmerProfile,
+      user: {
+        id: farmerProfile.user.authUser.id,
+        name: farmerProfile.user.authUser.name,
+        email: farmerProfile.user.authUser.email,
+        role: farmerProfile.user.authUser.role,
+        emailVerified: farmerProfile.user.authUser.emailVerified,
+        accountStatus: farmerProfile.user.authUser.accountStatus,
+      },
+      email: farmerProfile.user.authUser.email,
+      name: farmerProfile.user.authUser.name,
+      plan: farmerProfile.user.authUser.plan,
+    };
   }
 }

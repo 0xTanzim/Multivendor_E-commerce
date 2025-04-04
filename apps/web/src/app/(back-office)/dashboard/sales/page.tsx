@@ -22,17 +22,7 @@ const salePage = async () => {
 
   const salesData = await getData(saleUrl);
 
-  let sales = salesData;
-
-  // if (!isOrderArray(salesData)) {
-  //   sales = null;
-  // } else {
-  //   sales = salesData;
-  // }
-
-  console.log('==== sales ====', sales);
-
-  // return;
+  const sales = salesData;
 
   return (
     <div>

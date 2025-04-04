@@ -43,10 +43,12 @@ const UpdateProductPage = async ({ params }: IParams) => {
 
   const farmers =
     (allFarmersData &&
-      allFarmersData.map((farmer) => ({
-        id: farmer.user?.id,
-        title: farmer.user?.name,
-      }))) ||
+      allFarmersData
+        .filter((farmer) => farmer.user?.id !== undefined)
+        .map((farmer) => ({
+          id: farmer.user!.id,
+          title: farmer.user?.name,
+        }))) ||
     [];
 
   return (

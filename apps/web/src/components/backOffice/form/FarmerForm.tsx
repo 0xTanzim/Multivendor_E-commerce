@@ -6,7 +6,6 @@ import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
-import { FileRoutes } from '@/config';
 import { usePatchRequest } from '@/hooks/usePatchRequest';
 import { usePostRequest } from '@/hooks/usePostRequest';
 import { Farmer, FarmerInput, User } from '@repo/types';
@@ -15,7 +14,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 type Props = {
-  user: User;
+  user: User & Partial<{ email: string; name: string }>;
   updateData?: Farmer;
 };
 
@@ -46,11 +45,13 @@ export default function FarmerForm({ user, updateData }: Props) {
 
   const onSubmit = async (data: Farmer) => {
     data.profileImageUrl = imageUrl ?? '';
-    const code = generateNameCode('MFF', user.name);
+    const code = generateNameCode('MFF', user.name ?? '');
     data.products = products;
     data.userId = user.id;
     data.code = code;
     delete data.user;
+
+    console.log('Farmer data:', data);
 
     if (farmerId) {
       makePatchRequest({

@@ -32,6 +32,8 @@ const UpdateFarmerPage = async ({ params }: IParams) => {
     );
   }
 
+  
+
   return (
     <div>
       <FormHeader title="Update Farmer" />

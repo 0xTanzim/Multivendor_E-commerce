@@ -75,43 +75,41 @@ export class ProductService extends BaseService<Product, ProductRepository> {
     }
   }
 
-  // async updateProduct(productId: string, data: IProduct) {
-  //   try {
-  //     delete data.id;
+  async updateProduct(productId: string, data: IProduct) {
+    try {
+      const { categoryId, id, userId, sales, farmerId, ...updateData } = data;
 
-  //     console.log('Update product data========================>', data);
+      // Format data before updating
+      const formattedData = {
+        ...updateData,
+        productPrice: parseFloat(data.productPrice.toString()),
+        sellPrice: parseFloat(data.sellPrice.toString()),
+        wholeSalePrice: parseFloat(data.wholeSalePrice.toString()),
+        wholeSaleQty: Number(data.wholeSaleQty),
+        productStock: Number(data.productStock),
+        qty: Number(data.qty),
+        unit: data.unit.toString(),
+      };
 
-  //     const { categoryId, userId, farmerId, id, ...updateData } = data;
+      // Update the product, excluding the 'sales' relation
+      const updatedProduct = await this.repository.update(productId, {
+        ...formattedData,
+        category: {
+          connect: {
+            id: data.categoryId,
+          },
+        },
+        user: {
+          connect: {
+            id: data.userId,
+          },
+        },
+      });
 
-  //     const formattedData = {
-  //       ...updateData,
-  //       productPrice: parseFloat(data.productPrice.toString()),
-  //       sellPrice: parseFloat(data.sellPrice.toString()),
-  //       wholeSalePrice: parseFloat(data.wholeSalePrice.toString()),
-  //       wholeSaleQty: Number(data.wholeSaleQty),
-  //       productStock: Number(data.productStock),
-  //       qty: Number(data.qty),
-  //       unit: data.unit.toString(),
-  //     };
-
-  //     const updatedProduct = await this.repository.update(productId, {
-  //       ...formattedData,
-  //       category: {
-  //         connect: {
-  //           id: data.categoryId,
-  //         },
-  //       },
-  //       user: {
-  //         connect: {
-  //           id: data.userId,
-  //         },
-  //       },
-  //     });
-
-  //     return updatedProduct;
-  //   } catch (err) {
-  //     console.log('Error updating product', err.message);
-  //     throw new BadRequestError('Failed to update record');
-  //   }
-  // }
+      return updatedProduct;
+    } catch (err) {
+      console.log('Error updating product', err.message);
+      throw new BadRequestError('Failed to update record');
+    }
+  }
 }

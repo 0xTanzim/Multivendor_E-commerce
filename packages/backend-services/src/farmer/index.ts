@@ -59,6 +59,9 @@ export class FarmerService extends BaseService<
 
   async updateFarmer(id: string, data: FarmerInput) {
     try {
+      console.log('Farmer data to update', data);
+
+  
       const existFarmer = await this.farmerRepository.checkById(id);
 
       if (!existFarmer) {
@@ -95,8 +98,19 @@ export class FarmerService extends BaseService<
     }
   }
 
+  async getFarmerProfileByUserId(userId: string) {
+    try {
+      const farmer = await this.farmerRepository.getFarmerByUserId(userId);
+      if (!farmer) {
+        throw new NotFoundError('Farmer not found');
+      }
+      return farmer;
+    } catch (err) {
+      this.handlePrismaError(err, 'Error fetching farmer by user ID');
+    }
+  }
 
-  async updateFarmerStatus (id: string, data) {
+  async updateFarmerStatus(id: string, data) {
     try {
       const farmer = await this.farmerRepository.checkById(id);
       if (!farmer) {

@@ -26,8 +26,19 @@ export default function MultipleImageInput({
     document.body.style.overflow = 'auto';
   };
 
-  const removeImage = async (url: string) => {
-    const publicId = getPublicIdFromUrl(url);
+  const removeImage = async (urlToRemove: string) => {
+    const publicId = getPublicIdFromUrl(urlToRemove);
+
+    if (!publicId) {
+      console.error(
+        'Invalid URL or publicId could not be extracted:',
+        urlToRemove
+      );
+      return;
+    }
+
+    setImages((prevImages) => prevImages.filter((img) => img !== urlToRemove));
+
     try {
       const response = await fetch('/api/cloudinary/delete', {
         method: 'POST',
@@ -38,15 +49,15 @@ export default function MultipleImageInput({
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Failed to delete image:', errorData.error);
+        setImages((prevImages) => [...prevImages, urlToRemove].sort());
         return;
       }
 
-      // Deletion succeeded, update state
-      const updatedImages = images.filter((img) => img !== url);
-      setImages(updatedImages);
       console.log(`Image ${publicId} deleted from Cloudinary`);
     } catch (error) {
       console.error('Error during image deletion:', error);
+      // Revert state on network or unexpected error
+      setImages((prevImages) => [...prevImages, urlToRemove].sort());
     }
   };
 

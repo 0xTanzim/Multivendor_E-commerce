@@ -53,15 +53,6 @@ export class AuthRepository extends BaseRepository<
     return userName;
   }
 
-  async testDeleteAllUserandAuthUser() {
-    return await this.prisma.$transaction(async (tx) => {
-      const authUser = await tx.authUser.deleteMany();
-      const user = await tx.user.deleteMany();
-
-      return { authUser, user };
-    });
-  }
-
   async checkEmailExists(email: string): Promise<boolean> {
     const existingUser = await this.prisma.authUser.findUnique({
       where: { email },

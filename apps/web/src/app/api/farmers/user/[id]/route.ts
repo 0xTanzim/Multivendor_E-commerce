@@ -1,18 +1,17 @@
+import { farmerService } from '@/lib/di';
 import { handleError } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function PATCH(
+export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { id } = await params;
 
-    const body = await req.json();
+    const farmer = await farmerService.getFarmerProfileByUserId(id);
 
-    console.log('body', body);
-
-    return NextResponse.json(id);
+    return NextResponse.json(farmer);
   } catch (err) {
     return handleError(err);
   }

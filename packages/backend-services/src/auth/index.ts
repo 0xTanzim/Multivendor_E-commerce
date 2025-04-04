@@ -2,7 +2,7 @@ import { AuthRepository } from '@repo/backend-repository';
 import { BadRequestError } from '@repo/common/error';
 import { BaseService, injectable } from '@repo/core';
 import { AuthUser, User } from '@repo/database';
-import { sendEmail, sendVerificationEmail } from '@repo/email-service';
+import { MailService } from '@repo/smtp-email-service';
 import { IAuthUser } from '@repo/types';
 
 import base64url from 'base64url';
@@ -11,8 +11,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 @injectable()
 export class AuthService extends BaseService<AuthUser, AuthRepository> {
+  private mailService!: MailService;
   constructor(authRepository: AuthRepository) {
     super(authRepository);
+  }
+
+  setMailService(mailService: MailService) {
+    this.mailService = mailService;
   }
 
   async register(
@@ -46,23 +51,21 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
   }
 
   async sendVerifyEmail(user: IAuthUser) {
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
     let redirectUrl = '';
+
     if (user.role === 'FARMER') {
       redirectUrl = `onboarding/${user.id}?token=${user.verificationToken}`;
     }
 
     try {
-      const userId = user.id;
-
-      const res = await sendVerificationEmail({
+      const res = await this.mailService.sendVerificationEmail({
         to: user.email,
         name: user.name,
         redirectUrl,
-        linkText: 'Verify your email',
-        subject: 'Verify Account - MindFuel',
       });
-
-      console.log('Email sent:', res);
     } catch (error) {
       console.error('Error sending email:', error);
       throw new BadRequestError('Failed to send email');
@@ -106,10 +109,6 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
     }
   }
 
-  async testDeleteAllUserandAuthUser() {
-    return await this.repository.testDeleteAllUserandAuthUser();
-  }
-
   async sendForgetPasswordEmail(existingUser: AuthUser) {
     try {
       const userId = existingUser.id;
@@ -120,17 +119,11 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
 
       const redirectUrl = `reset-password?token=${token}&id=${userId}`;
 
-      const description = `Click the link below to reset your password`;
-
-      const res = await sendEmail({
+      const res = await this.mailService.sendForgotPasswordEmail({
         to: existingUser.email,
         name,
         redirectUrl,
-        linkText: 'Reset Password',
-        subject: 'Reset Password - MindFuel',
-        description,
       });
-
       console.log('Email sent:', res);
     } catch (err) {
       console.error('Error sending forget password email:', err);

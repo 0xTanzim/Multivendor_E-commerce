@@ -10,8 +10,8 @@ type DashboardCartsProps = {
 const DashboardCarts = ({ sales, orders }: DashboardCartsProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <WeeklySalesChart sales={sales} orders={orders} />
-      <BestSellingProductChart orders={orders} />
+      <WeeklySalesChart />
+      <BestSellingProductChart />
     </div>
   );
 };

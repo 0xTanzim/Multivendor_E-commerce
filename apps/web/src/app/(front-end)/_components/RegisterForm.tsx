@@ -47,10 +47,17 @@ export default function RegisterForm({ role }: props) {
       resourceName: 'Register',
     });
 
+    console.log('Registration result', result);
+
     let redirectPath = '/login';
 
     if (role !== 'USER') {
-      redirectPath = `/verify-email?userId=${result?.id}`;
+      if (!result?.authUser) {
+        console.error('No authUser found in the result');
+        return;
+      }
+
+      redirectPath = `/verify-email?userId=${result?.authUser?.id}`;
     }
 
     router.push(redirectPath);

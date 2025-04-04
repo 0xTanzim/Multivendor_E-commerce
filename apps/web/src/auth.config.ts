@@ -73,10 +73,9 @@ export const nextAuthConfig: NextAuthConfig = {
   },
 
   jwt: {
-    // @ts-ignore
+    // @ts-expect-error: The AUTH_SECRET environment variable is expected to be a string, but TypeScript cannot infer it.
     secret: process.env.AUTH_SECRET as string,
+
     encryption: true,
   },
 };
-
-

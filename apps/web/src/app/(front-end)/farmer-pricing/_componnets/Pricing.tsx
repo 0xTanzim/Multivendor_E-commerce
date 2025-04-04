@@ -89,7 +89,7 @@ const Pricing = () => {
             </ul>
 
             <Link
-              href={`/register?plan=${plan.value}`}
+              href={`/register-farmer?plan=${plan.value}`}
               className="mt-6 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition text-center block"
             >
               Get Started

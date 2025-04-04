@@ -1,3 +1,5 @@
+import { Sale } from '../sale';
+
 export type Product = {
   id?: string;
   title: string;
@@ -22,7 +24,7 @@ export type Product = {
   qty?: number;
   productStock: number;
   stockStatus?: string;
-  sales?: string[];
+  sales?: Sale[];
 };
 
 /**

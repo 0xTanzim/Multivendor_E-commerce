@@ -33,7 +33,7 @@ const UpdateCustomerPage = async ({ params }: IParams) => {
   return (
     <div>
       <FormHeader title="Update Farmer" />
-      <CustomerForm />
+      {/* <CustomerForm  /> */}
       {/* {farmer && <CustomerForm updateData={farmer} user={user} />} */}
     </div>
   );

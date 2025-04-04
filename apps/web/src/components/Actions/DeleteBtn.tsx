@@ -6,16 +6,16 @@ import toast from 'react-hot-toast';
 import Swal from 'sweetalert2';
 
 type DeleteBtnProps = {
-  
   endpoint: string;
   title: string;
 };
 
-export default function DeleteBtn({  endpoint, title }: DeleteBtnProps) {
+export default function DeleteBtn({ endpoint, title }: DeleteBtnProps) {
   const [loading, setLoading] = useState(false);
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
+  console.log('Endpoint', endpoint);
 
   async function handleDelete() {
     setLoading(true);
@@ -27,8 +27,7 @@ export default function DeleteBtn({  endpoint, title }: DeleteBtnProps) {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
-    })
-    .then(async (result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         const res = await fetch(`${baseUrl}/api/${endpoint}`, {
           method: 'DELETE',
@@ -44,7 +43,6 @@ export default function DeleteBtn({  endpoint, title }: DeleteBtnProps) {
       }
     });
   }
-
 
   return (
     <>

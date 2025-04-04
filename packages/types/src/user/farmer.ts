@@ -1,3 +1,4 @@
+import { $Enums } from '@repo/database';
 import { User } from './user';
 
 export enum FarmerStatus {
@@ -28,6 +29,7 @@ export type Farmer = {
   userId: string;
   code: string;
   user?: User;
+  status?: $Enums.FarmerStatus;
 };
 
 export type FarmerInput = Farmer & {

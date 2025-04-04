@@ -39,7 +39,7 @@ const NewProductPage = async () => {
     <div>
       <FormHeader title="New Product" />
       {
-        // @ts-ignore
+        // @ts-expect-error: Type 'null' is not assignable to type 'boolean'.
         <ProductForm categories={categories} farmers={farmers} />
       }
     </div>

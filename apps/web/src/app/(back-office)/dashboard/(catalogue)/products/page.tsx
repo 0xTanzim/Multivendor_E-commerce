@@ -26,7 +26,6 @@ const ProductPage = async () => {
   }
 
   const productsData = await getData(productUrl);
-  console.log('Raw productsData:', productsData);
   let products = null;
   if (!isProductArray(productsData)) {
     console.log('error');

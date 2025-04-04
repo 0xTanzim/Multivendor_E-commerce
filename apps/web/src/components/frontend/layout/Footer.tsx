@@ -1,13 +1,17 @@
+import Image from "next/image";
+
 const Footer = () => {
   return (
     <section className="py-10 bg-gray-50 sm:pt-16 lg:pt-24">
       <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
         <div className="grid grid-cols-2 md:col-span-3 lg:grid-cols-6 gap-y-16 gap-x-12">
           <div className="col-span-2 md:col-span-3 lg:col-span-2 lg:pr-8">
-            <img
+            <Image
               className="w-auto h-12"
               src="/images/logo.png"
               alt="MindFuel"
+              width={150}
+              height={50}
             />
 
             <p className="text-base leading-relaxed text-gray-600 mt-7">

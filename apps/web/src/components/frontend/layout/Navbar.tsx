@@ -46,7 +46,7 @@ const Navbar = () => {
               <span>Login</span>
             </Link>
           ) : (
-            <UserAvatar user={session?.user} />
+            session?.user && <UserAvatar user={session.user} />
           )}
 
           <HelpModal />

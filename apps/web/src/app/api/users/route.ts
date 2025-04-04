@@ -2,7 +2,7 @@ import { userService } from '@/lib/di';
 import { handleError } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
   try {
     const user = await userService.findAll();
 

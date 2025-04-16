@@ -9,7 +9,7 @@ type HeroCarouselProps = {
 
 const HeroCarousel = ({ banners }: HeroCarouselProps) => {
   const defaultImage = 'https://picsum.photos/800/400';
-  
+
   return (
     <Carousel autoplay showArrows className="rounded-md over-flow-hidden">
       {banners && banners.length > 0 ? (

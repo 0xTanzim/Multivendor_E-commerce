@@ -23,7 +23,11 @@ export async function POST(req: Request) {
 
 // export async function GET(req: Request) {
 //   try {
-//     const res = await authService.findAll();
+//     const res = await authService.findAll({
+//       where: {
+//         emailVerified: false,
+//       },
+//     });
 
 //     return NextResponse.json(res, { status: 200 });
 //   } catch (error: unknown) {

@@ -1,5 +1,5 @@
 import { Training } from '@repo/types';
-import { MoveRight } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import BlogCard from './BlogCard';
 
@@ -10,45 +10,59 @@ type CommunityTrainingsProps = {
 
 const CommunityTrainings = async ({
   trainings,
-  title,
+  title = 'Community Trainings',
 }: CommunityTrainingsProps) => {
   return (
-    <>
-      <section className="py-12 bg-white rounded-md shadow-sm dark:bg-slate-800 sm:py-16 lg:py-20 ">
-        <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
-          <div className=" mx-auto md:mx-0">
-            <div className="flex items-center justify-between">
-              <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl dark:text-slate-100">
+    <section className="py-14 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800 rounded-xl shadow-md overflow-hidden border border-slate-100 dark:border-slate-700 my-8">
+      <div className="px-6 sm:px-8 mx-auto max-w-7xl">
+        <div className="mx-auto md:mx-0 mb-10">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="flex items-center space-x-3">
+              <div className="bg-indigo-100 dark:bg-slate-700 p-2 rounded-lg">
+                <BookOpen className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
                 {title}
               </h2>
-
-              <Link
-                href={`/blog`}
-                className="bg-slate-800 py-3 px-5 rounded flex items-center text-white font-bold text-sm hover:bg-slate-700 transition-all duration-200"
-                title="See All Trainings"
-              >
-                See All
-                <MoveRight className="w-4 h-4 ml-2 transition-all duration-200 transform group-hover:translate-x-1" />
-              </Link>
             </div>
-            <p className="mt-5 text-base font-normal leading-7 text-gray-500 dark:text-slate-200">
-              Stay updated with the latest trainings and workshops to enhance
-              your skills and knowledge. Explore our curated list of informative
-              sessions designed to empower you in your journey.
-            </p>
+
+            <Link
+              href="/blogs"
+              className="group flex items-center px-5 py-2.5 bg-slate-900 dark:bg-indigo-600 text-white rounded-lg shadow-sm hover:bg-slate-800 dark:hover:bg-indigo-700 transition-all duration-200 self-start sm:self-center"
+            >
+              <span className="font-medium mr-2">View All Trainings</span>
+              <ArrowRight className="w-4 h-4 transition-all duration-200 transform group-hover:translate-x-1" />
+            </Link>
           </div>
 
-          <div className="grid max-w-md grid-cols-1 mx-auto mt-12 sm:mt-16 md:grid-cols-3 gap-y-12 md:gap-x-8 lg:gap-x-16 md:max-w-none">
-            {trainings &&
-              trainings.map((training) => (
-                <div key={training.id} className="relative">
-                  <BlogCard training={training} />
-                </div>
-              ))}
-          </div>
+          <p className="mt-5 text-base leading-7 text-slate-600 dark:text-slate-300 max-w-3xl">
+            Stay updated with the latest trainings and workshops to enhance your
+            skills and knowledge. Explore our curated list of informative
+            sessions designed to empower you in your journey.
+          </p>
         </div>
-      </section>
-    </>
+
+        {/* Trainings grid with improved spacing and hover effects */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+          {trainings && trainings.length > 0 ? (
+            trainings.map((training) => (
+              <div
+                key={training.id}
+                className="relative transition-transform duration-300 hover:-translate-y-2"
+              >
+                <BlogCard training={training} />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full flex items-center justify-center h-40 bg-white dark:bg-slate-700 rounded-lg">
+              <p className="text-slate-500 dark:text-slate-400">
+                No training content available at the moment
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </section>
   );
 };
 

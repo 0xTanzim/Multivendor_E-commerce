@@ -10,71 +10,42 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import {
-  setError,
-  setLoading,
-  setPermissionGroups,
-  setSelectedPermissionGroup,
-} from '@repo/redux';
-import { PermissionGroup, isPermissionGroupArray } from '@repo/types';
+import { PermissionGroup } from '@repo/types';
 import { Edit, FolderTree, Loader2, PlusCircle, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import PermissionGroupFormDialog from './PermissionGroupFormDialog';
+import { useRbac } from './RbacContext';
 
 const PermissionGroupsTab = () => {
-  const dispatch = useAppDispatch();
-  const { permissionGroups, loading, error } = useAppSelector(
-    (state) => state.rbac
-  );
+  const {
+    permissionGroups,
+    loading,
+    error,
+    setSelectedPermissionGroup,
+    fetchPermissionGroups,
+  } = useRbac();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
-    const fetchPermissionGroups = async () => {
-      try {
-        dispatch(setLoading(true));
-        const response = await fetch('/api/permission-groups');
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to fetch permission groups');
-        }
-
-        if (!isPermissionGroupArray(data)) {
-          throw new Error('Invalid response data format');
-        }
-
-        dispatch(setPermissionGroups(data));
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'An unknown error occurred';
-        dispatch(setError(message));
-        toast.error(message);
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
     fetchPermissionGroups();
-  }, [dispatch]);
+  }, [fetchPermissionGroups]);
 
   const handleCreateClick = () => {
-    dispatch(setSelectedPermissionGroup(undefined));
+    setSelectedPermissionGroup(undefined);
     setIsCreateDialogOpen(true);
   };
 
   const handleEditClick = (group: PermissionGroup) => {
-    dispatch(setSelectedPermissionGroup(group));
+    setSelectedPermissionGroup(group);
     setIsEditDialogOpen(true);
   };
 
   const handleDeleteClick = (group: PermissionGroup) => {
-    dispatch(setSelectedPermissionGroup(group));
+    setSelectedPermissionGroup(group);
     setIsDeleteDialogOpen(true);
   };
 

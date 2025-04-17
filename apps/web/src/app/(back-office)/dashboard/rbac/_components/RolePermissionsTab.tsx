@@ -9,25 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { setLoading, setPermissions, setRoles } from '@repo/redux';
-import { Role, isPermissionArray } from '@repo/types';
+import { Role } from '@repo/types';
 import { Loader2, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useRbac } from './RbacContext';
 
-type RolePermissionsTabProps = {
-  roles: Role[];
-};
-
-const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
-  const dispatch = useAppDispatch();
-  const {
-    roles: storeRoles,
-    permissions,
-    loading,
-    error,
-  } = useAppSelector((state) => state.rbac);
+const RolePermissionsTab = () => {
+  const { roles, permissions, loading, error, setRoles, fetchPermissions } =
+    useRbac();
 
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
@@ -35,48 +25,15 @@ const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Initialize the store with roles if they're not already there
-  useEffect(() => {
-    if (roles.length > 0 && storeRoles.length === 0) {
-      dispatch(setRoles(roles));
-    }
-  }, [roles, storeRoles, dispatch]);
-
   // Fetch permissions if not already loaded
   useEffect(() => {
-    const fetchPermissions = async () => {
-      if (permissions.length > 0) return;
-
-      try {
-        dispatch(setLoading(true));
-        const response = await fetch('/api/permissions');
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to fetch permissions');
-        }
-
-        if (!isPermissionArray(data)) {
-          throw new Error('Invalid permissions data format');
-        }
-
-        dispatch(setPermissions(data));
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'An unknown error occurred';
-        toast.error(message);
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
     fetchPermissions();
-  }, [dispatch, permissions.length]);
+  }, [fetchPermissions]);
 
   // Update selectedRole when selectedRoleId changes
   useEffect(() => {
     if (selectedRoleId) {
-      const role = storeRoles.find((r) => r.id === selectedRoleId);
+      const role = roles.find((r) => r.id === selectedRoleId);
       if (role) {
         setSelectedRole(role);
         setRolePermissions(role.permissions?.map((p) => p.id) || []);
@@ -85,7 +42,7 @@ const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
       setSelectedRole(null);
       setRolePermissions([]);
     }
-  }, [selectedRoleId, storeRoles]);
+  }, [selectedRoleId, roles]);
 
   const handleRoleSelect = (roleId: string) => {
     setSelectedRoleId(roleId);
@@ -104,8 +61,6 @@ const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
   const handleSavePermissions = async () => {
     if (!selectedRoleId) return;
 
-    console.log('rolePermissions-->', rolePermissions);
-
     setIsUpdating(true);
     try {
       const response = await fetch(`/api/roles/${selectedRoleId}/permissions`, {
@@ -122,8 +77,8 @@ const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
         throw new Error(data.message || 'Failed to update role permissions');
       }
 
-      // Update the role in the store
-      const updatedRoles = storeRoles.map((role) =>
+      // Update the role in the state
+      const updatedRoles = roles.map((role) =>
         role.id === selectedRoleId
           ? {
               ...role,
@@ -134,7 +89,7 @@ const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
           : role
       );
 
-      dispatch(setRoles(updatedRoles));
+      setRoles(updatedRoles);
       toast.success('Role permissions updated successfully');
     } catch (error) {
       const message =
@@ -195,7 +150,7 @@ const RolePermissionsTab = ({ roles }: RolePermissionsTabProps) => {
           </div>
           <div className="p-2 max-h-[500px] overflow-y-auto">
             <ul className="space-y-1">
-              {storeRoles.map((role) => (
+              {roles.map((role) => (
                 <li key={role.id}>
                   <button
                     className={`w-full text-left px-3 py-2 rounded-md ${

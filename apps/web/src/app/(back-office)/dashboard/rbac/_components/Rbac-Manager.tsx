@@ -1,7 +1,6 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Role } from '@repo/types';
 import { Link, Shield, UserCog } from 'lucide-react';
 
 import PermissionGroupsTab from './PermissionGroupsTab';
@@ -9,15 +8,9 @@ import PermissionsTab from './PermissionsTab';
 import RolePermissionsTab from './RolePermissionsTab';
 import RolesTab from './RolesTab';
 
-type RbacManagerProps = {
-  rolesData: Role[];
-};
-
-const RbacManager = ({ rolesData }: RbacManagerProps) => {
+const RbacManager = () => {
   return (
     <div className="bg-white dark:bg-slate-800 p-6 rounded-lg shadow relative">
-      {/* Add Toaster component to handle toast notifications properly */}
-    
       <div className="mb-6">
         <p className="text-slate-600 dark:text-slate-300">
           Manage user roles and permissions across the platform. Create and
@@ -26,7 +19,10 @@ const RbacManager = ({ rolesData }: RbacManagerProps) => {
         </p>
       </div>
 
-      <Tabs defaultValue="roles" className="w-full">
+      <Tabs
+        defaultValue="roles"
+        className="w-full dark:text-slate-100 text-slate-800"
+      >
         <TabsList className="grid grid-cols-4 mb-8">
           <TabsTrigger value="roles" className="flex items-center gap-2">
             <UserCog className="h-4 w-4" />
@@ -53,7 +49,7 @@ const RbacManager = ({ rolesData }: RbacManagerProps) => {
         </TabsList>
 
         <TabsContent value="roles">
-          <RolesTab initialRoles={rolesData} />
+          <RolesTab />
         </TabsContent>
 
         <TabsContent value="permissions">
@@ -65,7 +61,7 @@ const RbacManager = ({ rolesData }: RbacManagerProps) => {
         </TabsContent>
 
         <TabsContent value="role-permissions">
-          <RolePermissionsTab roles={rolesData} />
+          <RolePermissionsTab />
         </TabsContent>
       </Tabs>
     </div>

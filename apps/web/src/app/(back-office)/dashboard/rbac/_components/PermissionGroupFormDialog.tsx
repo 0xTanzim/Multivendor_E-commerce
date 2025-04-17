@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -17,15 +19,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setError, setPermissionGroups } from '@repo/redux';
 import { isPermissionGroup } from '@repo/types';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { useRbac } from './RbacContext';
 
 interface PermissionGroupFormDialogProps {
   mode: 'create' | 'edit';
@@ -49,10 +50,13 @@ const PermissionGroupFormDialog = ({
   open,
   onOpenChange,
 }: PermissionGroupFormDialogProps) => {
-  const dispatch = useAppDispatch();
-  const { selectedPermissionGroup, permissionGroups } = useAppSelector(
-    (state) => state.rbac
-  );
+  const {
+    selectedPermissionGroup,
+    permissionGroups,
+    setPermissionGroups,
+    setError,
+  } = useRbac();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const title =
@@ -66,7 +70,7 @@ const PermissionGroupFormDialog = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
+      name: selectedPermissionGroup?.name || '',
     },
   });
 
@@ -114,14 +118,10 @@ const PermissionGroupFormDialog = ({
 
       // Update permission groups in state
       if (mode === 'create') {
-        dispatch(setPermissionGroups([...permissionGroups, data]));
+        setPermissionGroups([...permissionGroups, data]);
       } else {
-        dispatch(
-          setPermissionGroups(
-            permissionGroups.map((group) =>
-              group.id === data.id ? data : group
-            )
-          )
+        setPermissionGroups(
+          permissionGroups.map((group) => (group.id === data.id ? data : group))
         );
       }
 
@@ -133,7 +133,7 @@ const PermissionGroupFormDialog = ({
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An unknown error occurred';
-      dispatch(setError(message));
+      setError(message);
       toast.error(message);
     } finally {
       setIsSubmitting(false);

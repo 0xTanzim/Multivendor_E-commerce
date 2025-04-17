@@ -28,15 +28,14 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setError, setRoles } from '@repo/redux';
 import { isRole } from '@repo/types';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { useRbac } from './RbacContext';
 
 interface RoleFormDialogProps {
   mode: 'create' | 'edit';
@@ -64,9 +63,7 @@ const formSchema = z.object({
 });
 
 const RoleFormDialog = ({ mode, open, onOpenChange }: RoleFormDialogProps) => {
-  const dispatch = useAppDispatch();
-
-  const { selectedRole, roles } = useAppSelector((state) => state.rbac);
+  const { selectedRole, roles, setRoles, setError } = useRbac();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const title = mode === 'create' ? 'Create Role' : 'Edit Role';
@@ -127,15 +124,13 @@ const RoleFormDialog = ({ mode, open, onOpenChange }: RoleFormDialogProps) => {
 
       // Update roles in state
       if (mode === 'create') {
-        console.log('data for set', data);
-
         const updatedRoles = [...roles, data];
-        dispatch(setRoles(updatedRoles));
+        setRoles(updatedRoles);
       } else {
         const updatedRoles = roles.map((role) =>
           role.id === data.id ? data : role
         );
-        dispatch(setRoles(updatedRoles));
+        setRoles(updatedRoles);
       }
 
       toast.success(
@@ -146,7 +141,7 @@ const RoleFormDialog = ({ mode, open, onOpenChange }: RoleFormDialogProps) => {
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An unknown error occurred';
-      dispatch(setError(message));
+      setError(message);
       toast.error(message);
     } finally {
       setIsSubmitting(false);

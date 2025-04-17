@@ -27,22 +27,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { setError, setPermissions } from '@repo/redux';
 import { isPermission } from '@repo/types';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
+import { useRbac } from './RbacContext';
 
-interface PermissionFormDialogProps {
-  mode: 'create' | 'edit';
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-}
-
+// Define form schema with Zod
 const formSchema = z.object({
   name: z
     .string()
@@ -58,37 +52,44 @@ const formSchema = z.object({
       message: 'Description must not exceed 200 characters.',
     })
     .optional(),
-
+  permissionGroupId: z.string().optional(),
   action: z
     .string()
-    .min(2, {
-      message: 'Action must be at least 2 characters.',
+    .min(1, {
+      message: 'Action is required.',
     })
     .max(50, {
       message: 'Action must not exceed 50 characters.',
     }),
-
   resource: z
     .string()
-    .min(2, {
-      message: 'Resource must be at least 2 characters.',
+    .min(1, {
+      message: 'Resource is required.',
     })
     .max(50, {
       message: 'Resource must not exceed 50 characters.',
     }),
-
-  permissionGroupId: z.string().optional(),
 });
+
+interface PermissionFormDialogProps {
+  mode: 'create' | 'edit';
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
 
 const PermissionFormDialog = ({
   mode,
   open,
   onOpenChange,
 }: PermissionFormDialogProps) => {
-  const dispatch = useAppDispatch();
-  const { selectedPermission, permissions, permissionGroups } = useAppSelector(
-    (state) => state.rbac
-  );
+  const {
+    selectedPermission,
+    permissions,
+    permissionGroups,
+    setPermissions,
+    setError,
+  } = useRbac();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const title = mode === 'create' ? 'Create Permission' : 'Edit Permission';
@@ -109,10 +110,8 @@ const PermissionFormDialog = ({
     },
   });
 
-
-  // Reset form values when selectedPermissionGroup changes or dialog opens in edit mode
-
-  useEffect(()=> {
+  // Reset form values when selectedPermission changes or dialog opens in edit mode
+  useEffect(() => {
     if (open && mode === 'edit' && selectedPermission) {
       form.reset({
         name: selectedPermission.name || '',
@@ -131,10 +130,6 @@ const PermissionFormDialog = ({
       });
     }
   }, [open, mode, selectedPermission, form]);
-
-
-
-
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -167,13 +162,11 @@ const PermissionFormDialog = ({
 
       // Update permissions in state
       if (mode === 'create') {
-        dispatch(setPermissions([...permissions, data]));
+        setPermissions([...permissions, data]);
       } else {
-        dispatch(
-          setPermissions(
-            permissions.map((permission) =>
-              permission.id === data.id ? data : permission
-            )
+        setPermissions(
+          permissions.map((permission) =>
+            permission.id === data.id ? data : permission
           )
         );
       }
@@ -186,7 +179,7 @@ const PermissionFormDialog = ({
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An unknown error occurred';
-      dispatch(setError(message));
+      setError(message);
       toast.error(message);
     } finally {
       setIsSubmitting(false);
@@ -213,7 +206,7 @@ const PermissionFormDialog = ({
                     <Input placeholder="Permission name" {...field} />
                   </FormControl>
                   <FormDescription>
-                    The name of the permission as it will appear in the system.
+                    A descriptive name for this permission.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -302,7 +295,7 @@ const PermissionFormDialog = ({
                   </Select>
 
                   <FormDescription>
-                    Organize this permission into a group for better management.
+                    Group related permissions together for easier management.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>

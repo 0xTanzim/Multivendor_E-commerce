@@ -9,12 +9,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { setRoles, setSelectedRole } from '@repo/redux';
 import { Role } from '@repo/types';
 import { ChevronRight, Edit, Loader2, PlusCircle, Trash } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
+import { useRbac } from './RbacContext';
 import RoleFormDialog from './RoleFormDialog';
 import RolePermissionsDialog from './RolePermissionsDialog';
 
@@ -55,7 +54,10 @@ const organizeRolesHierarchy = (roles: Role[]) => {
     roles.forEach((role) => {
       result.push({ ...role, level: role.level });
       if (role.children && role.children.length > 0) {
-        flattenHierarchy(role.children as (Role & { level: number; children: Role[] })[], result);
+        flattenHierarchy(
+          role.children as (Role & { level: number; children: Role[] })[],
+          result
+        );
       }
     });
     return result;
@@ -64,43 +66,31 @@ const organizeRolesHierarchy = (roles: Role[]) => {
   return flattenHierarchy(topLevelRoles);
 };
 
-type RolesTabProps = {
-  initialRoles: Role[];
-};
-
-const RolesTab = ({ initialRoles }: RolesTabProps) => {
-  const dispatch = useAppDispatch();
-  const { roles, loading, error } = useAppSelector((state) => state.rbac);
+const RolesTab = () => {
+  const { roles, loading, error, setSelectedRole } = useRbac();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isPermissionsDialogOpen, setIsPermissionsDialogOpen] = useState(false);
 
-  // Set initial roles from props
-  useEffect(() => {
-    if (initialRoles.length > 0) {
-      dispatch(setRoles(initialRoles));
-    }
-  }, [initialRoles, dispatch]);
-
   const handleCreateClick = () => {
-    dispatch(setSelectedRole(undefined));
+    setSelectedRole(undefined);
     setIsCreateDialogOpen(true);
   };
 
   const handleEditClick = (role: Role) => {
-    dispatch(setSelectedRole(role));
+    setSelectedRole(role);
     setIsEditDialogOpen(true);
   };
 
   const handleDeleteClick = (role: Role) => {
-    dispatch(setSelectedRole(role));
+    setSelectedRole(role);
     setIsDeleteDialogOpen(true);
   };
 
   const handlePermissionsClick = (role: Role) => {
-    dispatch(setSelectedRole(role));
+    setSelectedRole(role);
     setIsPermissionsDialogOpen(true);
   };
 

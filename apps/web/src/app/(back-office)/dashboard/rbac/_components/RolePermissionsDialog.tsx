@@ -15,12 +15,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import { setError, setPermissions, setRoles } from '@repo/redux';
-import { isPermissionArray, isRole, Permission } from '@repo/types';
+import { isRole, Permission } from '@repo/types';
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useRbac } from './RbacContext';
 
 interface RolePermissionsDialogProps {
   open: boolean;
@@ -31,13 +30,15 @@ const RolePermissionsDialog = ({
   open,
   onOpenChange,
 }: RolePermissionsDialogProps) => {
-  const dispatch = useAppDispatch();
   const {
     selectedRole,
     permissions: allPermissions,
     permissionGroups,
     roles,
-  } = useAppSelector((state) => state.rbac);
+    setRoles,
+    setError,
+    fetchPermissions,
+  } = useRbac();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
@@ -46,37 +47,23 @@ const RolePermissionsDialog = ({
 
   // Fetch permissions if not already loaded
   useEffect(() => {
-    const fetchPermissions = async () => {
-      if (allPermissions.length > 0) return;
-
-      try {
+    const loadPermissions = async () => {
+      if (allPermissions.length === 0) {
         setIsLoadingPermissions(true);
-        const response = await fetch('/api/permissions');
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || 'Failed to fetch permissions');
+        try {
+          await fetchPermissions();
+        } catch (error) {
+          // Error handling is done in the context
+        } finally {
+          setIsLoadingPermissions(false);
         }
-
-        if (!isPermissionArray(data)) {
-          throw new Error('Invalid response data format');
-        }
-
-        dispatch(setPermissions(data));
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'An unknown error occurred';
-        dispatch(setError(message));
-        toast.error(message);
-      } finally {
-        setIsLoadingPermissions(false);
       }
     };
 
     if (open) {
-      fetchPermissions();
+      loadPermissions();
     }
-  }, [dispatch, allPermissions.length, open]);
+  }, [open, allPermissions.length, fetchPermissions]);
 
   // Initialize selected permissions when dialog opens
   useEffect(() => {
@@ -170,9 +157,7 @@ const RolePermissionsDialog = ({
       }
 
       // Update the roles state
-      dispatch(
-        setRoles(roles.map((role) => (role.id === data.id ? data : role)))
-      );
+      setRoles(roles.map((role) => (role.id === data.id ? data : role)));
 
       toast.success('Role permissions updated successfully.');
 
@@ -180,7 +165,7 @@ const RolePermissionsDialog = ({
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'An unknown error occurred';
-      dispatch(setError(message));
+      setError(message);
       toast.error(message);
     } finally {
       setIsSubmitting(false);

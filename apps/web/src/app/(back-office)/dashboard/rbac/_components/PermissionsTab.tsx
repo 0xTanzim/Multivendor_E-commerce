@@ -10,26 +10,23 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
-import {
-  setError,
-  setLoading,
-  setPermissionGroups,
-  setPermissions,
-  setSelectedPermission,
-} from '@repo/redux';
-import { Permission, isPermissionArray } from '@repo/types';
+import { Permission } from '@repo/types';
 import { Edit, FolderTree, Loader2, PlusCircle, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import DeleteConfirmDialog from './DeleteConfirmDialog';
 import PermissionFormDialog from './PermissionFormDialog';
+import { useRbac } from './RbacContext';
 
 const PermissionsTab = () => {
-  const dispatch = useAppDispatch();
-  const { permissions, permissionGroups, loading, error } = useAppSelector(
-    (state) => state.rbac
-  );
+  const {
+    permissions,
+    permissionGroups,
+    loading,
+    error,
+    setSelectedPermission,
+    fetchPermissions,
+    fetchPermissionGroups,
+  } = useRbac();
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -38,62 +35,33 @@ const PermissionsTab = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch(setLoading(true));
-
         // Fetch permissions
-        const permissionsResponse = await fetch('/api/permissions');
-        const permissionsData = await permissionsResponse.json();
-
-        if (!permissionsResponse.ok) {
-          throw new Error(
-            permissionsData.message || 'Failed to fetch permissions'
-          );
-        }
-
-        if (!isPermissionArray(permissionsData)) {
-          throw new Error('Invalid permissions data format');
-        }
-
-        dispatch(setPermissions(permissionsData));
+        await fetchPermissions();
 
         // Fetch permission groups if not already loaded
         if (permissionGroups.length === 0) {
-          const groupsResponse = await fetch('/api/permission-groups');
-          const groupsData = await groupsResponse.json();
-
-          if (!groupsResponse.ok) {
-            throw new Error(
-              groupsData.message || 'Failed to fetch permission groups'
-            );
-          }
-
-          dispatch(setPermissionGroups(groupsData));
+          await fetchPermissionGroups();
         }
       } catch (error) {
-        const message =
-          error instanceof Error ? error.message : 'An unknown error occurred';
-        dispatch(setError(message));
-        toast.error(message);
-      } finally {
-        dispatch(setLoading(false));
+        // Error handling is done in context
       }
     };
 
     fetchData();
-  }, [dispatch, permissionGroups.length]);
+  }, [fetchPermissions, fetchPermissionGroups, permissionGroups.length]);
 
   const handleCreateClick = () => {
-    dispatch(setSelectedPermission(undefined));
+    setSelectedPermission(undefined);
     setIsCreateDialogOpen(true);
   };
 
   const handleEditClick = (permission: Permission) => {
-    dispatch(setSelectedPermission(permission));
+    setSelectedPermission(permission);
     setIsEditDialogOpen(true);
   };
 
   const handleDeleteClick = (permission: Permission) => {
-    dispatch(setSelectedPermission(permission));
+    setSelectedPermission(permission);
     setIsDeleteDialogOpen(true);
   };
 

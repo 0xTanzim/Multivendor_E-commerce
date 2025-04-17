@@ -5,15 +5,19 @@ import {
   isPermissionGroupArray,
   isRoleArray,
 } from '@repo/types';
+import { Toaster } from 'react-hot-toast';
 import RbacManager from './_components/Rbac-Manager';
+import { RbacProvider } from './_components/RbacContext';
 
 const RBACPage = async () => {
+  // Fetch data from API
   const [roles, permissions, permissionGroups] = await Promise.all([
     getData('roles'),
     getData('permissions'),
     getData('permission-groups'),
   ]);
 
+  // Validate data formats
   if (!isRoleArray(roles)) {
     console.error('Invalid response data format for roles');
     return <div>Error fetching roles</div>;
@@ -35,7 +39,14 @@ const RBACPage = async () => {
         <Heading title="Roles & Permissions Management" />
       </div>
 
-      <RbacManager rolesData={roles} />
+      <RbacProvider
+        initialRoles={roles}
+        initialPermissions={permissions}
+        initialPermissionGroups={permissionGroups}
+      >
+        <Toaster position="top-right" />
+        <RbacManager />
+      </RbacProvider>
     </div>
   );
 };

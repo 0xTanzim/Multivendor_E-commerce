@@ -26,9 +26,6 @@ export class FarmerService extends BaseService<
       }
 
       const farmerProfile = await this.farmerRepository.createFarmer(data);
-
-      console.log('Farmer profile', farmerProfile);
-
       return farmerProfile;
     } catch (err) {
       this.handlePrismaError(err, 'Error creating farmer');
@@ -61,7 +58,6 @@ export class FarmerService extends BaseService<
     try {
       console.log('Farmer data to update', data);
 
-  
       const existFarmer = await this.farmerRepository.checkById(id);
 
       if (!existFarmer) {

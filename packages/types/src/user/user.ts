@@ -1,13 +1,12 @@
-
 import { Product } from '../products';
 import { Farmer } from './farmer';
 
 export type UserRole =
-  | 'SUPER_ADMIN'
-  | 'ADMIN'
-  | 'FARMER'
-  | 'MODERATOR'
-  | 'USER';
+  | 'Super_Admin'
+  | 'Admin'
+  | 'Farmer'
+  | 'Moderator'
+  | 'User';
 export type Gender = 'MALE' | 'FEMALE' | 'UNKNOWN';
 
 export type User = {
@@ -18,7 +17,7 @@ export type User = {
   name?: string;
   gender?: Gender;
   bio?: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: Date | string;
   address?: string;
   phone?: string;
   city?: string;

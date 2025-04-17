@@ -12,36 +12,60 @@ export class AuthRepository extends BaseRepository<
     super(prisma, prisma.authUser);
   }
 
-  async registerUser({
-    name,
-    email,
-    password,
-    role,
-    verificationToken,
-    plan,
-  }: IAuthUser) {
+  async registerUser(newUser: IAuthUser) {
+    const { name, email, password, role, verificationToken, plan } = newUser;
+
     return await this.prisma.$transaction(async (tx) => {
+      // Find the role by name
+      const roleRecord = await this.prisma.role.findFirst({
+        where: { name: role },
+      });
+
+      if (!roleRecord) {
+        throw new Error(`Role ${role} not found`);
+      }
+
+      const emailExists = await this.checkEmailExists(email);
+
+      if (emailExists) {
+        throw new Error('Email already exists');
+      }
+
       const authUser = await tx.authUser.create({
         data: {
           email,
           password,
           name,
-          roleId: role,
+          roleId: roleRecord.id,
           verificationToken,
           plan,
         },
-      });
 
-      const user = await tx.user.create({
-        data: {
-          id: authUser.id,
-          username: await this.generateUserName(email),
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: { select: { name: true } },
+          plan: true,
+          verificationToken: true,
+          accountStatus: true,
+          emailVerified: true,
         },
       });
 
-      delete authUser.password;
+      await tx.user.create({
+        data: {
+          id: authUser.id,
+          username: await this.generateUserName(email),
+          firstName: name?.split(' ')[0],
+          lastName: name?.split(' ').slice(1).join(' ') || undefined,
+        },
+      });
 
-      return { authUser, user };
+      return {
+        ...authUser,
+        role: roleRecord.name,
+      };
     });
   }
 

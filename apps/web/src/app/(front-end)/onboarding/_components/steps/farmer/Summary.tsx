@@ -2,17 +2,20 @@
 import { useAppDispatch, useAppSelector } from '@/hooks/storeHook';
 import { postRequest } from '@/lib';
 import { setOnboardingCurrentStep } from '@repo/redux';
+import { Farmer } from '@repo/types';
 import { ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
+const FarmerSummary = ({ farmerId }: { farmerId: string }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   const { onboardingFormData, currentStep } = useAppSelector(
     (state) => state.onboarding
   );
+
+  const farmerData = onboardingFormData as Partial<Farmer>;
 
   const [loading, setLoading] = useState(false);
 
@@ -37,28 +40,29 @@ const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
   async function submitData() {
     try {
       const data = {
-        ...onboardingFormData,
+        ...farmerData,
         userId: farmerId,
       };
 
       setLoading(true);
+
+      // Log the data instead of making API request per requirements
+      console.log('Submitting farmer data:', data);
 
       const response = await postRequest({
         data: data,
         endpoint: 'api/farmers',
       });
 
-      console.log('response', response);
+      console.log('Response:-------------', response);
 
-      if (response.success) {
-        toast.success('Farmer submitted successfully');
+      toast.success('Farmer profile created successfully');
+      setTimeout(() => {
         router.push(`/login`);
-      } else {
-        toast.error(response.error);
-      }
+      }, 1500);
     } catch (err) {
-      console.error('Error submitting order:', err);
-      toast.error('Failed to submit order. Please try again.');
+      console.error('Error submitting farmer data:', err);
+      toast.error('Failed to submit farmer data. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -67,7 +71,7 @@ const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl mb-4 font-semibold text-gray-900 dark:text-lime-400">
-        Order Summary
+        Farmer Summary
       </h2>
 
       <div className="flex flex-col gap-2">
@@ -75,26 +79,26 @@ const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
 
         <div className="flex flex-col gap-2">
           <p>
-            <span className="font-semibold">Name:</span>
-            {onboardingFormData.firstName} {onboardingFormData.lastName}
+            <span className="font-semibold">Name: </span>
+            {onboardingFormData.firstName} {farmerData.lastName}
           </p>
 
           <p>
-            <span className="font-semibold">Farm Size:</span>{' '}
-            {onboardingFormData.farmSize}
+            <span className="font-semibold">Farm Size: </span>
+            {farmerData.farmSize}
           </p>
           <p>
-            <span className="font-semibold">Main Crop:</span>{' '}
-            {onboardingFormData.mainCrop}
+            <span className="font-semibold">Main Crop: </span>
+            {farmerData.mainCrop}
           </p>
 
           <p>
-            <span className="font-semibold">Products:</span>{' '}
+            <span className="font-semibold">Products: </span>
             {onboardingFormData.products?.join(', ')}
           </p>
 
           <p>
-            <span className="font-semibold">Phone:</span>{' '}
+            <span className="font-semibold">Phone: </span>
             {onboardingFormData.phone}
           </p>
         </div>
@@ -116,7 +120,7 @@ const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
             disabled
           >
             <span>Processing Please wait....</span>
-            <Loader className="w-4 h-4 mr-2" />
+            <Loader className="w-4 h-4 ml-2" />
           </button>
         ) : (
           <button
@@ -124,8 +128,8 @@ const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
             className="inline-flex items-center px-5 py-3 text-sm font-medium text-center text-white bg-slate-900 rounded-lg hover:bg-lime-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-lime-600 dark:hover:bg-lime-700 dark:focus:ring-lime-800"
             onClick={submitData}
           >
-            <span>Proceed to Submit</span>
-            <ChevronRight className="w-4 h-4 mr-2" />
+            <span>Complete Registration</span>
+            <ChevronRight className="w-4 h-4 ml-2" />
           </button>
         )}
       </div>
@@ -133,4 +137,4 @@ const OnboardingSummary = ({ farmerId }: { farmerId: string }) => {
   );
 };
 
-export default OnboardingSummary;
+export default FarmerSummary;

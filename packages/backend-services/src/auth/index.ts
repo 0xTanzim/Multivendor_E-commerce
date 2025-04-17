@@ -1,7 +1,7 @@
 import { AuthRepository } from '@repo/backend-repository';
 import { BadRequestError } from '@repo/common/error';
 import { BaseService, injectable } from '@repo/core';
-import { AuthUser, User } from '@repo/database';
+import { AuthUser } from '@repo/database';
 import { MailService } from '@repo/smtp-email-service';
 import { IAuthUser } from '@repo/types';
 
@@ -20,9 +20,7 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
     this.mailService = mailService;
   }
 
-  async register(
-    data: IAuthUser
-  ): Promise<{ authUser: AuthUser; user: User } | null> {
+  async register(data: IAuthUser) {
     try {
       const hashedPassword = await this.hashedPassword(data.password, 10);
       const token = await this.generateToken();
@@ -42,11 +40,11 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
       }
 
       await this.sendVerifyEmail({
-        ...res.authUser,
-        role: res.authUser.roleId,
+        ...res,
+        role: res.role,
       });
 
-      return res as { authUser: AuthUser; user: User };
+      return res as IAuthUser;
     } catch (err) {
       console.error('Error registering user:', err);
       throw new BadRequestError('Failed to register user');
@@ -57,11 +55,8 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
     if (!user) {
       throw new BadRequestError('User not found');
     }
-    let redirectUrl = '';
 
-    if (user.role === 'FARMER') {
-      redirectUrl = `onboarding/${user.id}?token=${user.verificationToken}`;
-    }
+    const redirectUrl = `onboarding/${user.id}?token=${user.verificationToken}`;
 
     try {
       const res = await this.mailService.sendVerificationEmail({
@@ -69,6 +64,8 @@ export class AuthService extends BaseService<AuthUser, AuthRepository> {
         name: user.name,
         redirectUrl,
       });
+
+      console.log('Email sent:', res);
     } catch (error) {
       console.error('Error sending email:', error);
       throw new BadRequestError('Failed to send email');

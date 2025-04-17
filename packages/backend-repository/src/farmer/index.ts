@@ -110,7 +110,7 @@ export class FarmerProfileRepository extends BaseRepository<
         user: {
           authUser: {
             role: {
-              name: 'FARMER',
+              name: 'Farmer',
             },
           },
         },

@@ -12,6 +12,8 @@ const Page = async ({ searchParams }: IParams) => {
 
   const user = await getData(`users/${userId}`);
 
+  console.log('user', user);
+
   if (!isAuthUser(user)) {
     return (
       <div className="flex justify-center items-center min-h-screen text-2xl font-semibold text-red-600">

@@ -1,7 +1,7 @@
 model Role {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String  @unique
-  description String?
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  name           String  @unique
+  description    String?
 
   // Self-referencing for hierarchy
   parentId String? @db.ObjectId

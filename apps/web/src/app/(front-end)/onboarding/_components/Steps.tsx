@@ -8,9 +8,10 @@ type StepsProps = {
     id: string | number;
     title: string;
   }[];
+  role: string;
 };
 
-const Steps = ({ steps }: StepsProps) => {
+const Steps = ({ steps, role }: StepsProps) => {
   const currentStep = useAppSelector((state) => state.onboarding.currentStep);
 
   return (
@@ -22,8 +23,8 @@ const Steps = ({ steps }: StepsProps) => {
         >
           <li>
             <div className="-m-1">
-              <div className="inline-flex items-center p-1 text-sm  md:text-base font-medium text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:text-gray-900 focus:ring-gray-900 hover:text-gray-700 dark:hover:text-lime-300">
-                <h2>Account</h2>
+              <div className="inline-flex items-center p-1 text-sm md:text-base font-medium text-gray-500 rounded-md focus:outline-none focus:ring-2 focus:text-gray-900 focus:ring-gray-900 hover:text-gray-700 dark:hover:text-lime-300">
+                <h2>{role} Onboarding</h2>
               </div>
             </div>
           </li>

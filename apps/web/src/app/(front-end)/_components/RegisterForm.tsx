@@ -3,15 +3,21 @@
 import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextInput from '@/components/FormInputs/TextInput';
 import { useAuthRequest } from '@/hooks/useAuthRequest';
-
 import { IAuthUser, UserRole } from '@repo/types';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+const schema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  password: z.string().min(4, 'Password must be at least 6 characters long'),
+});
 
 type props = {
-  role: Exclude<UserRole, 'SUPER_ADMIN'>;
+  role: Exclude<UserRole, ''>;
 };
 
 export default function RegisterForm({ role }: props) {
@@ -29,38 +35,45 @@ export default function RegisterForm({ role }: props) {
 
   const makeAuthRequest = useAuthRequest();
 
+  useEffect(() => {
+    if (role === 'Farmer' && !plan) {
+      router.push('/farmer-pricing');
+    }
+  }, [role, plan, router]);
+
   async function onSubmit(data: IAuthUser) {
     setLoading(true);
-    // Log the data to be sent
-    console.log('Registering user', data);
-    setLoading(false);
+
+    // if farmer and check if plan is not null
+    if (role === 'Farmer' && !plan) {
+      console.error('Plan is required for FARMER role');
+      return;
+    }
 
     if (plan) {
       data.plan = plan;
     }
 
     const result = await makeAuthRequest({
-      endpoint: '/api/register',
+      endpoint: '/api/auth/register',
       data,
       reset,
       setLoading,
       resourceName: 'Register',
     });
 
-    console.log('Registration result', result);
-
-    let redirectPath = '/login';
-
-    if (role !== 'USER') {
-      if (!result?.authUser) {
-        console.error('No authUser found in the result');
-        return;
+    if (result?.error) {
+      console.error('Error:', result.error);
+      setLoading(false);
+      return;
+    } else {
+      const userId = result?.id;
+      if (userId) {
+        router.push(`/verify-email?userId=${userId}`);
+      } else {
+        console.error('User ID not found');
       }
-
-      redirectPath = `/verify-email?userId=${result?.authUser?.id}`;
     }
-
-    router.push(redirectPath);
   }
 
   return (
@@ -119,7 +132,7 @@ export default function RegisterForm({ role }: props) {
           </Link>
         </p>
 
-        {role === 'USER' ? (
+        {role === 'User' ? (
           <p className="text-sm font-light py-2 text-gray-500 dark:text-gray-400">
             Are you a Farmer?{' '}
             <Link

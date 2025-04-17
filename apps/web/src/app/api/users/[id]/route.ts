@@ -1,12 +1,13 @@
-import { authService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { authService, userService } from '@/lib/di';
+import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+export class UserByIdController {
+  @catchErrors()
+  static async GET(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
 
     const user = await authService.findUnique({
@@ -17,32 +18,50 @@ export async function GET(
         id: true,
         name: true,
         email: true,
-        role: true,
-
+        accountStatus: true,
+        emailVerified: true,
         user: {
           select: {
             id: true,
             profileImage: true,
+            firstName: true,
+            lastName: true,
+            phone: true,
+            username: true,
+          },
+        },
+        role: {
+          select: {
+            name: true,
           },
         },
       },
     });
 
+    return NextResponse.json(
+      {
+        ...user,
+        role: (user as any)?.role?.name,
+      },
+      { status: 200 }
+    );
+  }
+
+  @catchErrors()
+  static async PATCH(
+    req: Request,
+    { params }: { params: Promise<{ id: string }> }
+  ): Promise<Response> {
+    const { id } = await params;
+
+    const body = await req.json();
+
+    const user = await userService.updateUser(id, body);
+
+    console.log('User updated:', user);
+
     return NextResponse.json(user, { status: 200 });
-  } catch (err) {
-    return handleError(err);
   }
 }
 
-// export async function DELETE(
-//   req: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//   try {
-//     const { id } = await params;
-//     const user = await userService.deleteById(id);
-//     return NextResponse.json(user);
-//   } catch (err) {
-//     return handleError(err);
-//   }
-// }
+export const { GET, PATCH } = UserByIdController;

@@ -51,7 +51,14 @@ const formSchema = z.object({
     })
     .max(50, {
       message: 'Name must not exceed 50 characters.',
+    })
+    .transform((val) => {
+      // Convert to Title Case (e.g., "admin" → "Admin", "USER" → "User")
+      return val
+        .toLowerCase()
+        .replace(/(^|\s)\w/g, (letter) => letter.toUpperCase());
     }),
+
   description: z
     .string()
     .max(200, {

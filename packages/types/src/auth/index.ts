@@ -4,11 +4,12 @@ export type IAuthUser = {
   id?: string;
   name: string | null;
   email: string;
-  password: string;
-  role: string;
+  password?: string;
+  role: string | 'Farmer' | 'Admin' | 'User';
   verificationToken?: string;
   plan?: string;
   accountStatus?: $Enums.AccountStatus;
+  emailVerified?: boolean;
 };
 
 export function isAuthUserArray(obj: unknown): obj is IAuthUser[] {
@@ -23,9 +24,7 @@ export function isAuthUser(obj: unknown): obj is IAuthUser {
     'name' in authUserObj &&
     typeof authUserObj.name === 'string' &&
     'email' in authUserObj &&
-    typeof authUserObj.email === 'string' &&
-    'role' in authUserObj &&
-    typeof authUserObj.role === 'string'
+    typeof authUserObj.email === 'string'
   );
 }
 

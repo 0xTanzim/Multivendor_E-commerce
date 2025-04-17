@@ -13,19 +13,21 @@ const FarmerDetailsForm = () => {
 
   const existingData = useAppSelector(
     (state) => state.onboarding.onboardingFormData
-  );
+  ) as Farmer;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<Farmer>({
     defaultValues: {
       ...existingData,
     },
   });
 
-  const [products, setProducts] = useState<string[]>([]);
+  const [products, setProducts] = useState<string[]>(
+    existingData.products || []
+  );
 
   const dispatch = useAppDispatch();
 

@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Farmer } from '@repo/types';
+import { Farmer, IAuthUser, User } from '@repo/types';
 
 type OnboardingState = {
   currentStep: number;
-  onboardingFormData: Partial<Farmer>;
+  onboardingFormData: Partial<Farmer | (User & IAuthUser)>;
 };
 
 const initialState: OnboardingState = {

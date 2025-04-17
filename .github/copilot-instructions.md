@@ -1,244 +1,198 @@
-# Copilot Instructions
+# 🧠 Copilot / VS Code Agent Instructions for Monorepo E-Commerce Platform
 
-This document provides guidelines for using GitHub Copilot (or similar VS Code agents) effectively in our Next.js project with a Turborepo monorepo setup. Follow these best practices to ensure clean, maintainable, and performant code.
+These are strict, professional-grade coding standards and architectural rules for GitHub Copilot (or any similar AI agent) to follow **without deviation**. This project is a **Next.js + Turborepo monorepo** designed using **OOP, clean architecture, and single responsibility principles**. Follow this to ensure code suggestions fully align with our architecture.
 
-## Component Creation Guidelines
+---
 
-### When to Create a New Component
+## 📌 CORE PRINCIPLES TO ALWAYS FOLLOW
 
-Create a new React component when:
+✅ **Follow Existing Code Pattern:**
 
-- **Reusable UI**: The UI element will be reused in multiple places (e.g., a `Button` or `Card` component).
-- **Code Length**: A section of UI exceeds 100 lines of JSX/TSX.
-- **Single Responsibility**: A section has a distinct responsibility or purpose (e.g., a `FormHeader` for form titles and actions).
-- **Complex Logic**: The logic becomes complex, involving more than 3 state variables or hooks (e.g., a form with validation).
-- **Interaction Patterns**: The component has a specific interaction pattern, such as a dropdown, modal, or carousel.
+- You **must follow existing repository/service structure**.
+- Avoid reinventing logic/structure. Study `@repo/core`, `@repo/backend-services`, and `@repo/backend-repository`.
+- Always use existing DI pattern via `@repo/core/container` with `tsyringe`.
 
-### When NOT to Create a New Component
+✅ **No Garbage Code:**
 
-Avoid creating components when:
+- All code must be clean, maintainable, readable.
+- Avoid commented-out logic, unused variables, or unstructured functions.
+- Do not generate code that mixes concerns or responsibilities.
 
-- **One-Time Use**: The component is used only once and is simple (under 40 lines of code).
-- **Too Granular**: The component is overly specific with no special behavior (e.g., a single styled `<button>` without logic).
-- **File Size Focus**: Breaking a component just to make files smaller without a functional reason.
+✅ **Always Apply SRP (Single Responsibility Principle):**
 
-### Single Responsibility Principle (SRP)
+- Each class, function, component must do **one thing only**.
+- If something does more, break it into smaller parts/components.
 
-Every component should have a single, clear responsibility. For example:
+✅ **Code Must Be Predictable:**
 
-- A `Card` component should only handle layout and styling.
-- A `CardHeader` component should manage the header content and actions.
-- Avoid mixing unrelated logic (e.g., data fetching and UI rendering) in one component.
+- Do not invent your own way of fetching data, instantiating classes, handling errors.
+- Always extend from `BaseService`, `BaseRepository`, and register via `tsyringe`.
 
-## Tailwind Best Practices
+✅ **Use Best Practices for All Layers:**
 
-- **Utility-First**: Use Tailwind's utility classes directly in JSX/TSX for most styling (e.g., `<div className="p-4 bg-blue-500 rounded-md">`).
-- **Extract Reusable Patterns**: For repeated Tailwind patterns, create a component instead of custom CSS classes (e.g., a `Card` component for a common card layout).
-- **Group Classes for Complex Components**: Use template literals to group Tailwind classes for readability:
-  ```tsx
-  const cardStyles = 'p-4 border rounded-lg shadow-md bg-white';
-  return <div className={cardStyles}>...</div>;
-  ```
-- **Use @apply Sparingly**: Only use Tailwind's `@apply` directive for highly reused patterns in `apps/web/src/style/main.scss`, and prefer components otherwise.
-- **Consistent Design System**: Define spacing, colors, and typography in `tailwind.config.ts` for consistency (e.g., `theme.extend.colors` for brand colors).
+- Use `DTOs` from `@repo/types`, not inline `any` types.
+- Map DB schema properly via Prisma schema files.
+- Handle errors using centralized `@repo/common/error` classes only.
 
-## Component Composition Example
+✅ **Be Consistent With Imports and Structure:**
 
-### Bad: Overly Nested and Complex
+- Import internal packages using `@repo/*`
+- Follow the layering pattern: `controller (API route)` → `service` → `repository` → `Prisma delegate`
 
-Avoid deeply nested JSX with inline styling that mixes responsibilities:
+✅ **Use TypeScript Strictly:**
 
-```tsx
-<div className="p-4 border rounded-lg shadow-md">
-  <div className="flex flex-col space-y-4">
-    <div className="bg-gray-100 p-3 rounded">
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-bold">{title}</h3>
-        {isEditable && (
-          <div className="flex space-x-2">
-            <button className="px-2 py-1 bg-blue-500 text-white rounded">
-              Edit
-            </button>
-            <button className="px-2 py-1 bg-red-500 text-white rounded">
-              Delete
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  </div>
-</div>
-```
+- Avoid `any`, `unknown`, or dynamic typing. Type all function params and returns properly.
+- Use utility types and generic inference when dealing with `TModel` and `TRepository` in Base classes.
 
-### Good: Flatter, Component-Based Approach
+✅ **Apply Dependency Injection Rigorously:**
 
-Break down the UI into components with single responsibilities:
+- Use `@injectable()`, `@inject()`, and register new dependencies using `tsyringe`.
+- Never use `new Class()` directly. Always `container.resolve(SomeService)`.
+
+✅ **No Logic Inside Components (React):**
+
+- Never fetch or mutate data directly inside a UI component.
+- Use services/hooks that encapsulate logic.
+
+✅ **Use Next.js Features Properly:**
+
+- Always prioritize **Server-Side Rendering (SSR)** for `page.tsx` files.
+
+- Minimize `client` usage — only for interaction-heavy or browser-specific features.
+
+- Extract and reuse **React Design Patterns** (like HOC, Compound Components, Render Props, Context Provider Pattern) where complexity demands it.
+
+- Implement **layouts** using `app/layout.tsx` structure to share layout logic.
+
+---
+
+## 📦 Monorepo Structure Summary
+
+- `apps/web` → Next.js app with SSR/CSR mix
+- `packages/backend-repository` → Prisma + Repo abstraction
+- `packages/backend-services` → Business logic layer
+- `packages/core` → Base classes, DI container, shared interfaces
+- `packages/database` → Prisma schema split by domain
+- `packages/types` → Shared DTOs & types
+- `packages/common` → Error handling, shared utilities
+- `packages/redux` → RTK slices for client-side state
+
+---
+
+## 🧱 React Component Creation Rules (Rewritten & Improved)
+
+### ✅ Create a Component When:
+
+- UI is reused in 2+ places
+- JSX exceeds 60 lines
+- Logic is complex (multiple conditions, effects, or 3+ hooks)
+- There is a distinct **semantic role** (e.g. `CartItem`, `ProductHeader`, `TrainingStep`)
+- There is a **separation between visual structure and logic** (SRP)
+
+### ❌ Do NOT Create a Component When:
+
+- It's used once and is simple
+- It’s only a styled element with no interaction or logic
+- It just wraps one HTML tag (like a span with a class)
+
+### ✅ Composition Best Practice
 
 ```tsx
 <Card>
-  <CardHeader>
-    <h3 className="text-lg font-bold">{title}</h3>
-    {isEditable && <ActionButtons actions={['edit', 'delete']} />}
-  </CardHeader>
+  <CardHeader title="Order Summary" />
+  <CardBody>
+    <ProductList items={products} />
+  </CardBody>
 </Card>
 ```
 
-- `Card`: Handles the outer layout and styling (padding, border, shadow).
-- `CardHeader`: Manages the header section (title and actions).
-- `ActionButtons`: Encapsulates the edit/delete buttons and their logic.
+> 🧼 Break large JSX trees into semantic chunks. Use composition over nesting.
 
-## Next.js "use client" Directives
+### 🧠 Clean Up Every Component
 
-Add `"use client"` directives only where necessary in Next.js components:
+- Extract inner logic to hooks if needed
+- Avoid inline conditionals that clutter JSX
+- Avoid defining functions inside render blocks (move to top or hooks)
 
-- **client:load**: Hydrate the component immediately on page load (e.g., for critical interactive components like `Navbar`).
-- **client:idle**: Hydrate once the browser is idle (e.g., for non-critical components like a `Footer`).
-- **client:visible**: Hydrate when the component is visible in the viewport (e.g., for a `ProductImageCarousel` below the fold).
-- **client:only**: Render only on the client-side, never server-side (e.g., for components relying on browser APIs like `window`).
+---
 
-### Example
+## 🎨 TailwindCSS Best Practices
 
-```tsx
-'use client';
+- Prefer utility classes inline
+- Use `classNames()` or template literals for dynamic styles
+- Avoid overuse of `@apply`, prefer components for repeated patterns
+- Define all custom design tokens in `tailwind.config.ts`
 
-import { useEffect, useState } from 'react';
+---
 
-export function ClientOnlyComponent() {
-  const [isMounted, setIsMounted] = useState(false);
+## ⚙️ Next.js Directives and Lazy Loading
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+### `"use client"` Usage
 
-  if (!isMounted) return null;
+| Directive        | When to Use                                      |
+| ---------------- | ------------------------------------------------ |
+| `client:load`    | For navbar, modal toggles, and authentication UI |
+| `client:idle`    | For non-critical footers, tooltips, banners      |
+| `client:only`    | Components using `window`, `localStorage`, etc.  |
+| `client:visible` | Lazy-hydrate below-the-fold components           |
 
-  return <div>Rendered only on the client</div>;
-}
-```
+Use `dynamic(() => import(...))` for:
 
-## Lazy Loading for Heavier Components
+- Modals
+- Charts (e.g., `WeeklySalesChart`)
+- Side panels
 
-Implement lazy loading for heavy React components to improve performance:
+---
 
-- Use `client:only` for components that don’t need server-side rendering (SSR).
-- Use Next.js dynamic imports with `React.lazy` for components like modals or charts:
+## 🚀 TurboRepo Instructions
 
-### Example
+### Dependency Rules
 
-```tsx
-import dynamic from 'next/dynamic';
-
-const HeavyComponent = dynamic(() => import('../components/HeavyComponent'), {
-  ssr: false, // Disable SSR
-  loading: () => <div>Loading...</div>,
-});
-
-export function ParentComponent() {
-  return (
-    <div>
-      <HeavyComponent />
-    </div>
-  );
-}
-```
-
-- Place heavy components in `apps/web/src/components` and ensure they are only loaded when needed (e.g., `WeeklySalesChart.tsx` in `apps/web/src/app/(back-office)/dashboard/_components`).
-
-## Turborepo Best Practices
-
-Since this project uses Turborepo for managing our monorepo, follow these rules to ensure consistency, scalability, and efficient builds across `apps` and `packages`.
-
-### Dependency Management
-
-- **Explicit Dependencies**: Define all dependencies in the `package.json` of the respective package or app (e.g., `apps/web/package.json`, `packages/database/package.json`). Avoid relying on implicit dependencies from the root `package.json`.
-- **Workspace Dependencies**: Use Turborepo workspaces to reference internal packages. For example, in `apps/web/package.json`, reference a package like `@repo/database` as a dependency:
-  ```json
-  "dependencies": {
-    "@repo/database": "workspace:*"
-  }
-  ```
-- **Avoid Circular Dependencies**: Ensure there are no circular dependencies between packages (e.g., `packages/backend-services` should not depend on `apps/web`). Use `pnpm` to catch these issues during installation.
+- Declare `@repo/*` dependencies in `package.json` using `workspace:*`
+- Never import app code into another app
+- Never depend on a package outside your declared boundaries
 
 ### Scripts and Pipelines
 
-- **Define Scripts in `turbo.json`**: Use `turbo.json` to define build, lint, and dev pipelines for all packages and apps. For example:
-  ```json
-  {
-    "pipeline": {
-      "build": {
-        "dependsOn": ["^build"],
-        "outputs": ["dist/**"]
-      },
-      "lint": {
-        "dependsOn": ["^lint"]
-      },
-      "dev": {
-        "cache": false
-      }
-    }
-  }
-  ```
-- **Consistent Scripts Across Packages**: Ensure each package has consistent scripts (e.g., `build`, `lint`, `test`) in its `package.json`. For example, in `packages/database/package.json`:
-  ```json
-  "scripts": {
-    "build": "tsc",
-    "lint": "eslint . --ext .ts"
-  }
-  ```
-- **Run Scripts with Turbo**: Use `turbo run` to execute scripts across the monorepo, leveraging Turborepo's caching and parallelization. For example:
-  ```bash
-  turbo run build --filter=web
-  ```
+- Define build/lint/test in `turbo.json`
+- Use `turbo run` to run commands across apps/packages
+- Leverage `dependsOn` and `outputs` correctly
 
-### Package Boundaries
+### Examples
 
-- **Separation of Concerns**: Each package in `packages` should have a single responsibility:
-  - `packages/database`: Handles database schema and Prisma client.
-  - `packages/backend-services`: Contains business logic and services.
-  - `packages/redux`: Manages state with Redux slices and store.
-- **No Direct App-to-App Imports**: Apps like `apps/web` should not import from other apps. Instead, share code through packages (e.g., `packages/common` for shared utilities).
-- **Export Only What’s Needed**: In each package, only export what’s necessary in `index.ts`. For example, in `packages/utils/src/index.ts`:
-  ```ts
-  export * from './convert';
-  export * from './data-generate';
-  export * from './date';
-  ```
+```bash
+# Run all builds
+pnpm turbo run build
 
-### TypeScript and Linting
+# Build just the backend services
+pnpm turbo run build --filter=@repo/backend-services
+```
 
-- **Centralized TypeScript Config**: Use the shared TypeScript configurations in `tooling/typescript-config` (e.g., `base.json`, `nextjs.json`) to ensure consistency across packages. Reference them in each `tsconfig.json`:
-  ```json
-  {
-    "extends": "../../tooling/typescript-config/nextjs.json",
-    "compilerOptions": {
-      "outDir": "dist"
-    }
-  }
-  ```
-- **Centralized ESLint Config**: Use the shared ESLint configurations in `tooling/eslint-config` (e.g., `nextjs.js`) to enforce linting rules across all packages. Reference them in `.eslintrc` files or the root `eslint.config.mjs`.
-- **Type Safety Across Packages**: When generating code, ensure TypeScript types are exported from `packages/types` and used consistently (e.g., `packages/types/src/product/product.ts` for product-related types).
+### Testing and CI
 
-### Testing and CI/CD
+- Tests should exist in `/test` or `__tests__` folders inside packages
+- Use mocked repositories/services in unit tests
+- CI scripts run `build`, `lint`, and `test` using `pnpm turbo run`
 
-- **Add Tests in Packages**: Place tests in a `test` directory within each package (e.g., `packages/backend-services/src/test`). Use Turborepo to run tests across all packages:
-  ```bash
-  turbo run test
-  ```
-- **CI/CD with GitHub Actions**: Update `.github/workflows/build.yml` to run Turborepo commands for linting, building, and testing. For example:
-  ```yaml
-  jobs:
-    build:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
-        - uses: pnpm/action-setup@v2
-          with:
-            version: 8
-        - run: pnpm install
-        - run: pnpm turbo run build lint test
-  ```
+---
 
-### Performance and Caching
+## ✅ Agent Behavior Checklist
 
-- **Leverage Turborepo Caching**: Use Turborepo’s caching to avoid rebuilding unchanged packages. Ensure `outputs` in `turbo.json` are correctly set for each pipeline (e.g., `dist/**` for `build`).
-- **Optimize Build Order**: Use `dependsOn` in `turbo.json` to ensure dependent packages are built first (e.g., `packages/database` before `packages/backend-services`).
+| ✅ Must Do                                      | ❌ Never Do                             |
+| ----------------------------------------------- | --------------------------------------- |
+| Follow our BaseService & BaseRepository pattern | Skip DI or use new Class()              |
+| Use clean, named imports                        | Use relative paths across packages      |
+| Create SRP-based components                     | Mix UI, logic, and data in one file     |
+| Inject dependencies with `tsyringe`             | Invent alternate patterns               |
+| Export only domain-specific logic from `types`  | Export everything or use `any` types    |
+| Prioritize SSR using Server Components          | Turn every page into a client component |
+
+---
+
+## 📈 Future Extensions (Optional)
+
+- Create `@repo/guards` for RBAC decorators
+- Add global `LoggerService` via DI
+- Build command/query handler system
+- Introduce `EventEmitter` or RabbitMQ-based pub/sub
+- Add `Zod`-based runtime validation layer

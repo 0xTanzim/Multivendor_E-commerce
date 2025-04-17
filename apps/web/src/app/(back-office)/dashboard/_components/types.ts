@@ -1,4 +1,4 @@
-// filepath: /mnt/storage/ecommerce/apps/web/src/app/(back-office)/dashboard/_components/types.ts
+
 /**
  * Extended order type with additional properties needed for the dashboard
  * This helps us handle potential type mismatches with the actual IOrder type

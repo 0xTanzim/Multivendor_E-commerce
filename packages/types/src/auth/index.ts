@@ -5,7 +5,7 @@ export type IAuthUser = {
   name: string | null;
   email: string;
   password: string;
-  role: $Enums.UserRole;
+  role: string;
   verificationToken?: string;
   plan?: string;
   accountStatus?: $Enums.AccountStatus;
@@ -25,11 +25,7 @@ export function isAuthUser(obj: unknown): obj is IAuthUser {
     'email' in authUserObj &&
     typeof authUserObj.email === 'string' &&
     'role' in authUserObj &&
-    (authUserObj.role === 'SUPER_ADMIN' ||
-      authUserObj.role === 'ADMIN' ||
-      authUserObj.role === 'FARMER' ||
-      authUserObj.role === 'MODERATOR' ||
-      authUserObj.role === 'USER')
+    typeof authUserObj.role === 'string'
   );
 }
 

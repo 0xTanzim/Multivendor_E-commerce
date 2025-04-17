@@ -6,6 +6,7 @@ export * from './farmer';
 export * from './market';
 export * from './order';
 export * from './product';
+export * from './rbac';
 export * from './sale';
 export * from './staff';
 export * from './test';

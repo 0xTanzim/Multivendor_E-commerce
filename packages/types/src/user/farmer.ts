@@ -36,6 +36,7 @@ export type FarmerInput = Farmer & {
   name?: string;
   email?: string;
   role?: string;
+  roleId?: string;
 };
 
 export function isFarmer(data: unknown): data is Farmer {

@@ -26,7 +26,7 @@ export class AuthRepository extends BaseRepository<
           email,
           password,
           name,
-          role,
+          roleId: role,
           verificationToken,
           plan,
         },

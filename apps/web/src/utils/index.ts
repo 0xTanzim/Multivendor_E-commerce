@@ -1,3 +1,4 @@
+export * from './apiHandler';
 export * from './chart/dataProcessors';
 export * from './convert';
 export * from './errorHandler';

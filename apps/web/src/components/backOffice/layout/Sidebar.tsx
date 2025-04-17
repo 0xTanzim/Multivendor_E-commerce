@@ -84,6 +84,11 @@ const Sidebar = ({ showSidebar, setShowSidebar }: SidebarProps) => {
       href: '/dashboard/staff',
     },
     {
+      title: 'Roles & Permissions',
+      icon: Settings,
+      href: '/dashboard/rbac',
+    },
+    {
       title: 'Community',
       icon: Building2,
       href: '/dashboard/community',

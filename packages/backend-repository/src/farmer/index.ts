@@ -50,7 +50,7 @@ export class FarmerProfileRepository extends BaseRepository<
         where: { id: userId },
         data: {
           emailVerified: true,
-          role: 'FARMER',
+          roleId: role,
           verificationToken: null,
         },
       });
@@ -109,7 +109,9 @@ export class FarmerProfileRepository extends BaseRepository<
       where: {
         user: {
           authUser: {
-            role: 'FARMER',
+            role: {
+              name: 'FARMER',
+            },
           },
         },
       },

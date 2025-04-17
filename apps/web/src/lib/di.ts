@@ -10,6 +10,9 @@ import {
   SaleService,
   TrainingService,
   UserService,
+  RoleService,
+  PermissionGroupService,
+  PermissionService
 } from '@repo/backend-services';
 
 import { container } from '@repo/core/container';
@@ -37,5 +40,11 @@ authService.setMailService(mailService);
 
 export const orderService = container.resolve(OrderService);
 export const saleService = container.resolve(SaleService);
+
+export const roleService = container.resolve(RoleService);
+export const permissionGroupService = container.resolve(
+  PermissionGroupService
+);
+export const permissionService = container.resolve(PermissionService);
 
 // export const staffService = container.resolve(StaffService);

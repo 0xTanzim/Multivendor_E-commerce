@@ -1,4 +1,4 @@
-// filepath: /mnt/storage/ecommerce/apps/web/src/utils/chart/dataProcessors.ts
+
 import {
   DashboardOrder,
   DashboardSale,

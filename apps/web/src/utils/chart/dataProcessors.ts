@@ -1,4 +1,3 @@
-
 import {
   DashboardOrder,
   DashboardSale,
@@ -120,11 +119,11 @@ export const getTopSellingProducts = (
           const productName = item.product.name;
           const currentCount = productCounts.get(productId) || {
             name: productName,
-            count: 0,
+            quantity: 0,
           };
           productCounts.set(productId, {
             name: productName,
-            count: currentCount.count + (item.quantity || 1),
+            quantity: currentCount.quantity + (item.quantity || 1),
           });
         }
       });
@@ -133,6 +132,95 @@ export const getTopSellingProducts = (
 
   // Convert map to array, sort by count, and limit results
   return Array.from(productCounts.values())
-    .sort((a, b) => b.count - a.count)
+    .sort((a, b) => b.quantity - a.quantity)
     .slice(0, limit);
+};
+
+/**
+ * Processes sales data for monthly visualization
+ * @param sales Array of sales data
+ * @returns Processed sales data suitable for monthly charting
+ */
+export const processMonthlyData = (sales: DashboardSale[] | ISale[]) => {
+  if (!sales || !Array.isArray(sales) || sales.length === 0) {
+    return [];
+  }
+
+  // Initialize monthly data
+  const monthlyData = Array.from({ length: 12 }, (_, i) => ({
+    date: format(new Date(new Date().getFullYear(), i, 1), 'yyyy-MM'),
+    dayName: format(new Date(new Date().getFullYear(), i, 1), 'MMM'),
+    totalSales: 0,
+    count: 0,
+  }));
+
+  // Aggregate sales by month
+  sales.forEach((sale) => {
+    if (sale.createdAt) {
+      const saleDate = new Date(sale.createdAt);
+      const monthIndex = saleDate.getMonth();
+      const year = saleDate.getFullYear();
+      const currentYear = new Date().getFullYear();
+
+      // Only include sales from current year
+      if (year === currentYear) {
+        const amount = (sale as any).amount || (sale as any).total || 0;
+        if (monthlyData[monthIndex]) {
+          monthlyData[monthIndex].totalSales += amount;
+          monthlyData[monthIndex].count += 1;
+        }
+      }
+    }
+  });
+
+  return monthlyData;
+};
+
+/**
+ * Processes sales data for yearly visualization
+ * @param sales Array of sales data
+ * @param years Number of years to go back
+ * @returns Processed sales data suitable for yearly charting
+ */
+export const processYearlyData = (
+  sales: DashboardSale[] | ISale[],
+  years = 5
+) => {
+  if (!sales || !Array.isArray(sales) || sales.length === 0) {
+    return [];
+  }
+
+  // Get the current year
+  const currentYear = new Date().getFullYear();
+
+  // Initialize yearly data
+  const yearlyData = Array.from({ length: years }, (_, i) => {
+    const year = currentYear - years + i + 1;
+    return {
+      date: year.toString(),
+      dayName: year.toString(),
+      totalSales: 0,
+      count: 0,
+    };
+  });
+
+  // Aggregate sales by year
+  sales.forEach((sale) => {
+    if (sale.createdAt) {
+      const saleDate = new Date(sale.createdAt);
+      const saleYear = saleDate.getFullYear();
+
+      // Find the corresponding year in our data array
+      const yearData = yearlyData.find(
+        (item) => parseInt(item.date) === saleYear
+      );
+      if (yearData) {
+        const amount = (sale as any).amount || (sale as any).total || 0;
+        yearData.totalSales += amount;
+        yearData.count += 1;
+      }
+    }
+  });
+
+  return yearlyData;
 };

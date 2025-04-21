@@ -15,12 +15,12 @@ type DashboardCartsProps = {
 
 const DashboardCarts = ({ sales, orders }: DashboardCartsProps) => {
   // Process data for charts
-  const processedSalesData = processSalesData(sales as any);
-  const topSellingProducts = getTopSellingProducts(orders as any);
+  const processedSalesData = processSalesData(sales);
+  const topSellingProducts = getTopSellingProducts(orders);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <WeeklySalesChart salesData={processedSalesData} />
+      <WeeklySalesChart salesData={processedSalesData} rawSales={sales} />
       <BestSellingProductChart productData={topSellingProducts} />
     </div>
   );

@@ -25,6 +25,7 @@ export const authOptions: NextAuthConfig = {
         email: { label: 'Email', type: 'email', placeholder: 'jb@gmail.com' },
         password: { label: 'Password', type: 'password' },
       },
+      // @ts-expect-error: The AUTH_SECRET environment variable is expected to be a string, but TypeScript cannot infer it.
       async authorize(credentials, req) {
         try {
           console.log('Authorize function received credentials:', credentials);
@@ -44,7 +45,7 @@ export const authOptions: NextAuthConfig = {
               name: true,
               email: true,
               password: true,
-              role: true,
+              role: { select: { name: true } },
               emailVerified: true,
               accountStatus: true,
               user: {
@@ -72,13 +73,13 @@ export const authOptions: NextAuthConfig = {
             id: existingUser.id,
             name: existingUser.name,
             email: existingUser.email,
-            role: existingUser.role,
+            role: existingUser.role?.name ?? 'User',
             emailVerified: existingUser.emailVerified,
             profileImage: existingUser.user?.profileImage,
             accountStatus: existingUser.accountStatus,
           };
 
-          console.log('User Compiled data');
+          console.log('User Compiled data', user);
           return user;
         } catch (error) {
           if (error instanceof NotFoundError) {
@@ -99,7 +100,6 @@ export const authOptions: NextAuthConfig = {
   callbacks: {
     async session({ session, token }: { session: any; token: any }) {
       if (token) {
-        console.log(`token: ${JSON.stringify(token)} in session`);
         session.user.id = token.id as string;
         session.user.name = token.name as string;
         session.user.email = token.email as string;

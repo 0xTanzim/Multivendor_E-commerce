@@ -8,11 +8,25 @@ import UserDashboard from './_components/UserDashboard';
 const DashboardPage = async () => {
   const role = await getRole();
 
+  const normalizeRole = (role: string | null): string => {
+    if (!role) return '';
+    return role
+      .toLowerCase()
+      .trim()
+      .replace(/[-_\s]+/g, ' ')
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  // Normalize the role to handle different formats
+  const normalizedRole = normalizeRole(role);
+
   // Handle different user roles
-  switch (role) {
-    case 'USER':
+  switch (normalizedRole) {
+    case 'User':
       return <UserDashboard />;
-    case 'FARMER':
+    case 'Farmer':
       return <FarmerDashboard />;
   }
 

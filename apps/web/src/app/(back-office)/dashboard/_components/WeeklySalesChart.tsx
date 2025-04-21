@@ -1,6 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import {
+  processMonthlyData,
+  processSalesData,
+  processYearlyData,
+} from '@/utils/chart/dataProcessors';
+import { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 
 import {
@@ -13,6 +18,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { DashboardSale } from './types';
 
 ChartJS.register(
   CategoryScale,
@@ -41,54 +47,60 @@ const options = {
 type TimePeriod = 'weekly' | 'monthly' | 'yearly';
 
 type WeeklySalesChartProps = {
-  salesData: {
+  salesData?: {
     date: string;
     dayName: string;
     totalSales: number;
     count: number;
   }[];
+  rawSales?: DashboardSale[];
 };
 
-const WeeklySalesChart = ({ salesData = [] }: WeeklySalesChartProps) => {
-  // Define time periods for better data visualization
-  const timePeriods: Record<TimePeriod, string[]> = {
-    weekly: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    monthly: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
-    yearly: ['2020', '2021', '2022', '2023', '2024', '2025'],
-  };
-
+const WeeklySalesChart = ({
+  salesData = [],
+  rawSales = [],
+}: WeeklySalesChartProps) => {
   const [selectedTimePeriod, setSelectedTimePeriod] =
     useState<TimePeriod>('weekly');
+  const [processedData, setProcessedData] = useState(salesData);
+  const [mounted, setMounted] = useState(false);
 
-  // Use the actual day names from processed data if available
+  // Ensure hydration is complete before rendering charts
+  useEffect(() => {
+    setMounted(true);
+
+    // Process data based on selected time period
+    if (rawSales && rawSales.length > 0) {
+      switch (selectedTimePeriod) {
+        case 'weekly':
+          setProcessedData(processSalesData(rawSales));
+          break;
+        case 'monthly':
+          setProcessedData(processMonthlyData(rawSales));
+          break;
+        case 'yearly':
+          setProcessedData(processYearlyData(rawSales));
+          break;
+      }
+    } else {
+      setProcessedData(salesData);
+    }
+  }, [selectedTimePeriod, rawSales, salesData]);
+
+  // Use the actual labels from processed data
   const labels =
-    salesData.length > 0
-      ? salesData.map((day) => day.dayName)
-      : timePeriods[selectedTimePeriod];
+    processedData.length > 0 ? processedData.map((item) => item.dayName) : [];
 
   // Prepare chart data from the processed sales data
   const salesChartData = {
     labels,
     datasets: [
       {
-        label: 'Sales',
+        label: 'Sales ($)',
         data:
-          salesData.length > 0
-            ? salesData.map((day) => day.totalSales)
-            : labels.map(() => Math.floor(Math.random() * 4000) + 1000),
+          processedData.length > 0
+            ? processedData.map((day) => day.totalSales)
+            : [],
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
@@ -101,9 +113,7 @@ const WeeklySalesChart = ({ salesData = [] }: WeeklySalesChartProps) => {
       {
         label: 'Orders',
         data:
-          salesData.length > 0
-            ? salesData.map((day) => day.count)
-            : labels.map(() => Math.floor(Math.random() * 30) + 5),
+          processedData.length > 0 ? processedData.map((day) => day.count) : [],
         borderColor: 'rgb(54, 162, 235)',
         backgroundColor: 'rgba(54, 162, 235, 0.5)',
       },
@@ -127,18 +137,34 @@ const WeeklySalesChart = ({ salesData = [] }: WeeklySalesChartProps) => {
     tabs[0]?.type || 'sales'
   );
 
+  if (!mounted) {
+    return (
+      <div className="dark:bg-slate-800 bg-slate-50 shadow-sm p-8 rounded-lg">
+        <div className="h-[350px] flex items-center justify-center">
+          <p className="text-slate-500 dark:text-slate-400">
+            Loading chart data...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const periodTitles = {
+    weekly: 'Weekly Performance',
+    monthly: 'Monthly Performance',
+    yearly: 'Yearly Performance',
+  };
+
   return (
     <div className="dark:bg-slate-800 bg-slate-50 shadow-sm p-8 rounded-lg">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-50">
-          {selectedTimePeriod.charAt(0).toUpperCase() +
-            selectedTimePeriod.slice(1)}{' '}
-          Performance
+          {periodTitles[selectedTimePeriod]}
         </h2>
 
         {/* Time period selector */}
         <div className="flex space-x-2 text-sm">
-          {Object.keys(timePeriods).map((period) => (
+          {Object.keys(periodTitles).map((period) => (
             <button
               key={period}
               onClick={() => setSelectedTimePeriod(period as TimePeriod)}
@@ -162,7 +188,7 @@ const WeeklySalesChart = ({ salesData = [] }: WeeklySalesChartProps) => {
               return (
                 <li className="me-2" key={index}>
                   <button
-                    className={`inline-block p-4  ${
+                    className={`inline-block p-4 ${
                       chartToDisplay === tab.type
                         ? 'text-orange-600 border-b-2 border-orange-600 rounded-t-lg active dark:text-orange-500 dark:border-orange-500'
                         : 'border-b-2 border-transparent rounded-t-lg text-slate-800 dark:text-slate-100 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300'

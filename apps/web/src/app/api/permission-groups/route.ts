@@ -14,17 +14,16 @@ function requirePermission(permission: string) {
   };
 }
 
-export class PermissionGroupController {
+@catchErrors()
+class PermissionGroupController {
   @requirePermission('permission-group:read')
-  @catchErrors()
-  static async GET() {
+  async GET() {
     const permissionGroups = await permissionGroupService.findAll();
     return NextResponse.json(permissionGroups);
   }
 
   @requirePermission('permission-group:create')
-  @catchErrors()
-  static async POST(request: NextRequest) {
+  async POST(request: NextRequest) {
     const data = await request.json();
     const permissionGroup = await permissionGroupService.create(data);
 
@@ -35,4 +34,4 @@ export class PermissionGroupController {
   }
 }
 
-export const { GET, POST } = PermissionGroupController;
+export const { GET, POST } = new PermissionGroupController();

@@ -1,9 +1,10 @@
 import { authService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export async function PATCH(req: Request) {
-  try {
+@catchErrors()
+class ForgotPasswordController {
+  async PATCH(req: Request) {
     const { email } = await req.json();
 
     const existingUser = await authService.findUnique({
@@ -31,7 +32,7 @@ export async function PATCH(req: Request) {
       },
       { status: 200 }
     );
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { PATCH } = new ForgotPasswordController();

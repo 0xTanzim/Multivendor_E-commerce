@@ -5,13 +5,14 @@ import {
   NotFoundError,
 } from '@repo/common/error';
 import { prisma } from '@repo/database';
-import { compare } from 'bcryptjs';
+import { compareSync } from 'bcrypt-edge';
 import { AuthError, NextAuthConfig } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),
   secret: process.env.AUTH_SECRET,
+  trustHost: true,
   session: {
     strategy: 'jwt',
   },
@@ -62,7 +63,10 @@ export const authOptions: NextAuthConfig = {
           }
           console.log('✅ Passed Check 2');
 
-          const passwordMatch = await compare(password, existingUser.password);
+          const passwordMatch = await compareSync(
+            password,
+            existingUser.password
+          );
           if (!passwordMatch) {
             console.log('Password incorrect');
             throw new ForbiddenError('Password Incorrect');

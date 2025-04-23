@@ -1,42 +1,32 @@
 import { productService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isProduct } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+@catchErrors()
+class ProductIdController {
+  async GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const product = await productService.findUnique({
       where: { id: id },
     });
 
     return NextResponse.json(product);
-  } catch (err) {
-    return handleError(err);
   }
-}
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+  async DELETE(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
     const product = await productService.deleteById(id);
     return NextResponse.json(product);
-  } catch (err) {
-    return handleError(err);
   }
-}
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+  async PATCH(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
     const data: unknown = await req.json();
 
@@ -46,7 +36,7 @@ export async function PATCH(
 
     const product = await productService.updateProduct(id, data);
     return NextResponse.json(product);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET, DELETE, PATCH } = new ProductIdController();

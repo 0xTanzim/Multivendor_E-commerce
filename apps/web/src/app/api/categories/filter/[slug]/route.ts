@@ -1,12 +1,13 @@
 import { categoryService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
-  try {
+@catchErrors()
+class CategoryFilterController {
+  async GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ slug: string }> }
+  ) {
     const { slug } = await params;
     const searchParams = req.nextUrl.searchParams;
     const includeParam = searchParams.get('include');
@@ -27,7 +28,7 @@ export async function GET(
     }
 
     return NextResponse.json(category);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new CategoryFilterController();

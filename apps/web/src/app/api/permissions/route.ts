@@ -3,15 +3,14 @@ import { catchErrors } from '@/utils';
 import { isPermission } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export class PermissionController {
-  @catchErrors()
-  static async GET() {
+@catchErrors()
+ class PermissionController {
+  async GET() {
     const permissions = await permissionService.findAll();
     return NextResponse.json(permissions);
   }
 
-  @catchErrors()
-  static async POST(request: NextRequest) {
+  async POST(request: NextRequest) {
     const data = await request.json();
 
     const permission = await permissionService.create(data);
@@ -24,4 +23,4 @@ export class PermissionController {
   }
 }
 
-export const { GET, POST } = PermissionController;
+export const { GET, POST } = new PermissionController();

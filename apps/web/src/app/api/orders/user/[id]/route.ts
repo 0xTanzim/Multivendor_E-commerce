@@ -1,18 +1,15 @@
 import { orderService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+@catchErrors()
+class UserOrderController {
+  async GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
     const orderRes = await orderService.findAll({
       where: { userId: id },
       orderBy: { createdAt: 'desc' },
-
       include: {
         OrderItem: true,
       },
@@ -28,7 +25,7 @@ export async function GET(
     }
 
     return NextResponse.json(orderRes);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new UserOrderController();

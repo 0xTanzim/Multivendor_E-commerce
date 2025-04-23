@@ -12,7 +12,8 @@ import {
   UserService,
   RoleService,
   PermissionGroupService,
-  PermissionService
+  PermissionService,
+  StaffService
 } from '@repo/backend-services';
 
 import { container } from '@repo/core/container';
@@ -33,6 +34,7 @@ export const farmerService = container.resolve(FarmerService);
 export const productService = container.resolve(ProductService);
 
 export const userService = container.resolve(UserService);
+export const staffService = container.resolve(StaffService);
 
 export const mailService = container.resolve(MailService);
 export const authService = container.resolve(AuthService);

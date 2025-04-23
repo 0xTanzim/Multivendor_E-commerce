@@ -3,9 +3,9 @@ import { catchErrors } from '@/utils';
 import { isFarmer } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export class FarmerController {
-  @catchErrors()
-  static async POST(req: Request) {
+@catchErrors()
+class FarmerController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isFarmer(data)) {
@@ -17,11 +17,10 @@ export class FarmerController {
     return NextResponse.json(newFarmer, { status: 201 });
   }
 
-  @catchErrors()
-  static async GET(_req: Request) {
+  async GET(_req: Request) {
     const farmers = await farmerService.findAllFarmers();
     return NextResponse.json(farmers, { status: 200 });
   }
 }
 
-export const { POST, GET } = FarmerController;
+export const { POST, GET } = new FarmerController();

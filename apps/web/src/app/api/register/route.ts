@@ -1,10 +1,11 @@
 import { authService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isAuthUser } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class RegisterController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isAuthUser(data)) {
@@ -12,25 +13,8 @@ export async function POST(req: Request) {
     }
 
     const res = await authService.register(data);
-
-    console.log(' result for creating', res);
-
     return NextResponse.json(res, { status: 201 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
 }
 
-// export async function GET(req: Request) {
-//   try {
-//     const res = await authService.findAll({
-//       where: {
-//         emailVerified: false,
-//       },
-//     });
-
-//     return NextResponse.json(res, { status: 200 });
-//   } catch (error: unknown) {
-//     return handleError(error);
-//   }
-// }
+export const { POST } = new RegisterController();

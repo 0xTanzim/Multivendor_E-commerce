@@ -2,9 +2,9 @@ import { roleService } from '@/lib/di';
 import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export class RolePermissionsController {
-  @catchErrors()
-  static async GET(
+@catchErrors()
+ class RolePermissionsController {
+  async GET(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -17,8 +17,7 @@ export class RolePermissionsController {
     return NextResponse.json(role);
   }
 
-  @catchErrors()
-  static async PATCH(
+  async PATCH(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -48,4 +47,4 @@ export class RolePermissionsController {
   }
 }
 
-export const { GET, PATCH } = RolePermissionsController;
+export const { GET, PATCH } = new RolePermissionsController();

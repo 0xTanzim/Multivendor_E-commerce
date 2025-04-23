@@ -1,15 +1,18 @@
+import { staffService } from '@/lib/di';
+import { catchErrors } from '@/utils';
 import { isStaff, Staff } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class StaffController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isStaff(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const newStaff: Staff = {
+    const staffData: Staff = {
       dob: data.dob,
       email: data.email,
       isActive: data.isActive,
@@ -22,14 +25,15 @@ export async function POST(req: Request) {
       code: data.code,
     };
 
-    console.log(newStaff);
+    // const newStaff = await staffService.create(staffData);
 
-    return NextResponse.json(newStaff, { status: 201 });
-  } catch (error: unknown) {
-    console.error(error);
-    return NextResponse.json(
-      { error: error, message: 'An error occurred' },
-      { status: 500 }
-    );
+    return NextResponse.json(staffData, { status: 201 });
+  }
+
+  async GET(_req: Request) {
+    const staffs = await staffService.findAll();
+    return NextResponse.json(staffs, { status: 200 });
   }
 }
+
+export const { GET, POST } = new StaffController();

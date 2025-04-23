@@ -1,16 +1,13 @@
 import { productService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+@catchErrors()
+class ProductCategoryController {
+  async GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
     let products = null;
-
     if (id) {
       products = await productService.findMany({
         where: { categoryId: id },
@@ -20,7 +17,7 @@ export async function GET(
     }
 
     return NextResponse.json(products);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new ProductCategoryController();

@@ -3,9 +3,9 @@ import { catchErrors } from '@/utils';
 import { isPermission } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export class PermissionByIdController {
-  @catchErrors()
-  static async GET(
+@catchErrors()
+ class PermissionByIdController {
+  async GET(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -16,10 +16,7 @@ export class PermissionByIdController {
   }
 
   @catchErrors()
-  static async PUT(
-    request: Request,
-    { params }: { params: Promise<{ id: string }> }
-  ) {
+  async PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const data = await request.json();
     const permission = await permissionService.update(id, data);
@@ -34,7 +31,7 @@ export class PermissionByIdController {
   }
 
   @catchErrors()
-  static async DELETE(
+  async DELETE(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -49,4 +46,4 @@ export class PermissionByIdController {
   }
 }
 
-export const { DELETE, PUT, GET } = PermissionByIdController;
+export const { DELETE, PUT, GET } = new PermissionByIdController();

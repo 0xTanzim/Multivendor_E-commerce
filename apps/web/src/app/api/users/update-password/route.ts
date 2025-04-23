@@ -1,9 +1,10 @@
 import { authService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export async function PATCH(req: Request) {
-  try {
+@catchErrors()
+class UpdatePasswordController {
+  async PATCH(req: Request) {
     const { password, id } = await req.json();
 
     const existingUser = await authService.findById(id);
@@ -27,7 +28,7 @@ export async function PATCH(req: Request) {
       },
       { status: 200 }
     );
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { PATCH } = new UpdatePasswordController();

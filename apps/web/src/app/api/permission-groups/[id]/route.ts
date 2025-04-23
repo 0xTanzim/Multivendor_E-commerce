@@ -3,9 +3,9 @@ import { catchErrors } from '@/utils';
 import { isPermissionGroup } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
+@catchErrors()
 class PermissionGroupByIDController {
-  @catchErrors()
-  static async GET(
+  async GET(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -17,8 +17,7 @@ class PermissionGroupByIDController {
     return NextResponse.json(permissionGroup);
   }
 
-  @catchErrors()
-  static async PUT(
+  async PUT(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -33,8 +32,7 @@ class PermissionGroupByIDController {
     return NextResponse.json(permissionGroup);
   }
 
-  @catchErrors()
-  static async DELETE(
+  async DELETE(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -49,4 +47,4 @@ class PermissionGroupByIDController {
   }
 }
 
-export const { DELETE, PUT, GET } = PermissionGroupByIDController;
+export const { DELETE, PUT, GET } = new PermissionGroupByIDController();

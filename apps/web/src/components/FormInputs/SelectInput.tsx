@@ -30,7 +30,6 @@ export default function SelectInput({
     label: option.title,
   }));
 
-
   const defaultSelected = hasMultiple
     ? selectOptions.filter((opt) =>
         Array.isArray(defaultValue)
@@ -54,14 +53,14 @@ export default function SelectInput({
       >
         {label}
       </label>
-      <div className="mt-2">
+      <div className="mt-2 dark:bg-slate-800">
         <Select
           id={name}
           instanceId={name}
           options={selectOptions}
           isMulti={hasMultiple}
           onChange={handleChange}
-          className="text-slate-900"
+          className="text-slate-900 "
           classNamePrefix="react-select"
           defaultValue={defaultSelected}
         />

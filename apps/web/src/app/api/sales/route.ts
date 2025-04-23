@@ -1,12 +1,13 @@
 import { saleService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
-  try {
+@catchErrors()
+class SaleController {
+  async GET(req: NextRequest) {
     const sales = await saleService.findAll();
     return NextResponse.json(sales);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new SaleController();

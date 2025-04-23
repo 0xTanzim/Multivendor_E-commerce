@@ -1,13 +1,16 @@
 import { userService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export async function GET(_req: Request): Promise<NextResponse> {
-  try {
+@catchErrors()
+class CustomerController {
+  async GET(_req: Request): Promise<NextResponse> {
     const customers = await userService.findAll({
       where: {
         authUser: {
-          role: 'USER',
+          role: {
+            name: 'User',
+          },
         },
       },
       select: {
@@ -23,7 +26,7 @@ export async function GET(_req: Request): Promise<NextResponse> {
       },
     });
     return NextResponse.json(customers, { status: 200 });
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new CustomerController();

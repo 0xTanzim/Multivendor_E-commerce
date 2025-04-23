@@ -1,18 +1,14 @@
 import { farmerService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+@catchErrors()
+class FarmerProductsController {
+  async GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-
     const farmer = await farmerService.getFarmerAllProducts(id);
-
     return NextResponse.json(farmer);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new FarmerProductsController();

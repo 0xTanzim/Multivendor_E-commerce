@@ -3,14 +3,13 @@ import { catchErrors } from '@/utils';
 import { isAuthUser } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export class RegisterUser {
-  @catchErrors()
-  static async GET(req: NextRequest) {
+@catchErrors()
+ class RegisterUser {
+  async GET(req: NextRequest) {
     return NextResponse.json({ message: 'GET request not allowed' });
   }
 
-  @catchErrors()
-  static async POST(req: NextRequest) {
+  async POST(req: NextRequest) {
     const data: unknown = await req.json();
 
     if (!isAuthUser(data)) {
@@ -23,4 +22,4 @@ export class RegisterUser {
   }
 }
 
-export const { GET, POST } = RegisterUser;
+export const { GET, POST } = new RegisterUser();

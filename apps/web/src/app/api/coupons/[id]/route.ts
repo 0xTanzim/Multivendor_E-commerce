@@ -1,43 +1,33 @@
 import { couponService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isCoupon } from '@repo/types';
 import { isoFormate } from '@repo/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+@catchErrors()
+class CouponIdController {
+  async GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const coupons = await couponService.findUnique({
+    const coupon = await couponService.findUnique({
       where: { id: id },
     });
 
-    return NextResponse.json(coupons);
-  } catch (err) {
-    return handleError(err);
+    return NextResponse.json(coupon);
   }
-}
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+  async DELETE(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
-    const coupons = await couponService.deleteById(id);
-    return NextResponse.json(coupons);
-  } catch (err) {
-    return handleError(err);
+    const coupon = await couponService.deleteById(id);
+    return NextResponse.json(coupon);
   }
-}
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+  async PATCH(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
     const data: unknown = await req.json();
 
@@ -57,10 +47,9 @@ export async function PATCH(
         ? data.startDate
         : isoFormate(data.startDate);
 
-    const coupons = await couponService.update(id, data);
-
-    return NextResponse.json(coupons);
-  } catch (err) {
-    return handleError(err);
+    const coupon = await couponService.update(id, data);
+    return NextResponse.json(coupon);
   }
 }
+
+export const { GET, DELETE, PATCH } = new CouponIdController();

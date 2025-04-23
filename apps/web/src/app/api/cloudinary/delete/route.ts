@@ -1,3 +1,4 @@
+import { catchErrors } from '@/utils';
 import { v2 as cloudinary } from 'cloudinary';
 import { NextResponse } from 'next/server';
 
@@ -7,17 +8,18 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function POST(request: Request) {
-  const { publicId } = await request.json();
+@catchErrors()
+class CloudinaryDeleteController {
+  async POST(request: Request) {
+    const { publicId } = await request.json();
 
-  if (!publicId) {
-    return NextResponse.json(
-      { error: 'Public ID is required' },
-      { status: 400 }
-    );
-  }
+    if (!publicId) {
+      return NextResponse.json(
+        { error: 'Public ID is required' },
+        { status: 400 }
+      );
+    }
 
-  try {
     const result = await cloudinary.uploader.destroy(publicId);
     if (result.result === 'ok') {
       return NextResponse.json({ message: 'Image deleted successfully' });
@@ -27,11 +29,7 @@ export async function POST(request: Request) {
         { status: 404 }
       );
     }
-  } catch (error) {
-    console.error('Error deleting image:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete image' },
-      { status: 500 }
-    );
   }
 }
+
+export const { POST } = new CloudinaryDeleteController();

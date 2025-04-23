@@ -3,14 +3,13 @@ import { catchErrors } from '@/utils';
 import { isRole } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export class RoleController {
-  @catchErrors()
-  static async GET() {
+@catchErrors()
+ class RoleController {
+  async GET() {
     return NextResponse.json(await roleService.findAll());
   }
 
-  @catchErrors()
-  static async POST(request: Request) {
+  async POST(request: Request) {
     const data = await request.json();
     const role = await roleService.create(data);
 
@@ -24,4 +23,4 @@ export class RoleController {
   }
 }
 
-export const { GET, POST } = RoleController;
+export const { GET, POST } = new RoleController();

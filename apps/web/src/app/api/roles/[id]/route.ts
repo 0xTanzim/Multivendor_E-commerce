@@ -2,9 +2,9 @@ import { roleService } from '@/lib/di';
 import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export class RoleByIdController {
-  @catchErrors()
-  static async GET(
+@catchErrors()
+ class RoleByIdController {
+  async GET(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -14,11 +14,7 @@ export class RoleByIdController {
     return NextResponse.json(role);
   }
 
-  @catchErrors()
-  static async PUT(
-    request: Request,
-    { params }: { params: Promise<{ id: string }> }
-  ) {
+  async PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const data = await request.json();
     const role = await roleService.update(id, data);
@@ -26,8 +22,7 @@ export class RoleByIdController {
     return NextResponse.json(role);
   }
 
-  @catchErrors()
-  static async DELETE(
+  async DELETE(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
   ) {
@@ -38,4 +33,4 @@ export class RoleByIdController {
   }
 }
 
-export const { DELETE, PUT, GET } = RoleByIdController;
+export const { DELETE, PUT, GET } = new RoleByIdController();

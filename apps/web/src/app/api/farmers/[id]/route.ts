@@ -1,27 +1,21 @@
 import { farmerService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isFarmer } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+@catchErrors()
+class FarmerIdController {
+  async GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const farmer = await farmerService.findFarmerById(id);
 
     return NextResponse.json(farmer);
-  } catch (err) {
-    return handleError(err);
   }
-}
 
-export async function PATCH(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+  async PATCH(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
     const data: unknown = await req.json();
     if (!isFarmer(data)) {
@@ -29,24 +23,20 @@ export async function PATCH(
     }
 
     const farmer = await farmerService.updateFarmer(id, data);
-    return NextResponse.json(data);
-  } catch (err) {
-    return handleError(err);
+    return NextResponse.json(farmer);
   }
-}
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+  async DELETE(
+    req: NextRequest,
+    { params }: { params: Promise<{ id: string }> }
+  ) {
     const { id } = await params;
     await farmerService.deleteById(id);
     return NextResponse.json(
       { message: 'Farmer deleted successfully' },
       { status: 200 }
     );
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET, PATCH, DELETE } = new FarmerIdController();

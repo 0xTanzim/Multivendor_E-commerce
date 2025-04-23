@@ -6,13 +6,8 @@ import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
-import { usePatchRequest } from '@/hooks/usePatchRequest';
-import { usePostRequest } from '@/hooks/usePostRequest';
 import { Market } from '@repo/types';
-import { generateSlug } from '@repo/utils';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { useMarketForm } from '../hooks/useMarketForm';
 
 type MarketFormProps = {
   categories: {
@@ -23,67 +18,20 @@ type MarketFormProps = {
 };
 
 const MarketForm = ({ categories, updateData = {} }: MarketFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm<Market>({
-    defaultValues: {
-      isActive: true,
-      ...updateData,
-    },
+  const { formMethods, loading, handleSubmit, setFieldValue } = useMarketForm({
+    updateData,
   });
 
-  const initialImage = updateData?.logoUrl ?? '';
-  const marketId = updateData?.id ?? '';
-
-  const [logoUrl, setLogoUrl] = useState<string | null>(initialImage);
-  const [loading, setLoading] = useState(false);
-
-  const makePostRequest = usePostRequest();
-  const makePatchRequest = usePatchRequest();
-
-  const onSubmit = async (data: Market) => {
-    setLoading(true);
-
-    if (!data.categoryIds || data.categoryIds.length === 0) {
-      setLoading(false);
-      return toast.error('Please select at least one category');
-    }
-
-    const slug = generateSlug(data.title);
-    data.slug = slug;
-
-    data.logoUrl = logoUrl ?? '';
-
-    if (marketId) {
-      makePatchRequest({
-        setLoading,
-        endpoint: `api/markets/${marketId}`,
-        data,
-        resourceName: 'Market',
-        reset,
-        redirectPath: '/dashboard/markets',
-      });
-    } else {
-      makePostRequest({
-        setLoading,
-        endpoint: 'api/markets',
-        data,
-        resourceName: 'Market',
-        reset,
-        redirectPath: '/dashboard/markets',
-      });
-    }
-
-    setLogoUrl(null);
-  };
+  const {
+    register,
+    formState: { errors },
+    watch,
+    setValue,
+  } = formMethods;
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={formMethods.handleSubmit(handleSubmit)}
       className="w-full max-w-4xl p-4 bg-white border border-slate-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-slate-800 dark:border-slate-700 mx-auto my-3"
     >
       <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -105,10 +53,47 @@ const MarketForm = ({ categories, updateData = {} }: MarketFormProps) => {
           defaultValue={updateData.categoryIds || []}
         />
 
+        <TextInput
+          label="Phone Number"
+          name="phone"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
+
+        <TextInput
+          label="Email Address"
+          name="email"
+          register={register}
+          errors={errors}
+          className="w-full"
+        />
+
+        <TextInput
+          label="Website"
+          name="website"
+          type="url"
+          register={register}
+          errors={errors}
+        />
+
+        <TextareaInput
+          label="Address"
+          name="address"
+          register={register}
+          errors={errors}
+        />
+
         <ImageInput
           label="Market Logo"
-          setImageUrl={setLogoUrl}
-          imageUrl={logoUrl}
+          setImageUrl={(url) => setFieldValue('logoUrl', url)}
+          imageUrl={watch('logoUrl') || updateData.logoUrl || ''}
+        />
+
+        <ImageInput
+          label="Cover Image"
+          setImageUrl={(url) => setValue('coverImageUrl', url)}
+          imageUrl={watch('coverImageUrl') || updateData.coverImageUrl || ''}
         />
 
         <TextareaInput
@@ -129,9 +114,9 @@ const MarketForm = ({ categories, updateData = {} }: MarketFormProps) => {
 
       <SubmitButton
         isLoading={loading}
-        buttonTitle={marketId ? 'Update Market' : 'Create Market'}
+        buttonTitle={updateData.id ? 'Update Market' : 'Create Market'}
         loadingButtonTitle={
-          marketId
+          updateData.id
             ? 'Updating Market please wait...'
             : 'Creating Market please wait...'
         }

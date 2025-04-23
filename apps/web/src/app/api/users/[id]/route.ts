@@ -2,12 +2,9 @@ import { authService, userService } from '@/lib/di';
 import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export class UserByIdController {
-  @catchErrors()
-  static async GET(
-    req: Request,
-    { params }: { params: Promise<{ id: string }> }
-  ) {
+@catchErrors()
+class UserByIdController {
+  async GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
 
     const user = await authService.findUnique({
@@ -47,21 +44,15 @@ export class UserByIdController {
     );
   }
 
-  @catchErrors()
-  static async PATCH(
+  async PATCH(
     req: Request,
     { params }: { params: Promise<{ id: string }> }
   ): Promise<Response> {
     const { id } = await params;
-
     const body = await req.json();
-
     const user = await userService.updateUser(id, body);
-
-    console.log('User updated:', user);
-
     return NextResponse.json(user, { status: 200 });
   }
 }
 
-export const { GET, PATCH } = UserByIdController;
+export const { GET, PATCH } = new UserByIdController();

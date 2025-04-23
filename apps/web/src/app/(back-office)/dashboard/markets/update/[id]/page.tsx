@@ -1,7 +1,8 @@
 import FormHeader from '@/components/backOffice/form/FormHeader';
-import MarketForm from '@/components/backOffice/markets/MarketForm';
+
 import { getData } from '@/lib/getData';
 import { isCategoryArray, isMarket } from '@repo/types';
+import MarketForm from '../../_components/MarketForm';
 type IParams = {
   params: Promise<{ id: string }>;
 };

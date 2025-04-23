@@ -1,10 +1,11 @@
 import { bannerService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isBanner } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class BannerController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isBanner(data)) {
@@ -17,17 +18,12 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(banner, { status: 201 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
-}
 
-export async function GET() {
-  try {
+  async GET() {
     const banners = await bannerService.findAll();
-
     return NextResponse.json(banners);
-  } catch (err: unknown) {
-    return handleError(err);
   }
 }
+
+export const { POST, GET } = new BannerController();

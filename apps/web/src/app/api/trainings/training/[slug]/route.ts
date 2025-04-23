@@ -1,12 +1,13 @@
 import { trainingService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
-  try {
+@catchErrors()
+class TrainingSlugController {
+  async GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ slug: string }> }
+  ) {
     const { slug } = await params;
     const training = await trainingService.findUnique({
       where: { slug },
@@ -16,7 +17,7 @@ export async function GET(
     });
 
     return NextResponse.json(training);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new TrainingSlugController();

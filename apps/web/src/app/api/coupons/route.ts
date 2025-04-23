@@ -1,11 +1,12 @@
 import { couponService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isCoupon } from '@repo/types';
 import { isoFormate } from '@repo/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request): Promise<NextResponse> {
-  try {
+@catchErrors()
+class CouponController {
+  async POST(req: Request): Promise<NextResponse> {
     const data: unknown = await req.json();
 
     if (!isCoupon(data)) {
@@ -35,17 +36,12 @@ export async function POST(req: Request): Promise<NextResponse> {
       status: 201,
       statusText: 'Successfully created!',
     });
-  } catch (error: unknown) {
-    return handleError(error);
+  }
+
+  async GET(req: NextRequest): Promise<NextResponse> {
+    const coupons = await couponService.findAll();
+    return NextResponse.json(coupons);
   }
 }
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  try {
-  
-    const coupons = await couponService.findAll();
-    return NextResponse.json(coupons);
-  } catch (err) {
-    return handleError(err);
-  }
-}
+export const { POST, GET } = new CouponController();

@@ -1,25 +1,22 @@
 import { PAGE_SIZE } from '@/constants';
 import { productService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isProduct } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class ProductController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
     if (!isProduct(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
     const newProduct = await productService.createProduct(data);
-
     return NextResponse.json(newProduct, { status: 201 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
-}
-export async function GET(req: NextRequest) {
-  try {
+
+  async GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const categoryId = searchParams.get('catId');
     const sortBy = searchParams.get('sort');
@@ -95,8 +92,7 @@ export async function GET(req: NextRequest) {
       totalPages,
       totalCount,
     });
-  } catch (error: unknown) {
-    return handleError(error);
   }
 }
 
+export const { POST, GET } = new ProductController();

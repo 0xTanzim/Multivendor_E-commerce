@@ -1,21 +1,21 @@
 import { saleService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ vendorId: string }> }
-) {
-  const { vendorId } = await params;
-
-  try {
+@catchErrors()
+class VendorSalesController {
+  async GET(
+    req: NextRequest,
+    { params }: { params: Promise<{ vendorId: string }> }
+  ) {
+    const { vendorId } = await params;
     const sales = await saleService.findAll({
       where: {
         vendorId,
       },
     });
     return NextResponse.json(sales);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { GET } = new VendorSalesController();

@@ -1,13 +1,13 @@
 import { userService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
-export async function GET(): Promise<NextResponse> {
-  try {
+@catchErrors()
+class UserController {
+  async GET(): Promise<NextResponse> {
     const user = await userService.findAll();
-
     return NextResponse.json(user, { status: 200 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
 }
+
+export const { GET } = new UserController();

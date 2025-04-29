@@ -68,6 +68,9 @@ export default function RegisterForm({ role }: props) {
       return;
     } else {
       const userId = result?.id;
+
+      console.log('User ID:', userId);
+
       if (userId) {
         router.push(`/verify-email?userId=${userId}`);
       } else {

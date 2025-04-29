@@ -84,18 +84,13 @@ const CategoryPage = async ({ params, searchParams }: IParams) => {
   }
 
   // Optional: Hero image section if category has an image
-  const showHero = categoriesData.imageUrl || categoriesData.bannerUrl;
-
+  const showHero = categoriesData.imageUrl;
   return (
     <div className="animate-fadeIn">
       {showHero && (
         <div className="relative w-full h-40 md:h-64 mb-6 rounded-lg overflow-hidden">
           <Image
-            src={
-              categoriesData.bannerUrl ||
-              categoriesData.imageUrl ||
-              '/images/placeholder-banner.webp'
-            }
+            src={categoriesData.imageUrl || '/images/placeholder-banner.webp'}
             alt={categoriesData.title || 'Category'}
             fill
             className="object-cover"

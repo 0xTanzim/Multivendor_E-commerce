@@ -18,6 +18,10 @@ export const PUBLIC_ROUTES = [
   '/category/:slug',
   '/products',
   '/products/:slug',
+  '/verify-email',
+  '/verify-email/:userId',
+  'onboarding',
+  '/onboarding/:slug',
 ];
 
 export const LOGIN_ROUTE = '/login';

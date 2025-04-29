@@ -7,6 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { IOrder, isOrderArray } from '@repo/types';
 import { calculateSubTotal } from '@repo/utils';
 import { Box, Clock, Package, ShoppingBag, User } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -16,7 +17,7 @@ import { useEffect, useState } from 'react';
 
 const UserDashboard = () => {
   const { data: session } = useSession();
-  const [recentOrders, setRecentOrders] = useState([]);
+  const [recentOrders, setRecentOrders] = useState<IOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,8 +27,10 @@ const UserDashboard = () => {
           const ordersData = await fetch(`/api/orders/user/${session.user.id}`);
           const ordersJson = await ordersData.json();
 
-          if (Array.isArray(ordersJson)) {
-            setRecentOrders(ordersJson.slice(0, 5)); // Get most recent 5 orders
+          if (isOrderArray(ordersJson)) {
+            console.log('Fetched orders:', ordersJson);
+
+            setRecentOrders(ordersJson.slice(0, 5));
           }
         } catch (error) {
           console.error('Error fetching orders:', error);
@@ -194,12 +197,12 @@ const UserDashboard = () => {
                         <div>
                           <p className="font-medium">
                             Order #
-                            {order.orderNumber || order.id.substring(0, 8)}
+                            {order.orderNumber || (order.id ? order.id.substring(0, 8) : 'N/A')}
                           </p>
                           <div className="flex items-center text-sm text-gray-500">
                             <Clock className="h-3 w-3 mr-1" />
                             <span>
-                              {new Date(order.createdAt).toLocaleDateString()}
+                              {order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A'}
                             </span>
                           </div>
                         </div>
@@ -208,14 +211,14 @@ const UserDashboard = () => {
                         <p className="font-semibold">${subtotal}</p>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${
-                            order.status === 'DELIVERED'
+                            order.orderStatus === 'DELIVERED'
                               ? 'bg-green-50 text-green-700'
-                              : order.status === 'PROCESSING'
+                              : order.orderStatus === 'PROCESSING'
                                 ? 'bg-blue-50 text-blue-700'
                                 : 'bg-amber-50 text-amber-700'
                           }`}
                         >
-                          {order.status}
+                          {order.orderStatus}
                         </span>
                       </div>
                     </div>

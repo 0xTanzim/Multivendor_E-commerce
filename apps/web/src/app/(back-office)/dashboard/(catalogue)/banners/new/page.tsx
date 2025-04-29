@@ -1,5 +1,5 @@
-import BannerForm from '@/components/backOffice/form/BannerForm';
 import FormHeader from '@/components/backOffice/form/FormHeader';
+import BannerForm from '../_components/BannerForm';
 
 const NewBannerPage = () => {
   return (

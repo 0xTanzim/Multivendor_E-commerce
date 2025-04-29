@@ -144,7 +144,7 @@ const ProductDetailsPage = async ({
                     ${product.sellPrice}
                   </h2>
                   {product.productPrice &&
-                    product.productPrice > product.sellPrice && (
+                    product.productPrice > product.sellPrice! && (
                       <del className="text-lg text-gray-400">
                         ${product.productPrice}
                       </del>

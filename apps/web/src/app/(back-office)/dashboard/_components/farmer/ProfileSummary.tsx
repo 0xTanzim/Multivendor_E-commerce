@@ -19,8 +19,14 @@ type ProfileSummaryProps = {
 };
 
 const ProfileSummary = ({ farmer }: ProfileSummaryProps) => {
+  console.log('Farmer Profile Summary', farmer);
+
   // Get first name initial for avatar fallback
-  const getInitials = () => {
+  const getInitials = (
+    farmer: Farmer & {
+      name: string;
+    }
+  ) => {
     if (!farmer?.name) return 'NA';
     const nameParts = farmer.name.trim().split(' ');
     const firstInitial = nameParts[0]?.charAt(0) || '';
@@ -33,10 +39,12 @@ const ProfileSummary = ({ farmer }: ProfileSummaryProps) => {
       <CardHeader className="flex flex-col items-center pb-2 pt-6 space-y-3">
         <Avatar className="h-24 w-24 border-4 border-primary/20">
           <AvatarImage
-            src={farmer.profileImageUrl || ''}
-            alt={farmer?.user?.name}
+            src={farmer.profileImageUrl || undefined}
+            alt={farmer?.user?.name || 'Farmer'}
           />
-          <AvatarFallback className="text-2xl">{getInitials()}</AvatarFallback>
+          <AvatarFallback className="text-2xl">
+            {getInitials(farmer as Farmer & { name: string })}
+          </AvatarFallback>
         </Avatar>
         <div className="text-center space-y-1">
           <CardTitle>{farmer?.user?.name}</CardTitle>

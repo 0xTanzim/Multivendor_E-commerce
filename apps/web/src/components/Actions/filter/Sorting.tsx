@@ -90,8 +90,8 @@ const Sorting = ({ title, isSearch }: { title: string; isSearch: boolean }) => {
             aria-haspopup="true"
           >
             <span className="flex items-center">
-              {selectedOption.icon}
-              <span>{selectedOption.title}</span>
+              {selectedOption?.icon}
+              <span>{selectedOption?.title}</span>
             </span>
             <ChevronDown className="ml-1 h-3.5 w-3.5 text-slate-400" />
           </button>

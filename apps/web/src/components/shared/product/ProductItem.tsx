@@ -39,7 +39,8 @@ const ProductItem = ({ product }: ProductItemProps) => {
     product.productPrice > product.sellPrice;
   const discountPercentage = hasDiscount
     ? Math.round(
-        ((product.productPrice - product.sellPrice) / product.productPrice) *
+        ((product.productPrice - (product.sellPrice as number)) /
+          product.productPrice) *
           100
       )
     : 0;
@@ -78,9 +79,9 @@ const ProductItem = ({ product }: ProductItemProps) => {
 
       <div className="p-4">
         {/* Product category (if available) */}
-        {product.categoryTitle && (
+        {product.title && (
           <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">
-            {product.categoryTitle}
+            {product.title}
           </div>
         )}
 

@@ -1,7 +1,7 @@
-import BannerForm from '@/components/backOffice/form/BannerForm';
 import FormHeader from '@/components/backOffice/form/FormHeader';
 import { getData } from '@/lib/getData';
 import { isBanner } from '@repo/types';
+import BannerForm from '../../_components/BannerForm';
 
 const BannerUpdatePage = async ({
   params,
@@ -21,8 +21,6 @@ const BannerUpdatePage = async ({
   } else {
     banner = bannerData;
   }
-
-  console.log(banner);
 
   return (
     <div>

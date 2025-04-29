@@ -1,12 +1,18 @@
 'use client';
 
-import { Category, Product } from '@repo/types';
+import { Product } from '@repo/types';
 import { Filter as FilterIcon, Grid2X2, Layout, Tag } from 'lucide-react';
 import { useState } from 'react';
 import Breadcrumb from './Breadcrumb';
 import Filter from './Filter';
 import FilteredProduct from './FilteredProduct';
 import Sorting from './Sorting';
+
+type Category = {
+  title: string;
+  slug: string;
+  description?: string;
+};
 
 type FilterComponentProps = {
   category: Category;

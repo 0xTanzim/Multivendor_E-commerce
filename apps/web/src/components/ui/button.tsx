@@ -32,6 +32,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       React.cloneElement(props.children as React.ReactElement, {
         className: cn(getButtonStyles(variant, size), className),
         ...props,
+        // @ts-ignore
         ref,
       })
     ) : (

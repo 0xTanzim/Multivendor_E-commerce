@@ -2,7 +2,7 @@ import CategoryList from '@/components/frontend/landing/CategoryList';
 import BreadCamp from '@/components/shared/BreadCamp';
 import { getData } from '@/lib/getData';
 import { isCategoryArray, isMarket } from '@repo/types';
-import { Clock, Globe, MapPin, Phone } from 'lucide-react';
+import { Globe, MapPin, Phone } from 'lucide-react';
 import Image from 'next/image';
 
 type IParams = {
@@ -114,14 +114,14 @@ const marketPage = async ({ params }: IParams) => {
                     </span>
                   </span>
                 )}
-                {market.hours && (
+                {/* {market.hours && (
                   <span className="inline-flex items-center text-xs bg-slate-100 dark:bg-slate-700 px-3 py-1 rounded-full">
                     <Clock className="h-3 w-3 mr-1 text-lime-600 dark:text-lime-400" />
                     <span className="text-slate-700 dark:text-slate-200">
                       {market.hours}
                     </span>
                   </span>
-                )}
+                )} */}
               </div>
             </div>
           </div>

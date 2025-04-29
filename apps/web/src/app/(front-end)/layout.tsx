@@ -9,11 +9,8 @@ export default function FrontEndLayout({
   return (
     <div>
       <Navbar />
-
-      <div className="max-w-6xl mx-auto py-6  px-8 lg:px-0">
-        {children}
-      </div>
-        <Footer />
+      <div className="max-w-6xl mx-auto py-6  px-8 lg:px-0">{children}</div>
+      <Footer />
     </div>
   );
 }

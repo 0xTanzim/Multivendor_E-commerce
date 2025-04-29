@@ -24,14 +24,15 @@ export class ProductService extends BaseService<Product, ProductRepository> {
         categoryId: data.categoryId,
         farmerId: data.farmerId,
         isActive: data.isActive,
-        isWholeSale: data.isWholeSale,
+        isWholesale: data.isWholesale,
         wholeSalePrice: toFloat(data.wholeSalePrice),
         wholeSaleQty: toInt(data.wholeSaleQty),
         unit: data.unit,
         qty: data.qty,
         productStock: toInt(data.productStock),
         productCode: data.productCode,
-        images: data.images ?? [],
+        productImages: data.productImages ?? [],
+
         imageUrl: data.imageUrl ?? '',
         sellPrice: toFloat(
           data.sellPrice,
@@ -49,7 +50,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
           categoryId: newProduct.categoryId,
           userId: newProduct.farmerId,
           isActive: newProduct.isActive,
-          isWholesale: newProduct.isWholeSale,
+          isWholesale: newProduct.isWholesale,
           wholeSalePrice: newProduct.wholeSalePrice,
           wholeSaleQty: newProduct.wholeSaleQty,
           unit: newProduct.unit,
@@ -60,6 +61,7 @@ export class ProductService extends BaseService<Product, ProductRepository> {
           sellPrice: newProduct.sellPrice,
           slug: newProduct.slug,
           title: newProduct.title,
+          productImages: newProduct.productImages,
         },
       });
 
@@ -70,6 +72,44 @@ export class ProductService extends BaseService<Product, ProductRepository> {
       }
 
       throw new BadRequestError('Failed to create record');
+    }
+  }
+
+  async updateProduct(productId: string, data: IProduct) {
+    try {
+      const { categoryId, id, userId, sales, farmerId, ...updateData } = data;
+
+      // Format data before updating
+      const formattedData = {
+        ...updateData,
+        productPrice: parseFloat(data.productPrice.toString()),
+        sellPrice: parseFloat(data.sellPrice.toString()),
+        wholeSalePrice: parseFloat(data.wholeSalePrice.toString()),
+        wholeSaleQty: Number(data.wholeSaleQty),
+        productStock: Number(data.productStock),
+        qty: Number(data.qty),
+        unit: data.unit.toString(),
+      };
+
+      // Update the product, excluding the 'sales' relation
+      const updatedProduct = await this.repository.update(productId, {
+        ...formattedData,
+        category: {
+          connect: {
+            id: data.categoryId,
+          },
+        },
+        user: {
+          connect: {
+            id: data.userId,
+          },
+        },
+      });
+
+      return updatedProduct;
+    } catch (err) {
+      console.log('Error updating product', err.message);
+      throw new BadRequestError('Failed to update record');
     }
   }
 }

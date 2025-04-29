@@ -1,10 +1,11 @@
 import { farmerService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isFarmer } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class FarmerController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isFarmer(data)) {
@@ -14,16 +15,12 @@ export async function POST(req: Request) {
     const newFarmer = await farmerService.createFarmer(data);
 
     return NextResponse.json(newFarmer, { status: 201 });
-  } catch (error: unknown) {
-    return handleError(error);
+  }
+
+  async GET(_req: Request) {
+    const farmers = await farmerService.findAllFarmers();
+    return NextResponse.json(farmers, { status: 200 });
   }
 }
 
-export async function GET(_req: Request) {
-  try {
-    const farmers = await farmerService.findAll();
-    return NextResponse.json(farmers, { status: 200 });
-  } catch (err) {
-    return handleError(err);
-  }
-}
+export const { POST, GET } = new FarmerController();

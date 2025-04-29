@@ -11,6 +11,18 @@ export const isoFormate = (date: string) => {
   return isoString;
 };
 
+export function convertIsoDateToNormalDate(isoDate: string | Date) {
+  if (!isoDate) {
+    return '';
+  }
+
+  const date = new Date(isoDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 /**
  *  Format date to dd/mm/yyyy format
  * @param date   Date object
@@ -28,3 +40,17 @@ export const formatDate = (date: unknown): string => {
   const year = dateObj.getFullYear();
   return `${day}/${month}/${year}`;
 };
+
+export function convertToNormalDate(isoDate: string | Date): string {
+  if (!isoDate) {
+    return '';
+  }
+
+  const date = new Date(isoDate);
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+  };
+  return date.toLocaleDateString('en-US', options);
+}

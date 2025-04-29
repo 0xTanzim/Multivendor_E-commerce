@@ -22,9 +22,9 @@ const SidebarCategories = async () => {
 
         <div className="py-3 px-6 h-[300pSSx] overflow-y-auto flex flex-col gap-2 ">
           {categories && categories.length > 0 ? (
-            categories.map((category, index) => (
+            categories.map((category) => (
               <Link
-                href="#"
+                href={`/category/${category.slug}`}
                 className="flex items-center gap-3 hover:bg-slate-50 p-2 rounded-md duration-500 transition-all dark:text-slate-300 dark:hover:bg-slate-600"
                 key={category.id}
               >

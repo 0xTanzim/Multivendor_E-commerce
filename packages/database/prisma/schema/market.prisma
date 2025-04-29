@@ -6,6 +6,18 @@ model Market {
   description String?
   isActive    Boolean @default(false)
 
+  // new added schema
+  coverImageUrl String?
+  website       String?
+  phone         String?
+  email         String?
+  address       String?
+
+  isFeatured Boolean @default(false)
+  isVerified Boolean @default(false)
+
+  // finished
+
   categoryIds String[]   @db.ObjectId
   categories  Category[] @relation(fields: [categoryIds], references: [id])
 

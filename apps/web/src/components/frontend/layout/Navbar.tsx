@@ -1,12 +1,30 @@
-import { HelpCircle, ShoppingCart, User } from 'lucide-react';
+"use client";
+
+import UserAvatar from '@/components/shared/UserAvatar';
+import ThemeSwitcherBtn from '@/components/ui/ThemeSwitcherBtn';
+import { User } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '../../../../public/images/logo.png';
-import SearchForm from '../SearchForm';
-import ThemeSwitcherBtn from '@/components/ui/ThemeSwitcherBtn';
 import { HelpModal } from '../HelpModal';
+import SearchForm from '../SearchForm';
+import CartCount from '../cart/CartCount';
 
 const Navbar = () => {
+  const { data: session, status } = useSession();
+
+  if (status === 'loading') {
+    return (
+      <p>
+        <span className="font-bold">Loading...</span>
+        <span className="text-gray-500">
+          Please wait while we load the data.
+        </span>
+      </p>
+    );
+  }
+
   return (
     <div className="bg-white dark:bg-slate-700 shadow-sm">
       <div className=" flex items-center justify-between py-3 max-w-6xl mx-auto px-8 gap-8">
@@ -19,31 +37,20 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-8">
-          <Link
-            href={'/login'}
-            className="flex items-center space-x-1 text-green-950 dark:text-green-50"
-          >
-            <User />
-            <span>Login</span>
-          </Link>
-
-        
+          {status === 'unauthenticated' ? (
+            <Link
+              href={'/login'}
+              className="flex items-center space-x-1 text-green-950 dark:text-green-50"
+            >
+              <User />
+              <span>Login</span>
+            </Link>
+          ) : (
+            session?.user && <UserAvatar user={session.user} />
+          )}
 
           <HelpModal />
-
-          <Link
-            href="/cart"
-            type="button"
-            className="relative inline-flex items-center p-3 text-sm font-medium text-center text-white bg-transparent rounded-lg "
-          >
-            <ShoppingCart className="text-lime-700 dark:text-lime-500" />
-            <span className="sr-only">Cart</span>
-            <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500  rounded-full -top-0 end-6 dark:border-gray-900">
-              20
-            </div>
-          </Link>
-
-
+          <CartCount />
         </div>
         <ThemeSwitcherBtn />
       </div>

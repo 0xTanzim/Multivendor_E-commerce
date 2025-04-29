@@ -6,17 +6,14 @@ export type CreateMarket = {
   description: string;
   isActive: boolean;
   categoryIds: string[];
+  coverImageUrl?: string;
+  website?: string;
+  phone?: string;
+  address?: string;
+  email?: string;
 };
 
-export type Market = {
-  id?: string;
-  title: string;
-  slug: string;
-  logoUrl?: string;
-  description: string;
-  isActive: boolean;
-  categoryIds: string[];
-};
+export type Market = CreateMarket & {};
 
 /**
  * Type guard to check if a given object is an array of Market.

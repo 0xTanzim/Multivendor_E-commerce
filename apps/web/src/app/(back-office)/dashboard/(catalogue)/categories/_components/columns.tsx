@@ -51,13 +51,17 @@ export const columns = [
   {
     accessorKey: 'createdAt',
     header: () => <div className="text-right">Created At</div>,
-    cell: ({ row }: { row: Row<any> }) => <DateColumn row={row} accessorKey='createdAt' />,
+    cell: ({ row }: { row: Row<any> }) => (
+      <DateColumn row={row} accessorKey="createdAt" />
+    ),
   },
 
   {
     id: 'actions',
     cell: ({ row }: { row: Row<any> }) => {
-      return <ActionColumn row={row} title="Category" />;
+      return (
+        <ActionColumn row={row} title="Category" endPointPath="categories" />
+      );
     },
   },
 ];

@@ -1,44 +1,82 @@
-"use client";
+'use client';
 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+type ProductData = {
+  name: string;
+  quantity: number;
+};
 
+type BestSellingProductChartProps = {
+  productData: ProductData[];
+};
 
-const BestSellingProductChart = () => {
-  const data = {
-    labels: ["GCabbage", "Watermelon", "Broccoli", "Maize"],
-    datasets: [
-      {
-        label: "# of Votes",
-        data: [60, 46, 33, 15],
-        backgroundColor: [
-          "#1E3A8A",
-          "#9333EA", 
-          "#10B981",
-          "#F59E0B", 
-        ],
-        borderColor: [
-          "#1E3A8A", 
-          "#9333EA", 
-          "#10B981", 
-          "#F59E0B", 
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+const BestSellingProductChart = ({
+  productData = [],
+}: BestSellingProductChartProps) => {
+  // Ensure we have data or provide placeholder
+  const chartData =
+    productData.length > 0
+      ? productData
+      : [{ name: 'No Data Available', quantity: 0 }];
 
   return (
-    <div className="dark:bg-slate-800 bg-slate-50 shadow-sm p-8 rounded-lg">
-      <h2 className="text-xl font-bold text-slate-800 dark:text-slate-50">Best Selling Product Chart</h2>
-      <div className="p-4">
-      <Pie data={data} />
-      </div>
-    </div>
+    <Card className="shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle>Best Selling Products</CardTitle>
+        <CardDescription>Top products by sales volume</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="h-[300px] w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={chartData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 60,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="name"
+                angle={-45}
+                textAnchor="end"
+                height={70}
+                tick={{ fontSize: 12 }}
+              />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="quantity"
+                name="Units Sold"
+                fill="#8884d8"
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
 export default BestSellingProductChart;
-

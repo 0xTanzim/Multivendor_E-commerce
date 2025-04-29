@@ -1,0 +1,79 @@
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  FARMER
+  MODERATOR
+  USER
+}
+
+enum AccountStatus {
+  PENDING
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum VerificationCodeType {
+  ACCOUNT_ACTIVATION
+  PASSWORD_RESET
+  EMAIL_CHANGE
+  PHONE_CHANGE
+  TWO_FACTOR_AUTH
+  TWO_FACTOR_AUTH_DISABLE
+}
+
+enum VerificationStatus {
+  PENDING
+  VERIFIED
+  EXPIRED
+}
+
+enum LoginAttemptStatus {
+  SUCCESS
+  FAILED
+}
+
+model AuthUser {
+  id                String        @id @default(auto()) @map("_id") @db.ObjectId
+  email             String        @unique
+  password          String
+  name              String?
+  emailVerified     Boolean       @default(false)
+  accountStatus     AccountStatus @default(PENDING)
+  plan              String?
+  verificationToken String?
+
+  // Relations
+  user         User           @relation(fields: [id], references: [id])
+  authSessions AuthSession[]
+  loginHistory LoginHistory[]
+
+  // Role: one user → one role
+  roleId String? @db.ObjectId
+  role   Role?   @relation(name: "UserRoles", fields: [roleId], references: [id], onDelete: SetNull)
+}
+
+model AuthSession {
+  id         String               @id @default(auto()) @map("_id") @db.ObjectId
+  userId     String               @db.ObjectId
+  token      String?              @unique
+  code       String?
+  type       VerificationCodeType @default(ACCOUNT_ACTIVATION)
+  expiresAt  DateTime?
+  verified   Boolean              @default(false)
+  status     VerificationStatus   @default(PENDING)
+  verifiedAt DateTime?
+
+  user AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LoginHistory {
+  id        String             @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String             @db.ObjectId
+  ipAddress String?
+  userAgent String?
+  attempt   LoginAttemptStatus @default(SUCCESS)
+  loginAt   DateTime           @default(now())
+
+  user AuthUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

@@ -1,55 +1,34 @@
 import { UserRepository } from '@repo/backend-repository';
-import { BadRequestError, ConflictError } from '@repo/common/error';
 import { BaseService, injectable } from '@repo/core';
-import { prisma } from '@repo/database';
-import { User } from '@repo/types';
-import bcrypt from 'bcryptjs';
+import { User } from '@repo/database';
+import { User as IUser } from '@repo/types';
+import { isoFormate } from '@repo/utils';
 
 @injectable()
 export class UserService extends BaseService<User, UserRepository> {
-  constructor(userRepository: UserRepository) {
+  constructor(private readonly userRepository: UserRepository) {
     super(userRepository);
   }
 
-  async fetchUserByEmail(email: string) {
-    return this.repository.findUnique({ where: { email } });
-  }
-
-  async createUser(data: User) {
+  async updateUser(id: string, data: Partial<IUser>): Promise<IUser> {
     try {
-      const newUser = {
-        email: data.email,
-        name: data.name,
-        password: data.password,
-        role: data.role,
-        bio: data.bio ?? '',
+      const updateData = {
+        ...data,
+        dateOfBirth:
+          data.dateOfBirth instanceof Date
+            ? data.dateOfBirth
+            : isoFormate(data.dateOfBirth),
       };
 
-      const hashedPassword = await this.hashedPassword(data.password, 10);
+      const res = await this.userRepository.updateUser(id, updateData);
 
-      const user = await prisma.user.create({
-        data: {
-          ...newUser,
-          password: hashedPassword,
-        },
-      });
-
-      return user;
+      // Ensure gender is cast to the correct enum/type
+      return {
+        ...res,
+        gender: res.gender as IUser['gender'],
+      };
     } catch (err) {
-      if (err.code === 'P2002') {
-        throw new ConflictError('User with this email already exists');
-      }
-
-      throw new BadRequestError('Failed to create user');
+      return this.handlePrismaError(err, 'Error updating user');
     }
-  }
-
-  async hashedPassword(password: string, saltRounds = 10) {
-    const salt = await bcrypt.genSalt(saltRounds);
-    return bcrypt.hash(password, salt);
-  }
-
-  async comparePassword(password: string, hashedPassword: string) {
-    return bcrypt.compare(password, hashedPassword);
   }
 }

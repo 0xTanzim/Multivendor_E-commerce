@@ -4,6 +4,9 @@ export const getData = async (endpoint: string) => {
 
     const res = await fetch(`${baseUrl}/api/${endpoint}`, {
       cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     });
 
     const data = await res.json();

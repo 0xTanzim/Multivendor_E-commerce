@@ -1,4 +1,5 @@
-import NewTrainingForm from '@/components/backOffice/community/NewTrainingForm';
+import TrainingForm from '@/components/backOffice/community/TrainingForm';
+import FormHeader from '@/components/backOffice/form/FormHeader';
 import { getData } from '@/lib/getData';
 import { isCategoryArray } from '@repo/types';
 
@@ -16,7 +17,8 @@ const NewTrainingPage = async () => {
 
   return (
     <div>
-      <NewTrainingForm categories={categories} />
+      <FormHeader title="New Training" />
+      <TrainingForm categories={categories} />
     </div>
   );
 };

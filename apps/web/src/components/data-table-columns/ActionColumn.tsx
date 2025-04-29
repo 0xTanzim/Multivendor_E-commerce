@@ -5,11 +5,30 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { API_ENDPOINTS, EndpointKey } from '@repo/types';
 import { Row } from '@tanstack/react-table';
 import { MoreHorizontal } from 'lucide-react';
+import DeleteBtn from '../Actions/DeleteBtn';
+import EditBtn from '../Actions/EditBtn';
 import { Button } from '../ui/button';
-const ActionColumn = ({ row, title }: { row: Row<any>; title: string }) => {
-  const isActive = row.getValue('isActive');
+
+const ActionColumn = ({
+  row,
+  title,
+  endPointPath,
+}: {
+  row: Row<any>;
+  title: string;
+  endPointPath: EndpointKey;
+}) => {
+  const id = row.original.id;
+
+  const apiEndPoint = `${API_ENDPOINTS[endPointPath]}/${id}`;
+
+  const editEndpoint =
+    endPointPath === 'trainings'
+      ? `/community/update/${id}`
+      : `${API_ENDPOINTS[endPointPath]}/update/${id}`;
 
   return (
     <DropdownMenu>
@@ -21,8 +40,12 @@ const ActionColumn = ({ row, title }: { row: Row<any>; title: string }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuItem>Delete {title} </DropdownMenuItem>
-        <DropdownMenuItem>Edit {title}</DropdownMenuItem>
+        <DropdownMenuItem>
+          <DeleteBtn endpoint={apiEndPoint} title={title} />
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <EditBtn editEndpoint={editEndpoint} title={title} />
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

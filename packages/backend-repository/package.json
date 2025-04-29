@@ -14,7 +14,8 @@
   "dependencies": {
     "@repo/typescript-config": "workspace:*",
     "@repo/database": "workspace:*",
-    "@repo/core": "workspace:*"
+    "@repo/core": "workspace:*",
+    "@repo/types": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2"

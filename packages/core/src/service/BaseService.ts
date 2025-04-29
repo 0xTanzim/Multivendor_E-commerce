@@ -23,24 +23,17 @@ export abstract class BaseService<
     try {
       const result = await this.repository.findAll(options);
       return result;
-    } catch (err) {
-      throw new InternalServerError('Error fetching records');
+    } catch (error) {
+      return this.handlePrismaError(error, 'findAll');
     }
   }
 
   async findById(id: ID): Promise<TModel | null> {
     try {
       const result = await this.repository.findById(id);
-      if (!result) {
-        throw new NotFoundError(`Record with ID ${id} not found`);
-      }
       return result;
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] findById error', error);
-      throw new InternalServerError('Error fetching records');
+      return this.handlePrismaError(error, 'findById');
     }
   }
 
@@ -50,12 +43,20 @@ export abstract class BaseService<
   ): Promise<T> {
     try {
       return await this.repository.create(data, select);
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        throw new ConflictError('Record already exists');
-      }
-      console.error('[BaseService] create error', error);
-      throw new BadRequestError('Failed to create record');
+    } catch (error) {
+      return this.handlePrismaError(error, 'create');
+    }
+  }
+
+  async createMany<T = TModel>(
+    data: Parameters<TRepository['createMany']>[0],
+    skipDuplicates?: Parameters<TRepository['createMany']>[1]
+  ): Promise<{ count: number }> {
+    try {
+      const result = await this.repository.createMany(data, skipDuplicates);
+      return result;
+    } catch (error) {
+      return this.handlePrismaError(error, 'createMany');
     }
   }
 
@@ -69,25 +70,17 @@ export abstract class BaseService<
 
       return await this.repository.update(id, data);
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] update error', error);
-      throw new BadRequestError('Failed to update record');
+      return this.handlePrismaError(error, 'update');
     }
   }
 
-  async delete(id: ID): Promise<TModel | null> {
+  async deleteById(id: ID): Promise<TModel | null> {
     try {
       const result = await this.repository.delete(id);
       if (!result) throw new NotFoundError(`Record with ID ${id} not found`);
       return result;
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] delete error', error);
-      throw new BadRequestError('Failed to delete record');
+      return this.handlePrismaError(error, 'deleteById');
     }
   }
 
@@ -95,7 +88,7 @@ export abstract class BaseService<
     try {
       return await this.repository.checkExist({ id });
     } catch (error) {
-      throw new InternalServerError('Error checking record');
+      return this.handlePrismaError(error, 'checkExistById');
     }
   }
 
@@ -105,7 +98,7 @@ export abstract class BaseService<
     try {
       return await this.repository.checkExist(where);
     } catch (error) {
-      throw new InternalServerError('Error checking record');
+      return this.handlePrismaError(error, 'checkExist');
     }
   }
 
@@ -113,8 +106,7 @@ export abstract class BaseService<
     try {
       return await this.repository.aggregate(args);
     } catch (error) {
-      console.error('[BaseService] aggregate error', error);
-      throw new InternalServerError('Error performing aggregate operation');
+      return this.handlePrismaError(error, 'aggregate');
     }
   }
 
@@ -122,8 +114,7 @@ export abstract class BaseService<
     try {
       return await this.repository.count(args);
     } catch (error) {
-      console.error('[BaseService] count error', error);
-      throw new InternalServerError('Error counting records');
+      return this.handlePrismaError(error, 'count');
     }
   }
 
@@ -132,12 +123,8 @@ export abstract class BaseService<
   ): Promise<TModel | null> {
     try {
       return await this.repository.upsert(args);
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        throw new ConflictError('Record already exists');
-      }
-      console.error('[BaseService] upsert error', error);
-      throw new BadRequestError('Failed to upsert record');
+    } catch (error) {
+      return this.handlePrismaError(error, 'upsert');
     }
   }
 
@@ -151,11 +138,7 @@ export abstract class BaseService<
     try {
       return await this.repository.findFirst(args);
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] findFirst error', error);
-      throw new InternalServerError('Error finding record');
+      return this.handlePrismaError(error, 'findFirst');
     }
   }
 
@@ -165,8 +148,7 @@ export abstract class BaseService<
     try {
       return await this.repository.aggregateRaw(args);
     } catch (error) {
-      console.error('[BaseService] aggregateRaw error', error);
-      throw new InternalServerError('Error performing raw aggregate operation');
+      return this.handlePrismaError(error, 'aggregateRaw');
     }
   }
 
@@ -176,11 +158,7 @@ export abstract class BaseService<
     try {
       return await this.repository.findMany(args);
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] findMany error', error);
-      throw new InternalServerError('Error finding records');
+      return this.handlePrismaError(error, 'findMany');
     }
   }
 
@@ -190,11 +168,7 @@ export abstract class BaseService<
     try {
       return await this.repository.deleteMany(args);
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] deleteMany error', error);
-      throw new BadRequestError('Failed to delete records');
+      return this.handlePrismaError(error, 'deleteMany');
     }
   }
 
@@ -204,11 +178,7 @@ export abstract class BaseService<
     try {
       return await this.repository.updateMany(args);
     } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
-      }
-      console.error('[BaseService] updateMany error', error);
-      throw new BadRequestError('Failed to update records');
+      return this.handlePrismaError(error, 'updateMany');
     }
   }
 
@@ -216,13 +186,65 @@ export abstract class BaseService<
     args: Parameters<TRepository['findUnique']>[0]
   ): Promise<TModel | null> {
     try {
-      return await this.repository.findUnique(args);
-    } catch (error) {
-      if (error instanceof BaseError) {
-        throw error;
+      const result = await this.repository.findUnique(args);
+      if (!result) {
+        throw new NotFoundError(`Record not found`);
       }
-      console.error('[BaseService] findUnique error', error);
-      throw new InternalServerError('Error finding unique record');
+      return result;
+    } catch (error) {
+      return this.handlePrismaError(error, 'findUnique');
     }
+  }
+
+  protected handlePrismaError(error: any, operation: string): never {
+    console.log('Prisma Error', error.message);
+
+    if (error && error.name === 'PrismaClientKnownRequestError' && error.code) {
+      console.log(
+        `Error Details For:- (${operation})==> Prisma Client Error ===> :`,
+        JSON.stringify(error, null, 2)
+      );
+      switch (error.code) {
+        case 'P2001':
+          throw new NotFoundError(`Record not found in where condition`);
+        case 'P2002':
+          throw new ConflictError('Record already exists');
+
+        case 'P2003':
+          throw new BadRequestError(
+            `Foreign key constraint failed on field: ${error.meta?.field_name || 'unknown'}`
+          );
+
+        case 'P2012':
+        case 'P2013':
+          throw new BadRequestError(
+            `Missing required value: ${error.meta || 'unknown'}`
+          );
+
+        case 'P2014':
+          throw new BadRequestError(
+            'Operation failed due to constraint violation'
+          );
+        case 'P2023':
+          throw new BadRequestError(
+            `Invalid ID format: ${error.meta?.message || error.message}`
+          );
+        case 'P2025':
+          throw new NotFoundError(
+            `Record not found: ${error.meta?.cause || 'Unknown cause'}`
+          );
+        default:
+          throw new BadRequestError(
+            `Database error (${error.code}): ${error.message}`
+          );
+      }
+    }
+
+    if (error instanceof BaseError) {
+      throw error;
+    }
+
+    console.log(`Error JSON (${operation}) :1`, JSON.stringify(error, null, 2));
+    throw new InternalServerError(`Error during ${operation}`);
   }
 }

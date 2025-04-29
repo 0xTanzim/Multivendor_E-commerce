@@ -1,18 +1,15 @@
-import NewProductForm from '@/components/backOffice/product/NewProductForm';
+import FormHeader from '@/components/backOffice/form/FormHeader';
+import ProductForm from '@/components/backOffice/product/ProductForm';
 import { getData } from '@/lib/getData';
 import { isCategoryArray, isFarmers } from '@repo/types';
 
 const NewProductPage = async () => {
   // Categories and Farmers
   const categoriesData: unknown = await getData('categories');
-  const farmersData: unknown = await getData('farmers');
+  const farmersData = await getData('farmers');
 
   if (!isCategoryArray(categoriesData)) {
     return <div>Failed to fetch categories</div>;
-  }
-
-  if (!isFarmers(farmersData)) {
-    return <div>Failed to fetch users</div>;
   }
 
   const categories = categoriesData.map((category) => ({
@@ -20,12 +17,33 @@ const NewProductPage = async () => {
     title: category.title,
   }));
 
-  const farmers = farmersData.map((farmer) => ({
-    id: farmer.id!,
-    title: farmer.name,
-  }));
+  let allFarmersData = null;
 
-  return <NewProductForm categories={categories} farmers={farmers} />;
+  if (!isFarmers(farmersData)) {
+    allFarmersData = null;
+  } else {
+    allFarmersData = farmersData;
+  }
+
+  console.log('allFarmersData', allFarmersData);
+
+  const farmers =
+    (allFarmersData &&
+      allFarmersData.map((farmer) => ({
+        id: farmer.user?.id,
+        title: farmer.user?.name,
+      }))) ||
+    [];
+
+  return (
+    <div>
+      <FormHeader title="New Product" />
+      {
+        // @ts-expect-error: Type 'null' is not assignable to type 'boolean'.
+        <ProductForm categories={categories} farmers={farmers} />
+      }
+    </div>
+  );
 };
 
 export default NewProductPage;

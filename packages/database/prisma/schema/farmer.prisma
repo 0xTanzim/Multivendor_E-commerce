@@ -1,21 +1,28 @@
+enum FarmerStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  SUSPENDED
+  BLOCKED
+}
+
 model FarmerProfile {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  name               String
-  email              String
   phone              String
   physicalAddress    String?
   contactPerson      String?
   contactPersonPhone String?
-  profileImageUrl    String?
+  profileImageUrl    String?  @default("")
   terms              String?
   notes              String?
-  isActive           Boolean  @default(false)
-  products           String[]
-  mainCrops          String
+  isActive           Boolean  @default(true)
+  products           String[] @default([])
+  mainCrop           String?
   farmSize           Float?
   code               String?
+  status             FarmerStatus @default(PENDING)
 
-  user   User   @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String @unique @db.ObjectId
 
   createdAt DateTime  @default(now())

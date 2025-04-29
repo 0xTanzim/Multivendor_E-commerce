@@ -9,7 +9,7 @@ export default function Register() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
               Create a new account
             </h1>
-            <RegisterForm role="USER" />
+            <RegisterForm role="User" />
           </div>
         </div>
       </div>

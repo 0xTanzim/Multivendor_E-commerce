@@ -1,39 +1,31 @@
-enum UserRole {
-  SUPER_ADMIN
-  ADMIN
-  FARMER
-  MODERATOR
-  USER
-}
-
-enum Gender {
-  MALE
-  FEMALE
-  UNKNOWN
-}
-
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?        @unique
-  emailVerified DateTime?
-  password      String?
-  role          UserRole       @default(USER)
-  gender        Gender         @default(UNKNOWN)
-  bio           String?        @default("")
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  username      String?    @unique
+  gender        String    @default("UNKNOWN")
+  firstName     String?
+  lastName      String?
+  bio           String?   @default("")
+  dateOfBirth   DateTime?
+  address       String?
+  phone         String    @default("")
+  city          String?
+  country       String?
+  postalCode    String?
+  district      String?
+  streetAddress String?
+
+  profileImage String?   @default("")
+  settings     Json?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  isDeleted    Boolean   @default(false)
+  deletedAt    DateTime? @map("deletedAt")
+  authUser     AuthUser?
+  products     Product[]
+  orders       Order[]
+  sales        Sale[]
+  coupons      Coupon[]
+
   farmerProfile FarmerProfile?
-
-  products Product[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Profile {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  firstName String
-  lastName  String
-  userId    String    @unique @db.ObjectId
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
+  isActive      Boolean        @default(true)
 }

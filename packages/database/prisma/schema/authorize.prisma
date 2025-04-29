@@ -1,0 +1,57 @@
+model Role {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  name           String  @unique
+  description    String?
+
+  // Self-referencing for hierarchy
+  parentId String? @db.ObjectId
+  parent   Role?   @relation(name: "RoleHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children Role[]  @relation(name: "RoleHierarchy")
+
+  // Permissions (many-to-many)
+  rolePermissions RolePermission[]
+
+  // Reverse relation to users
+  users AuthUser[] @relation(name: "UserRoles")
+
+  isDefault Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Permission {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String  @unique
+  description String?
+  action      String
+  resource    String
+
+  // Permission Group (optional)
+  permissionGroupId String?          @db.ObjectId
+  permissionGroup   PermissionGroup? @relation(fields: [permissionGroupId], references: [id])
+
+  // Roles (many-to-many)
+  rolePermissions RolePermission[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RolePermission {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  roleId       String @db.ObjectId
+  permissionId String @db.ObjectId
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+}
+
+model PermissionGroup {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String       @unique
+  permissions Permission[]
+}

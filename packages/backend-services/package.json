@@ -8,18 +8,22 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"  
+      "default": "./dist/index.js"
     }
   },
   "dependencies": {
+    "@repo/backend-repository": "workspace:*",
     "@repo/common": "workspace:*",
     "@repo/core": "workspace:*",
     "@repo/database": "workspace:*",
+    "@repo/email-service": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@repo/smtp-email-service": "workspace:*",
     "@repo/utils": "workspace:*",
+    "base64url": "^3.0.1",
     "bcryptjs": "^3.0.2",
-    "@repo/backend-repository": "workspace:*"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

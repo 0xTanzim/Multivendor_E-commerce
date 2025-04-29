@@ -16,7 +16,14 @@ const nextConfig: NextConfig = {
         hostname: 'utfs.io',
         pathname: '/f/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

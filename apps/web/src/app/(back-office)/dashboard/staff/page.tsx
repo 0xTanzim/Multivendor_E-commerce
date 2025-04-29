@@ -1,7 +1,11 @@
+import { getData } from "@/lib/getData";
 import PageHeader from "../_components/PageHeader";
 import TableActions from "../_components/TableActions";
 
-const staffPage = () => {
+const staffPage = async() => {
+
+  // const staffDatas = await getData('staffs');
+
   return (
     <div>
       {/* header  */}

@@ -13,5 +13,16 @@
       "docker-compose.yml",
       "docker-compose.yaml"
     ]
-  }
+  },
+  "postman.settings.dotenv-detection-notification-visibility": false,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/**": true,
+    "**/.next/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/out/**": true,
+    "**/coverage/**": true
+  },
+  
 }

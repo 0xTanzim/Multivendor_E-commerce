@@ -11,4 +11,8 @@ export class ProductRepository extends BaseRepository<
   constructor(@inject(PrismaClientToken) prisma: PrismaClient) {
     super(prisma, prisma.product);
   }
+
+
+
+
 }

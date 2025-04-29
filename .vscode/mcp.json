@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "mongodb": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-mongo-server",
+        "mongodb+srv://kdptanzim0:MrVCLVFCPRA2RCG3@cluster0.wubbv.mongodb.net/mindFuel?retryWrites=true&w=majority&appName=Cluster0"
+      ]
+    }
+  }
+}

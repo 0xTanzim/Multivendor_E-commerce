@@ -1,10 +1,11 @@
 import { marketService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { isMarket, Market } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class MarketController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isMarket(data)) {
@@ -18,24 +19,21 @@ export async function POST(req: Request) {
       isActive: data.isActive,
       slug: data.slug,
       logoUrl: data.logoUrl,
+      email: data.email,
+      phone: data.phone,
+      website: data.website,
+      address: data.address,
+      coverImageUrl: data.coverImageUrl,
     };
 
     const newMarket = await marketService.create(marketData);
 
     return NextResponse.json(newMarket, { status: 201 });
-  } catch (error: unknown) {
-    console.error(error);
-    return handleError(error);
   }
-}
 
-export async function GET(_req: Request) {
-  try {
+  async GET(_req: Request) {
     const markets = await marketService.findAll();
-
     return NextResponse.json(markets, { status: 200 });
-  } catch (error: unknown) {
-    console.error(error);
-    return handleError(error);
   }
 }
+export const { GET, POST } = new MarketController();

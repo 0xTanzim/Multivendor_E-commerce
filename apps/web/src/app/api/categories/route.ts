@@ -1,17 +1,18 @@
 import { categoryService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { CreateCategory, isCategory } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class CategoryController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
 
     if (!isCategory(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    const CategoryData: CreateCategory = {
+    const categoryData: CreateCategory = {
       title: data.title,
       slug: data.slug,
       imageUrl: data.imageUrl ?? '',
@@ -19,15 +20,11 @@ export async function POST(req: Request) {
       isActive: data.isActive ?? false,
     };
 
-    const newCategory = await categoryService.create(CategoryData);
+    const newCategory = await categoryService.create(categoryData);
     return NextResponse.json(newCategory, { status: 201 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
-}
 
-export async function GET(req: NextRequest) {
-  try {
+  async GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const query = searchParams.get('include');
 
@@ -44,7 +41,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(categories);
-  } catch (err) {
-    return handleError(err);
   }
 }
+
+export const { POST, GET } = new CategoryController();

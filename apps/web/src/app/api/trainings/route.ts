@@ -1,10 +1,11 @@
 import { trainingService } from '@/lib/di';
-import { handleError } from '@/utils';
+import { catchErrors } from '@/utils';
 import { Training, isTraining } from '@repo/types';
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
+@catchErrors()
+class TrainingController {
+  async POST(req: Request) {
     const data: unknown = await req.json();
     if (!isTraining(data)) {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
@@ -21,21 +22,18 @@ export async function POST(req: Request) {
     };
 
     const newTraining = await trainingService.create(trainingData);
-
-    console.log(newTraining);
-
     return NextResponse.json(newTraining, { status: 201 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
-}
 
-export async function GET() {
-  try {
-    const trainings = await trainingService.findAll();
+  async GET() {
+    const trainings = await trainingService.findAll({
+      include: {
+        category: true,
+      },
+    });
 
     return NextResponse.json(trainings, { status: 200 });
-  } catch (error: unknown) {
-    return handleError(error);
   }
 }
+
+export const { POST, GET } = new TrainingController();

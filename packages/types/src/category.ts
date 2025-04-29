@@ -1,6 +1,6 @@
 import { Training } from './community';
 import { Market } from './market';
-import { Product } from './product';
+import { Product } from './products';
 
 export interface CreateCategory {
   title: string;
@@ -11,13 +11,8 @@ export interface CreateCategory {
   marketIds?: string[];
 }
 
-export type Category = {
+export type Category = CreateCategory &  {
   id?: string;
-  title: string;
-  slug: string;
-  description: string;
-  imageUrl?: string;
-  isActive?: boolean;
   products?: Product[];
   marketIds?: string[];
   markets?: Market[];

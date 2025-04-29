@@ -18,6 +18,7 @@ export abstract class BaseRepository<
     updateMany: (...args: any) => any;
     deleteMany: (...args: any) => any;
     aggregateRaw: (...args: any) => any;
+    createMany: (...args: any) => any;
   },
 > {
   protected prisma: PrismaClient;
@@ -31,8 +32,15 @@ export abstract class BaseRepository<
   async findAll(
     args?: Parameters<TDelegate['findMany']>[0]
   ): Promise<TModel[]> {
-    return this.delegate.findMany(args);
+    const defaultOrder = { orderBy: { createdAt: 'desc' } };
+    const options = {
+      ...defaultOrder,
+      ...args,
+      orderBy: args?.orderBy ?? defaultOrder.orderBy,
+    };
+    return this.delegate.findMany(options);
   }
+  
 
   async findById(id: ID): Promise<TModel | null> {
     return this.delegate.findUnique({ where: { id } });
@@ -65,6 +73,18 @@ export abstract class BaseRepository<
       select,
     }) as Promise<T>;
   }
+
+  async createMany(
+    data: Parameters<TDelegate['createMany']>[0]['data'],
+    skipDuplicates?: Parameters<TDelegate['createMany']>[0]['skipDuplicates']
+  ): Promise<{ count: number }> {
+    return this.delegate.createMany({
+      data,
+      skipDuplicates,
+    });
+  }
+
+
 
   async update(
     id: ID,
@@ -118,5 +138,10 @@ export abstract class BaseRepository<
     args: Parameters<TDelegate['aggregateRaw']>[0]
   ): Promise<any> {
     return this.delegate.aggregateRaw(args);
+  }
+
+  async checkById(id: ID): Promise<boolean> {
+    const result = await this.delegate.findUnique({ where: { id } });
+    return !!result;
   }
 }

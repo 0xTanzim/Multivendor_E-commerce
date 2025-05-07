@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { calculateSubTotal } from '@repo/utils';
 import { format } from 'date-fns';
 import { Eye } from 'lucide-react';
 import Link from 'next/link';
@@ -98,53 +99,61 @@ const CustomDataTable = ({ orders = [] }: CustomDataTableProps) => {
           {/* Table body */}
           <tbody>
             {currentlyDisplayData.length > 0 ? (
-              currentlyDisplayData.map((order) => (
-                <tr
-                  key={order.id || Math.random().toString()}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                >
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              currentlyDisplayData.map((order) => {
+                // Calculate subtotal for each order
+                const subtotal = calculateSubTotal(order.OrderItem || []);
+                console.log('subtotal', subtotal);
+
+                return (
+                  <tr
+                    key={order.id || Math.random().toString()}
+                    className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
-                    #
-                    {order.orderNumber ||
-                      (order.id ? order.id.substring(0, 8) : 'N/A')}
-                  </th>
-                  <td className="px-6 py-4">
-                    {/* Handle different ways the customer name might be stored */}
-                    {order.user?.name ||
-                      order.customer?.name ||
-                      order.customerName ||
-                      'Customer'}
-                  </td>
-                  <td className="px-6 py-4">
-                    {order.createdAt
-                      ? format(new Date(order.createdAt), 'MMM dd, yyyy')
-                      : 'N/A'}
-                  </td>
-                  <td className="px-6 py-4">
-                    {formatCurrency(order.totalAmount || order.total || 0)}
-                  </td>
-                  <td className="px-6 py-4">
-                    <Badge
-                      className={getStatusColor(order.status || 'PENDING')}
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      {order.status || 'PENDING'}
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-4">{order.items?.length || 0}</td>
-                  <td className="px-6 py-4">
-                    <Link
-                      href={`/dashboard/orders/${order.id || ''}`}
-                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline flex items-center gap-1"
-                    >
-                      <Eye size={16} />
-                      View
-                    </Link>
-                  </td>
-                </tr>
-              ))
+                      #
+                      {order.orderNumber ||
+                        (order.id ? order.id.substring(0, 8) : 'N/A')}
+                    </th>
+                    <td className="px-6 py-4">
+                      {/* Handle different ways the customer name might be stored */}
+                      {order.user?.name ||
+                        order.customer?.name ||
+                        order.customerName ||
+                        'Customer'}
+                    </td>
+                    <td className="px-6 py-4">
+                      {order.createdAt
+                        ? format(new Date(order.createdAt), 'MMM dd, yyyy')
+                        : 'N/A'}
+                    </td>
+                    <td className="px-6 py-4">
+                      {formatCurrency(subtotal || order.total || 0)}
+                    </td>
+                    <td className="px-6 py-4">
+                      <Badge
+                        className={getStatusColor(order.status || 'PENDING')}
+                      >
+                        {order.status || 'PENDING'}
+                      </Badge>
+                    </td>
+                    <td className="px-6 py-4">
+                      {order.OrderItem?.length || 0}
+                    </td>
+                    <td className="px-6 py-4">
+                      <Link
+                        href={`/dashboard/orders/${order.id || ''}`}
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline flex items-center gap-1"
+                      >
+                        <Eye size={16} />
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })
             ) : (
               <tr>
                 <td colSpan={7} className="px-6 py-4 text-center">

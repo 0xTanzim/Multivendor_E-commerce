@@ -46,7 +46,7 @@ export const authOptions: NextAuthConfig = {
               name: true,
               email: true,
               password: true,
-              role: { select: { name: true } },
+              role: { select: { name: true, id: true } },
               emailVerified: true,
               accountStatus: true,
               user: {
@@ -78,6 +78,7 @@ export const authOptions: NextAuthConfig = {
             name: existingUser.name,
             email: existingUser.email,
             role: existingUser.role?.name ?? 'User',
+            roleId: existingUser.role?.id,
             emailVerified: existingUser.emailVerified,
             profileImage: existingUser.user?.profileImage,
             accountStatus: existingUser.accountStatus,
@@ -108,6 +109,7 @@ export const authOptions: NextAuthConfig = {
         session.user.name = token.name as string;
         session.user.email = token.email as string;
         session.user.role = token.role;
+        session.user.roleId = token.roleId;
         session.user.emailVerified = token.emailVerified;
         session.user.profileImage = token.profileImage;
         session.user.accountStatus = token.accountStatus;
@@ -120,6 +122,7 @@ export const authOptions: NextAuthConfig = {
         token.name = user.name as string;
         token.email = user.email as string;
         token.role = user.role;
+        token.roleId = user.roleId;
         token.emailVerified = user.emailVerified as boolean;
         token.profileImage = user.profileImage ?? null;
         token.accountStatus = user.accountStatus;

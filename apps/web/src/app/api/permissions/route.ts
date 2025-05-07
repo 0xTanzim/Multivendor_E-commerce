@@ -4,7 +4,7 @@ import { isPermission } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 @catchErrors()
- class PermissionController {
+class PermissionController {
   async GET() {
     const permissions = await permissionService.findAll();
     return NextResponse.json(permissions);
@@ -12,6 +12,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
   async POST(request: NextRequest) {
     const data = await request.json();
+    console.log('data', data);
 
     const permission = await permissionService.create(data);
 

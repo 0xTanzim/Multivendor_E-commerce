@@ -4,9 +4,16 @@ import { isAuthUser } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 @catchErrors()
- class RegisterUser {
+class RegisterUser {
   async GET(req: NextRequest) {
-    return NextResponse.json({ message: 'GET request not allowed' });
+    return NextResponse.json({
+      message: 'GET request not allowed',
+      users: await authService.findMany({
+        include: {
+          role: true,
+        },
+      }),
+    });
   }
 
   async POST(req: NextRequest) {

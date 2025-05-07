@@ -1,5 +1,5 @@
 import { authDetails } from '@/lib';
-import { permissionService } from '@/lib/permission/permissionService';
+import { permissionManagerService } from '@/lib/permission/permissionService';
 
 import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
@@ -11,8 +11,7 @@ class TestController {
 
     // Simulate a delay
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await permissionService.refresh();
-    const permissions = await permissionService.getPermissions(
+    const permissions = await permissionManagerService.getPermissions(
       roleId as string
     );
 

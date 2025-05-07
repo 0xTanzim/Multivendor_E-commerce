@@ -1,5 +1,5 @@
 import { authService } from '@/lib/di';
-import { permissionService } from '@/lib/permission/permissionService';
+import { permissionManagerService } from '@/lib/permission/permissionService';
 import { catchErrors } from '@/utils';
 import { NextResponse } from 'next/server';
 
@@ -15,11 +15,12 @@ class UserByIdController {
       },
     });
 
-    await permissionService.refresh();
-    const permissions = await permissionService.getPermissions(user.roleId);
+    await permissionManagerService.refresh();
+    const permissions = await permissionManagerService.getPermissions(
+      user.roleId
+    );
 
     return NextResponse.json({
-
       user,
       permissions,
     });

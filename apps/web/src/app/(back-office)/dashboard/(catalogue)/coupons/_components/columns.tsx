@@ -48,17 +48,28 @@ export const columns = [
   {
     accessorKey: 'expiryDate',
     header: () => <div className="text-right">Expiry Date</div>,
-    cell: ({ row }: { row: Row<any> }) => <DateColumn row={row} accessorKey='expiryDate' />,
+    cell: ({ row }: { row: Row<any> }) => (
+      <DateColumn row={row} accessorKey="expiryDate" />
+    ),
   },
   {
     accessorKey: 'createdAt',
     header: () => <div className="text-right">Created At</div>,
-    cell: ({ row }: { row: Row<any> }) => <DateColumn row={row} accessorKey='createdAt' />,
+    cell: ({ row }: { row: Row<any> }) => (
+      <DateColumn row={row} accessorKey="createdAt" />
+    ),
   },
   {
     id: 'actions',
     cell: ({ row }: { row: Row<any> }) => {
-      return <ActionColumn row={row} title="Coupon" endPointPath='coupons' />;
+      return (
+        <ActionColumn
+          row={row}
+          title="Coupon"
+          endPointPath="coupons"
+          resource="coupon"
+        />
+      );
     },
   },
 ];

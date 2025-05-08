@@ -1,7 +1,6 @@
 import { auth } from '@/auth';
 import { loadPermissionsOnStartup } from '@/lib/permission';
 import { GlobalProvider } from '@/provider/GlobalProvider';
-import { permissionManagerService } from '@repo/core/pm';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import '../style/main.scss';
@@ -31,11 +30,7 @@ export default async function RootLayout({
   const session = await auth();
   await loadPermissionsOnStartup();
 
-  const permissions = await permissionManagerService.getPermissions(
-    session?.user?.roleId ?? ''
-  );
-
-  console.log('permissions:-', permissions);
+  // console.log('permissions:-', permissions);
 
   return (
     <html lang="en" suppressHydrationWarning>

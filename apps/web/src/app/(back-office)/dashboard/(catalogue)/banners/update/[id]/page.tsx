@@ -1,4 +1,5 @@
 import FormHeader from '@/components/backOffice/form/FormHeader';
+import { withPagePermission } from '@/lib';
 import { getData } from '@/lib/getData';
 import { isBanner } from '@repo/types';
 import BannerForm from '../../_components/BannerForm';
@@ -8,7 +9,9 @@ const BannerUpdatePage = async ({
 }: {
   params: Promise<{ id: string }>;
 }) => {
+  await withPagePermission(['update:banner']);
   const { id } = await params;
+
   const bannerData = await getData(`banners/${id}`);
   let banner = null;
 

@@ -57,7 +57,9 @@ export const columns = [
   {
     accessorKey: 'status',
     header: 'Status',
-    cell: ({ row }: { row: Row<any> }) => <Status row={row} accessorKey="status" />,
+    cell: ({ row }: { row: Row<any> }) => (
+      <Status row={row} accessorKey="status" />
+    ),
   },
   {
     accessorKey: 'isActive',
@@ -74,7 +76,14 @@ export const columns = [
   {
     id: 'actions',
     cell: ({ row }: { row: Row<any> }) => {
-      return <ActionColumn row={row} title="Farmer" endPointPath="farmers" />;
+      return (
+        <ActionColumn
+          row={row}
+          title="Farmer"
+          endPointPath="farmers"
+          resource="farmer"
+        />
+      );
     },
   },
 ];

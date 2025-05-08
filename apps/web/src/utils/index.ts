@@ -5,3 +5,4 @@ export * from './decorators';
 export * from './errorHandler';
 export * from './generate';
 export * from './imageutil';
+export * from './permissions';

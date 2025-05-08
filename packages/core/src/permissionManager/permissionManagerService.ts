@@ -136,7 +136,9 @@ export class PermissionManagerService {
    */
   async getPermissions(roleId: string): Promise<string[]> {
     let map = await this.redis.get<RolePermissionMap>(CACHE_KEY);
+
     if (!map) map = await this.loadAll();
+
     return map?.[roleId] ?? [];
   }
 

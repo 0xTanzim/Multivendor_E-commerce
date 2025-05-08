@@ -1,4 +1,5 @@
 import { DataTable } from '@/components/data-table/DataTable';
+import { HasRoleAndPermission } from '@/components/shared/auth/AuthGuard';
 import { getData } from '@/lib/getData';
 import { isBannerArray } from '@repo/types';
 import PageHeader from '../../_components/PageHeader';
@@ -17,11 +18,17 @@ const bannerPage = async () => {
   return (
     <div>
       {/* header  */}
-      <PageHeader
-        heading="Banners"
-        linkTitle="Add Banner"
-        href="/dashboard/banners/new"
-      />
+      <HasRoleAndPermission
+        requiredPermissions={['create:banner']}
+        requiredRole="admin"
+      >
+        <PageHeader
+          heading="Banners"
+          linkTitle="Add Banner"
+          href="/dashboard/banners/new"
+        />
+      </HasRoleAndPermission>
+      {/* header end */}
 
       <div className="py-8">
         {banners && <DataTable columns={columns} data={banners} />}

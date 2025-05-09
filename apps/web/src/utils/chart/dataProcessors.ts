@@ -110,7 +110,7 @@ export const getTopSellingProducts = (
   orders.forEach((order) => {
     // Use type assertion to access items property
     const dashboardOrder = order as DashboardOrder;
-    const items = dashboardOrder.items;
+    const items = dashboardOrder.OrderItem;
 
     if (items && Array.isArray(items)) {
       items.forEach((item) => {

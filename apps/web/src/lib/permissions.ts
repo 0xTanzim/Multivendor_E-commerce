@@ -19,3 +19,5 @@ export const hasPageAccess = (userRole: string, path: string): boolean => {
     (allowedRole) => normalizeRole(allowedRole) === normalizedUserRole
   );
 };
+
+

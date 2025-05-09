@@ -1,5 +1,6 @@
 import FormHeader from '@/components/backOffice/form/FormHeader';
 
+import { withPagePermission } from '@/lib';
 import { getData } from '@/lib/getData';
 import { isCategoryArray, isMarket } from '@repo/types';
 import MarketForm from '../../_components/MarketForm';
@@ -8,6 +9,8 @@ type IParams = {
 };
 const UpdateMarketPage = async ({ params }: IParams) => {
   const { id } = await params;
+
+  await withPagePermission(['update:market']);
 
   const marketData = await getData(`markets/${id}`);
   console.log(marketData);

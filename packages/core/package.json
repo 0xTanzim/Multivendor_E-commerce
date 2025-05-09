@@ -8,13 +8,15 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./container": "./src/di/container.ts"
+    "./container": "./src/di/container.ts",
+    "./pm": "./src/permissionManager/index.ts"
   },
   "dependencies": {
     "@repo/common": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/types": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@upstash/redis": "^1.34.8",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.8.0"
   },

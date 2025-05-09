@@ -26,8 +26,14 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     }
 
     // Check permissions when session is loaded
-    if (session?.user?.role) {
+    if (session?.user?.role && pathname.startsWith('/dashboard')) {
       const hasAccess = hasPageAccess(session.user.role, pathname);
+
+      console.log('ProtectedRoute', {
+        pathname,
+        userRole: session.user.role,
+        hasAccess,
+      });
 
       // Redirect if user doesn't have permission
       if (!hasAccess) {

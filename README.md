@@ -47,6 +47,15 @@ We use [landingfolio](https://www.landingfolio.com/) for inspiration for the lan
 | User Profiles             | ✅ Done |
 | Community Engagement      | ✅ Done |
 
+### Security & Access Control
+
+| Feature                          | Status  |
+| -------------------------------- | ------- |
+| Role-Based Access Control (RBAC) | ✅ Done |
+| Permission-Based Access          | ✅ Done |
+| Policy-Based Access              | ✅ Done |
+| Hierarchical RBAC                | ✅ Done |
+
 ### Upcoming Features
 
 | Feature                            | Status         |
@@ -55,10 +64,6 @@ We use [landingfolio](https://www.landingfolio.com/) for inspiration for the lan
 | Advanced Product Reviews & Ratings | 📅 Planned     |
 | Real-time Chat Feature             | 📅 Planned     |
 | Push Notifications                 | 📅 Planned     |
-| Role-Based Access Control (RBAC)   | 📅 Planned     |
-| Permission-Based Access            | 📅 Planned     |
-| Policy-Based Access                | 📅 Planned     |
-| Hierarchical RBAC                  | 📅 Planned     |
 
 ## Technologies Used
 
@@ -79,10 +84,18 @@ We use [landingfolio](https://www.landingfolio.com/) for inspiration for the lan
   - Next.js API Routes
 
 - **Architecture:**
+
   - OOP
   - Tsyringe (Dependency Injection)
   - TurboRepo (Monorepo)
   - pnpm-workspaces
+
+- **Security:**
+  - JWT Authentication
+  - Role-based Authorization
+  - Permission Validation
+  - Policy Enforcement
+  - Access Control Lists
 
 ## Project Structure
 
@@ -100,6 +113,8 @@ packages/
   redux/               # Redux store and slices
   types/               # TypeScript type definitions
   utils/               # Utility functions
+  authentication/      # Authentication & authorization services
+  rbac/                # Role-based access control implementation
 tooling/               # Shared configuration
   eslint-config/       # ESLint configuration
   typescript-config/   # TypeScript configuration
@@ -110,7 +125,7 @@ tooling/               # Shared configuration
 ### **1. Clone the repository**
 
 ```bash
-git clone https://github.com/TanzimHossain2/Multivendor_E-commerce
+git clone https://github.com/0xTanzim/Multivendor_E-commerce
 ```
 
 ### **2. Change to the project directory**
@@ -132,6 +147,8 @@ Create a `.env` file in the root directory with the following variables:
 ```
 DATABASE_URL="mongodb://username:password@localhost:27017/ecommerce?authSource=admin"
 NEXT_PUBLIC_BASE_URL="http://localhost:3000"
+JWT_SECRET="your-secret-key-here"
+JWT_EXPIRY="7d"
 # Add other required environment variables
 ```
 
@@ -166,17 +183,46 @@ pnpm build
 - Use `pnpm build` to build all packages and applications
 - Use `pnpm lint` to run linting across the workspace
 
+## Access Control System
+
+Our platform implements a comprehensive access control system:
+
+- **Role-Based Access Control (RBAC)**: Users are assigned roles (Admin, Vendor, Customer) with predefined permissions
+- **Permission-Based Access**: Granular control over specific actions and resources
+- **Policy-Based Access**: Dynamic rules that consider context and conditions beyond just roles
+- **Hierarchical RBAC**: Inheritance of permissions through role hierarchies (e.g., SuperAdmin → Admin → Staff)
+
+This multi-layered approach ensures secure and flexible access management throughout the application.
+
 ## Challenges Overcome
 
-- **Monorepo Management:** Ensuring smooth coordination between different packages
-- **OOP in Backend:** Structuring BaseRepository & BaseService effectively
-- **Dependency Injection:** Automating DI using `tsyringe` for better maintainability
-- **State Management:** Leveraging Redux Toolkit for efficient global state
+- **Monorepo Management**: Ensuring smooth coordination between different packages
+- **OOP in Backend**: Structuring BaseRepository & BaseService effectively
+- **Dependency Injection**: Automating DI using `tsyringe` for better maintainability
+- **State Management**: Leveraging Redux Toolkit for efficient global state
+- **Access Control**: Implementing a flexible yet powerful RBAC system with hierarchical roles and policy enforcement
 
 ## Contribution
 
-If you want to contribute, feel free to fork the repository and submit a pull request.
+If you want to contribute, please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+Please ensure your code follows our coding standards and includes appropriate tests.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ---
 
-🚀 **This project is under active development. Check the feature tables above for current status!**
+🚀 **This project is under active development with all core features now implemented!**
+
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=flat&logo=next.js)](https://nextjs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0-green?style=flat&logo=mongodb)](https://www.mongodb.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![TurboRepo](https://img.shields.io/badge/TurboRepo-Latest-purple?style=flat&logo=turborepo)](https://turbo.build/)

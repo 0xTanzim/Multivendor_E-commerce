@@ -1,4 +1,3 @@
-
 /**
  * Extended order type with additional properties needed for the dashboard
  * This helps us handle potential type mismatches with the actual IOrder type
@@ -10,7 +9,8 @@ export type DashboardOrder = {
   status?: string;
   total?: number;
   totalAmount?: number;
-  items?: Array<{
+
+  OrderItem?: Array<{
     product?: {
       id: string;
       name: string;

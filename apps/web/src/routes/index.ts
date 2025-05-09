@@ -22,6 +22,7 @@ export const PUBLIC_ROUTES = [
   '/verify-email/:userId',
   'onboarding',
   '/onboarding/:slug',
+  '/unauthorized',
 ];
 
 export const LOGIN_ROUTE = '/login';

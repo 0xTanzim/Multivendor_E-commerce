@@ -8,6 +8,7 @@ declare module 'next-auth' {
     name?: string | null;
     email?: string | null;
     role: $Enums.UserRole;
+    roleId?: string | null;
     emailVerified: boolean | null;
     profileImage?: string | null;
     accountStatus?: $Enums.AccountStatus;
@@ -18,6 +19,7 @@ declare module 'next-auth' {
     user: {
       id: string;
       role: $Enums.UserRole;
+      roleId?: string | null;
       emailVerified: boolean | null;
       profileImage?: string | null;
       accountStatus?: $Enums.AccountStatus;
@@ -30,6 +32,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     role: $Enums.UserRole;
+    roleId?: string | null;
     emailVerified: boolean | null;
     profileImage?: string | null;
     accountStatus?: $Enums.AccountStatus;
@@ -47,7 +50,7 @@ declare module '@auth/core/adapters' {
     name?: string | null;
     profileImage?: string | null;
     role: $Enums.UserRole;
+    roleId?: string | null;
     accountStatus: $Enums.AccountStatus;
-    
   }
 }

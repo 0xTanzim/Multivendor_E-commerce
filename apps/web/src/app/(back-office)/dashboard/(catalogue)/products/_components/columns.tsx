@@ -61,7 +61,14 @@ export const columns = [
   {
     id: 'actions',
     cell: ({ row }: { row: Row<any> }) => {
-      return <ActionColumn row={row} title="Product" endPointPath='products' />;
+      return (
+        <ActionColumn
+          row={row}
+          title="Product"
+          endPointPath="products"
+          resource="product"
+        />
+      );
     },
   },
 ];

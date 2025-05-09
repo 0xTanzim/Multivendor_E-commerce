@@ -14,20 +14,29 @@ interface MailOptions {
 
 @injectable()
 export class MailService {
-  private transporter: Transporter;
+  private transporter: Transporter | null = null;
+
+  // Lazy initialization of the transporter
+  private getTransporter(): Transporter {
+    if (!this.transporter) {
+      const user = process.env.EMAIL_USER;
+      const pass = process.env.GOOGLE_APP_PASSWORD;
+
+      if (!user || !pass) {
+        throw new Error('Missing email credentials in environment variables');
+      }
+
+      this.transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: { user, pass },
+      });
+    }
+    return this.transporter;
+  }
 
   constructor() {
-    const user = process.env.EMAIL_USER;
-    const pass = process.env.GOOGLE_APP_PASSWORD;
-
-    if (!user || !pass) {
-      throw new Error('Missing email credentials in environment variables');
-    }
-
-    this.transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user, pass },
-    });
+    // Don't initialize transporter in the constructor
+    // We'll initialize it lazily when needed
   }
 
   async sendMail(options: MailOptions) {
@@ -42,7 +51,8 @@ export class MailService {
         })
       );
 
-      const info = await this.transporter.sendMail({
+      const transporter = this.getTransporter();
+      const info = await transporter.sendMail({
         from: `"MindFuel" <${process.env.EMAIL_USER}>`,
         to: options.to,
         subject: options.subject,

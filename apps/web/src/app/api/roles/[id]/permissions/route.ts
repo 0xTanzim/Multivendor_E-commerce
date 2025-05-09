@@ -1,9 +1,10 @@
 import { roleService } from '@/lib/di';
 import { catchErrors } from '@/utils';
+import { permissionManagerService } from '@repo/core/pm';
 import { NextResponse } from 'next/server';
 
 @catchErrors()
- class RolePermissionsController {
+class RolePermissionsController {
   async GET(
     _request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -24,12 +25,6 @@ import { NextResponse } from 'next/server';
     const { id } = await params;
     const data = await request.json();
 
-    console.log('data-->', data);
-
-    // data--> {
-    //   permissionIds: [ '680090dace7b239004c5d52f', '6800892dce7b239004c5d52e' ]
-    // }
-
     const role = await roleService.update(id, {
       rolePermissions: {
         deleteMany: {},
@@ -41,7 +36,7 @@ import { NextResponse } from 'next/server';
       },
     });
 
-    console.log('updated role-->', role);
+    await permissionManagerService.refresh();
 
     return NextResponse.json(role);
   }

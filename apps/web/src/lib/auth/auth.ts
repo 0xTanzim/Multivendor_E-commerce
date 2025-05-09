@@ -29,18 +29,26 @@ export const getUserId = async () => {
 export const authDetails = async (): Promise<{
   userId: string | null;
   role: $Enums.UserRole | null;
+  roleId: string | null;
   session: Session | null;
   userEmail: string | null;
 }> => {
   const session: Session = await auth();
 
   if (!session) {
-    return { userId: null, role: null, session: null, userEmail: null };
+    return {
+      userId: null,
+      role: null,
+      session: null,
+      userEmail: null,
+      roleId: null,
+    };
   }
 
   const userId: string = session?.user?.id;
   const role: $Enums.UserRole = session?.user?.role;
-  const userEmail: string = session?.user?.email ?? "";
+  const userEmail: string = session?.user?.email ?? '';
+  const roleId: string = session?.user?.roleId ?? '';
 
-  return { userId, role, session, userEmail };
+  return { userId, role, session, userEmail, roleId };
 };

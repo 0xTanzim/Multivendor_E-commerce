@@ -13,7 +13,6 @@ const UpdateMarketPage = async ({ params }: IParams) => {
   await withPagePermission(['update:market']);
 
   const marketData = await getData(`markets/${id}`);
-  console.log(marketData);
 
   let market = null;
 

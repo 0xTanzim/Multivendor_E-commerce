@@ -10,16 +10,12 @@ const marketsPage = async () => {
   const marketsData = await getData('markets');
 
   let markets = null;
-
-  if (!isMarketArray(marketsData)) {
-    markets = null;
-  } else {
+  if (isMarketArray(marketsData)) {
     markets = marketsData;
   }
 
   return (
     <div>
-      {/* header  */}
       <HasPermission requiredPermissions={PERMISSIONS.CREATE_MARKET}>
         <PageHeader
           heading="Markets"
@@ -29,7 +25,18 @@ const marketsPage = async () => {
       </HasPermission>
 
       <div className="py-8">
-        {markets && <DataTable columns={columns} data={markets} />}
+        {markets ? (
+          <HasPermission
+            requiredPermissions={PERMISSIONS.VIEW_MARKET}
+            fallback={<div>No access</div>}
+          >
+            <DataTable columns={columns} data={markets} />
+          </HasPermission>
+        ) : (
+          <div className="text-center text-gray-500">
+            No markets available or failed to load data.
+          </div>
+        )}
       </div>
     </div>
   );

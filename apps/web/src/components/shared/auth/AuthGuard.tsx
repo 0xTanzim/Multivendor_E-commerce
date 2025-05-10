@@ -23,25 +23,15 @@ export const AuthGuard = ({
   showLoading = false,
 }: AuthGuardProps) => {
   const { role, userId } = useAuthDetails();
-  const permissions = usePermissions();
+  const { permissions, isLoading } = usePermissions();
+
+  console.log('Permissions', permissions);
 
   const loading = !role || !userId;
 
   if (loading && showLoading) {
     return loadingFallback;
   }
-
-  // console.log('AuthGuard', {
-  //   role,
-  //   userId,
-  //   permissions,
-  //   requiredRole,
-  //   requiredPermissions,
-  //   loading,
-  //   showLoading,
-  //   fallback,
-  //   loadingFallback,
-  // });
 
   const normalizedRole = role?.toLowerCase();
   const requiredRoleNormalized = requiredRole?.toLowerCase();
@@ -58,6 +48,9 @@ export const AuthGuard = ({
 
   const normalizedPermissions = permissions.map((p) => p.toLowerCase());
   const normalizedRequiredPerms = requiredPerms.map((p) => p.toLowerCase());
+
+  console.log('Normalized Permissions', normalizedPermissions);
+  console.log('Normalized Required Permissions', normalizedRequiredPerms);
 
   const hasPermission =
     normalizedRequiredPerms.length === 0

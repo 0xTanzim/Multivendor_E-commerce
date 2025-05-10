@@ -6,6 +6,7 @@ import SubmitButton from '@/components/FormInputs/SubmitButton';
 import TextareaInput from '@/components/FormInputs/TextareaInput';
 import TextInput from '@/components/FormInputs/TextInput';
 import ToggleInput from '@/components/FormInputs/ToggleInput';
+import { useAuthDetails } from '@/hooks/useAuthDetails';
 import { Market } from '@repo/types';
 import { useMarketForm } from '../hooks/useMarketForm';
 
@@ -28,6 +29,8 @@ const MarketForm = ({ categories, updateData = {} }: MarketFormProps) => {
     watch,
     setValue,
   } = formMethods;
+
+ 
 
   return (
     <form

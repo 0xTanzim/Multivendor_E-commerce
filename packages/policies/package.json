@@ -1,0 +1,31 @@
+{
+  "name": "@repo/policies",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@repo/backend-services": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/core": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/smtp-email-service": "workspace:*",
+    "@repo/utils": "workspace:*"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/types": "workspace:*",
+    "@types/eslint": "^9.6.1",
+    "@types/node": "^22.13.8",
+    "eslint": "^9.21.0",
+    "typescript": "^5.8.2"
+  }
+}

@@ -11,6 +11,7 @@ export type CreateMarket = {
   phone?: string;
   address?: string;
   email?: string;
+  ownerId?: string;
 };
 
 export type Market = CreateMarket & {};

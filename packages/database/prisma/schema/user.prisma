@@ -1,6 +1,6 @@
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  username      String?    @unique
+  username      String?   @unique
   gender        String    @default("UNKNOWN")
   firstName     String?
   lastName      String?
@@ -28,4 +28,6 @@ model User {
 
   farmerProfile FarmerProfile?
   isActive      Boolean        @default(true)
+  Market        Market[]
+  Training      Training[]
 }

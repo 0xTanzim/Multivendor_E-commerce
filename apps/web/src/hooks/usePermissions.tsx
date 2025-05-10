@@ -1,6 +1,7 @@
 'use client';
 
-import useSWR from 'swr';
+import { useEffect } from 'react';
+import useSWR, { useSWRConfig } from 'swr';
 import { useAuthDetails } from './useAuthDetails';
 
 interface PermissionsResponse {
@@ -17,22 +18,37 @@ const fetchPermissions = async (url: string): Promise<PermissionsResponse> => {
  * Hook to get the user's permissions from the API using SWR caching.
  * Automatically caches results, dedupes requests, and supports background revalidation.
  */
-export function usePermissions(): string[] {
+export function usePermissions(): {
+  permissions: string[];
+  isLoading: boolean;
+  error: unknown;
+} {
   const { roleId } = useAuthDetails();
+  const { mutate } = useSWRConfig();
 
-  const { data, error } = useSWR<PermissionsResponse>(
+  // Invalidate cache when roleId changes
+  useEffect(() => {
+    if (roleId) {
+      mutate(`/api/permissions/${roleId}/check`);
+    }
+  }, [roleId, mutate]);
+
+  const { data, error, isLoading } = useSWR<PermissionsResponse>(
     roleId ? `/api/permissions/${roleId}/check` : null,
     fetchPermissions,
     {
       revalidateOnFocus: false,
       dedupingInterval: 1000 * 60 * 15, // 15 minutes
+      shouldRetryOnError: true,
+      errorRetryCount: 3,
+      errorRetryInterval: 1000,
     }
   );
 
   if (error) {
     console.error('Failed to load permissions:', error);
-    return [];
+    return { permissions: [], isLoading: false, error };
   }
 
-  return data?.permissions ?? [];
+  return { permissions: data?.permissions ?? [], isLoading, error };
 }

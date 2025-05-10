@@ -11,4 +11,9 @@ export class MarketRepository extends BaseRepository<
   constructor(@inject(PrismaClientToken) prisma: PrismaClient) {
     super(prisma, prisma.market);
   }
+
+  async updateMarket(id: string, data: any, user: any) {
+    return super.update(id, data);
+  }
 }
+

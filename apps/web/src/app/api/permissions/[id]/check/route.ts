@@ -10,7 +10,12 @@ class PermissionCheckController {
   ) {
     const { id } = await params;
     const permissions = await permissionManagerService.getPermissions(id);
-    return NextResponse.json({ permissions });
+    return NextResponse.json({ permissions }, {
+       headers: {
+        'Cache-Control': 'public, max-age=900',  // 15 minutes
+        'Content-Type': 'application/json',
+       }
+    });
   }
 }
 

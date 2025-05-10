@@ -1,3 +1,4 @@
+import { useAuthDetails } from '@/hooks/useAuthDetails';
 import {
   useFormSubmission,
   UseFormSubmissionReturn,
@@ -20,6 +21,8 @@ export const useMarketForm = ({
 }: UseMarketFormProps): UseFormSubmissionReturn<MarketFormData, Market> => {
   const marketId = updateData?.id ?? '';
 
+  const { userId } = useAuthDetails();
+
   return useFormSubmission<MarketFormData, Market>({
     defaultValues: {
       title: updateData.title || '',
@@ -33,6 +36,7 @@ export const useMarketForm = ({
       coverImageUrl: updateData.coverImageUrl ?? '',
       logoUrl: updateData.logoUrl ?? '',
       slug: updateData.slug || '',
+      ownerId: updateData.ownerId || userId,
     },
     endpoint: marketId ? `/markets/${marketId}` : '/markets',
     method: marketId ? 'PATCH' : 'POST',

@@ -1,5 +1,7 @@
+import { RequirePolicy } from '@/lib/decorator/require-policy';
 import { marketService } from '@/lib/di';
 import { catchErrors } from '@/utils';
+import { MarketUpdatePolicy } from '@repo/policies';
 import { isMarket } from '@repo/types';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -22,6 +24,11 @@ class MarketIdController {
     return NextResponse.json(market);
   }
 
+  @RequirePolicy(
+    MarketUpdatePolicy,
+    marketService.findById.bind(marketService),
+    'id'
+  )
   async PATCH(
     req: NextRequest,
     { params }: { params: Promise<{ id: string }> }
@@ -33,7 +40,7 @@ class MarketIdController {
       return NextResponse.json({ error: 'Invalid data' }, { status: 400 });
     }
 
-    console.log('data', data);
+    console.log('update  data', data);
     const { categoryIds, ...rest } = data;
 
     const market = await marketService.update(id, {
@@ -43,7 +50,7 @@ class MarketIdController {
       },
     });
 
-    console.log('market', market);
+    console.log(' update  market', market);
 
     return NextResponse.json(market);
   }

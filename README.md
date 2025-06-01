@@ -6,6 +6,11 @@ The backend follows **OOP principles**, reducing code duplication with a **BaseR
 
 A custom Error Library is implemented to handle errors effectively, and an **Error Handler** is used to catch unhandled exceptions.
 
+
+The platform features a comprehensive **access control system** with **Role-Based Access Control (RBAC)**, allowing for flexible and secure user management. The access control system supports **permission-based access**, **policy-based access**, and **hierarchical RBAC** to ensure that users have the appropriate permissions based on their roles.
+
+
+
 We use [landingfolio](https://www.landingfolio.com/) for inspiration for the landing page design.
 
 ## Features and Status
@@ -201,6 +206,7 @@ This multi-layered approach ensures secure and flexible access management throug
 - **Dependency Injection**: Automating DI using `tsyringe` for better maintainability
 - **State Management**: Leveraging Redux Toolkit for efficient global state
 - **Access Control**: Implementing a flexible yet powerful RBAC system with hierarchical roles and policy enforcement
+- **Policy Based Access**: Creating a dynamic access control system that adapts to various user contexts
 
 ## Contribution
 

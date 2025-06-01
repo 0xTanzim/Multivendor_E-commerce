@@ -4,7 +4,12 @@ export interface PolicyContext extends Record<string, unknown> {
   roleId?: string;
   permissions?: string[] | string;
   email?: string;
-  featureFlags?: string[]; // future implementation
+  featureFlags?: string[];
+
+  resource?: unknown;
+  featureDetails?: unknown;
+
+  [key: string]: unknown;
 }
 
 export interface PolicyResult {

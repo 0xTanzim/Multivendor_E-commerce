@@ -335,6 +335,9 @@ importers:
       '@repo/email-service':
         specifier: workspace:*
         version: link:../email-service
+      '@repo/payment-gateway':
+        specifier: workspace:*
+        version: link:../payment-gateway
       '@repo/smtp-email-service':
         specifier: workspace:*
         version: link:../smtp-email-service
@@ -485,6 +488,34 @@ importers:
         version: 3.0.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.85.1)
       typescript:
         specifier: ^5.8.2
+        version: 5.8.2
+
+  packages/payment-gateway:
+    dependencies:
+      '@repo/common':
+        specifier: workspace:*
+        version: link:../common
+      '@repo/core':
+        specifier: workspace:*
+        version: link:../core
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../types
+      stripe:
+        specifier: ^14.0.0
+        version: 14.25.0
+      tsyringe:
+        specifier: ^4.8.0
+        version: 4.8.0
+    devDependencies:
+      '@repo/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint-config
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../tooling/typescript-config
+      typescript:
+        specifier: ^5.3.3
         version: 5.8.2
 
   packages/policies:
@@ -6064,6 +6095,10 @@ packages:
 
       (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
 
+  qs@6.14.0:
+    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
+    engines: {node: '>=0.6'}
+
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
@@ -6703,6 +6738,10 @@ packages:
   strip-outer@1.0.1:
     resolution: {integrity: sha512-k55yxKHwaXnpYGsOzg4Vl8+tDrWylxDEpknGjhTiZB8dFRU5rTo9CAzeycivxV3s+zlTKwrs6WxMxR95n26kwg==}
     engines: {node: '>=0.10.0'}
+
+  stripe@14.25.0:
+    resolution: {integrity: sha512-wQS3GNMofCXwH8TSje8E1SE8zr6ODiGtHQgPtO95p9Mb4FhKC9jvXR2NUTpZ9ZINlckJcFidCmaTFV4P6vsb9g==}
+    engines: {node: '>=12.*'}
 
   style-to-js@1.1.16:
     resolution: {integrity: sha512-/Q6ld50hKYPH3d/r6nr117TZkHR0w0kGGIVfpG9N6D8NymRPM9RqCUv4pRpJ62E5DqOYx2AFpbZMyCPnjQCnOw==}
@@ -12915,6 +12954,10 @@ snapshots:
 
   q@1.5.1: {}
 
+  qs@6.14.0:
+    dependencies:
+      side-channel: 1.1.0
+
   queue-microtask@1.2.3: {}
 
   quick-lru@5.1.1: {}
@@ -13710,6 +13753,11 @@ snapshots:
   strip-outer@1.0.1:
     dependencies:
       escape-string-regexp: 1.0.5
+
+  stripe@14.25.0:
+    dependencies:
+      '@types/node': 22.13.10
+      qs: 6.14.0
 
   style-to-js@1.1.16:
     dependencies:

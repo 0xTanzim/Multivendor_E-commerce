@@ -8,6 +8,7 @@ export * from './coupon';
 export * from './endPoints';
 export * from './inputTypes';
 export * from './market';
+export * from './payment';
 export * from './products';
 export * from './rbac'; // New RBAC types
 export * from './user';

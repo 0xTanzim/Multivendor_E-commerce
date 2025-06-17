@@ -5,6 +5,7 @@ export * from './coupon';
 export * from './farmer';
 export * from './market';
 export * from './order';
+export * from './payment';
 export * from './product';
 export * from './rbac';
 export * from './sale';

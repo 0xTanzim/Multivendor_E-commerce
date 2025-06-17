@@ -15,7 +15,8 @@
     "@repo/typescript-config": "workspace:*",
     "@repo/database": "workspace:*",
     "@repo/core": "workspace:*",
-    "@repo/types": "workspace:*"
+    "@repo/types": "workspace:*",
+    "@repo/payment-gateway": "workspace:*"
   },
   "devDependencies": {
     "typescript": "^5.8.2"
